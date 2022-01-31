@@ -19,7 +19,7 @@
     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
 
-	<context:component-scan base-package="adid">
+	<context:component-scan base-package="ccs">
 		<context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
 		<context:exclude-filter expression="org.springframework.stereotype.Service" type="annotation"/>
 		<context:exclude-filter expression="org.springframework.stereotype.Repository" type="annotation"/>

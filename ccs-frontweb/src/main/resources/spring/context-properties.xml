@@ -23,7 +23,7 @@
     <!-- 환경 변수 설정 페이지 경로 등. -->
     <util:properties id="variables" location="classpath:/adid/properties/globals.variables.xml" />
     
-    
+<!--     
 	<bean id="messageSource" class="adid.framework.message.CustomReloadableResourceBundleMessageSource">
 		<property name="basenames">
 			<list>
@@ -42,10 +42,10 @@
    
 
 	<bean class="adid.framework.message.MessageResolverServiceImpl" id="messageService" >
-		 <!-- <property name="messageSource">
+		 <property name="messageSource">
             <ref bean="messageSource" />
-        </property> -->
-	</bean>
+        </property>
+	</bean> -->
 
 	
 </beans>	

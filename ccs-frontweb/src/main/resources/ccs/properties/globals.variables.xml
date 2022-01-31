@@ -3,11 +3,11 @@
 <properties>
 	<!-- <entry key="Url.Main">/mngt/main.do</entry> -->
 	
-	<entry key="Url.Relay"></entry>
+<!-- 	<entry key="Url.Relay"></entry>
 	<entry key="Url.Login">/mngt/lgn100.do</entry>
 	<entry key="Url.Logout">/mngt/lgn100.do</entry>
 	<entry key="Url.Main">/mngt/main.do</entry>
-	<entry key="Url.Test">/mngt/main.do</entry>
+	<entry key="Url.Test">/mngt/main.do</entry> -->
 
 <!-- 	
 	 <entry key="Url.Main">/main.do</entry>
