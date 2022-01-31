@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+    version="3.1">
+	<display-name>ccs</display-name>
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:ccs/spring/context-*.xml</param-value>
+	</context-param>    
+   
+   	<servlet>
+		<servlet-name>ccs-action</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/config/dispatcher-servlet.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+    
+	 <servlet-mapping>
+        <servlet-name>ccs-action</servlet-name>
+<!--         <url-pattern>*.do</url-pattern>
+        <url-pattern>*.json</url-pattern> -->
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    
+     <!-- 세션타임 -->
+    <session-config>
+        <session-timeout>180</session-timeout>
+    </session-config>
+    
+     <jsp-config>
+		<taglib>
+			<taglib-uri>http://www.customtaglib.co.kr/tags</taglib-uri>
+			<taglib-location>/WEB-INF/tlds/ascscmn.tld</taglib-location>
+		</taglib>
+	</jsp-config> 
+    
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+    
+	<login-config>
+		<auth-method>BASIC</auth-method>
+	</login-config>
+    
+	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>/common/error.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/common/error.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/common/error.jsp</location>
+	</error-page>
+    <distributable/>
+</web-app>

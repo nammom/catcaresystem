@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:task="http://www.springframework.org/schema/task"
+  xmlns:util="http://www.springframework.org/schema/util"
+  xmlns:cache="http://www.springframework.org/schema/cache"
+  xmlns:p="http://www.springframework.org/schema/p"
+  xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd 
+    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
+    http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.0.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+	
+	<!-- 1. WAS 데이터소스 참조 -->
+	<!-- <alias name="was-dataSource" alias="egov.dataSource"/>
+    <alias name="was-dataSource" alias="dataSource"/>
+	<jee:jndi-lookup id="was-dataSource" jndi-name="jboss/cubridDS" resource-ref="true" />
+ -->
+	<!-- 2. 프로퍼티 속성 참고 테이터소스 -->
+	<!--
+	<bean id="egov.propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:/egovframework/egovProps/globals.properties</value>
+            </list>
+        </property>
+    </bean>
+
+	<alias name="dataSource-${Globals.DbType}" alias="egov.dataSource"/>
+    <alias name="dataSource-${Globals.DbType}" alias="dataSource"/>
+
+    <bean id="dataSource-cubrid" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${Globals.DriverClassName}"/>
+        <property name="url" value="${Globals.Url}" />
+        <property name="username" value="${Globals.UserName}"/>
+        <property name="password" value="${Globals.Password}"/>
+    </bean>
+	-->
+	
+	<!-- 3. 기본 테이터소스 -->
+	
+	<!-- <alias name="dataSource-cubrid" alias="egov.dataSource"/>
+    <alias name="dataSource-cubrid" alias="dataSource"/>
+    
+    <bean id="dataSource-cubrid" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+        <property name="url" value="jdbc:cubrid:192.168.123.105:30000:KOCIS:::?charset=UTF-8" />
+        <property name="username" value="user01"/>
+        <property name="password" value="user01"/>
+    </bean>  -->
+ 
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="#{config['Globals.DB.DriverClassName']}"/>
+        <property name="url" value="#{config['Globals.DB.Url']}" />
+        <property name="username" value="#{config['Globals.DB.UserName']}"/>
+        <property name="password" value="#{config['Globals.DB.Password']}"/>
+        <property name="validationQuery" value="#{config['Globals.DB.validationQuery']}" />
+        <property name="testWhileIdle" value="true" />
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <property name="maxActive" value="1024"  />
+    </bean>  
+
+   
+
+   
+   
+   
+   
+	
+    <!-- DB Pool이 생성이 되더라고 특정 시간 호출되지 않으면 DBMS 설정에 따라 연결을 끊어질 때
+		이 경우 DBCP를 사용하셨다면.. 다음과 같은 설정을 추가하시면 연결을 유지시켜 줍니다. -->
+	<!--
+	<property name="validationQuery" value="select 1 from dual" />
+	<property name="testWhileIdle" value="true" />
+	<property name="timeBetweenEvictionRunsMillis" value="60000" /> -->  <!-- 1분 -->
+</beans>

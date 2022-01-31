@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <settings>
+ 		<setting name="jdbcTypeForNull" value="VARCHAR"/> <!-- JDBC타입을 파라미터에 제공하지 않을때 null값을 처리한 JDBC타입을 명시 -->
+ 		<setting name="callSettersOnNulls" value="true"/> <!-- 가져온 값이 null일때 setter나 맵의 put 메소드를 호출할지를 명시 Map.keySet() 이나 null값을 초기화할때 유용하다. int, boolean 등과 같은 원시타입은 null을 셋팅할 수 없다는 점은 알아두면 좋다. -->
+ 		<setting name="defaultStatementTimeout" value="300"/> <!-- 설정된 시간 이상으로 쿼리시간이 걸리는 경우  timed out 오류 발생함 -->
+        <setting name="logImpl" value="LOG4J2"/>
+ 	</settings>
+ 	
+    <typeAliases>
+    </typeAliases>
+ 
+ 	<typeHandlers>
+ 	</typeHandlers>
+</configuration>
