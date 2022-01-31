@@ -9,6 +9,8 @@ public class cmnController {
 	
 	@RequestMapping(value = "/test")
 	public String cmn() throws Exception {
+		
+		
 		return "cmn/test";
 	}
 }
