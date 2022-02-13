@@ -17,11 +17,11 @@
     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">	  
 	  
 	 <!-- 프로퍼티 정보 설정 -->
-    <util:properties id="config" location="classpath:/adid/properties/globals.properties.xml" />
+    <util:properties id="config" location="classpath:/ccs/properties/globals.properties.xml" />
     
     
     <!-- 환경 변수 설정 페이지 경로 등. -->
-    <util:properties id="variables" location="classpath:/adid/properties/globals.variables.xml" />
+    <util:properties id="variables" location="classpath:/ccs/properties/globals.variables.xml" />
     
 <!--     
 	<bean id="messageSource" class="adid.framework.message.CustomReloadableResourceBundleMessageSource">

@@ -6,9 +6,6 @@ import java.util.Map;
 import ccs.framework.annotations.Mapper;
 
 
-
-
-
 @Mapper(value="SampleMapper")
 public interface SampleMapper {
 
