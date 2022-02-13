@@ -52,6 +52,13 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
+		
+		<dependency> 
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId> 
+			<version>${org.springframework-version}</version> 
+		</dependency>
+
 				
 		<!-- AspectJ -->
 		<dependency>
@@ -129,18 +136,20 @@
 		
 		
 		<!-- postgre db driver-->
-		<!--<dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>9.4.1208</version>
-        </dependency>-->
+		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+		<dependency>
+		    <groupId>org.postgresql</groupId>
+		    <artifactId>postgresql</artifactId>
+		    <version>9.2-1004-jdbc41</version>
+		</dependency>
+
 
 		<!-- https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc6 -->
-		<dependency>
+<!-- 		<dependency>
 		    <groupId>com.oracle.database.jdbc</groupId>
 		    <artifactId>ojdbc6</artifactId>
 		    <version>11.2.0.4</version>
-		</dependency>
+		</dependency> -->
 
 		<!-- json 처리  -->
         <dependency>
