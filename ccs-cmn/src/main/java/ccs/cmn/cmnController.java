@@ -19,9 +19,31 @@ public class cmnController {
 	
 	@RequestMapping(value = "/test")
 	public String cmn(){
-		List<Map<String,Object>> result = sampleservice.selectSampleSql();
-		System.out.println(result);
-		
 		return "cmn/test";
+	}
+	
+	@RequestMapping(value = "/home")
+	public String cmnHome(){
+		return "cmn/home";
+	}
+	
+	@RequestMapping(value = "/introduction")
+	public String cmnIntroduction(){
+		return "cmn/introduction";
+	}
+	
+	@RequestMapping(value = "/login")
+	public String cmnLogin(){
+		return "cmn/login/login";
+	}
+	
+	@RequestMapping(value = "/login/accessDenied")
+	public String cmnLoginAccessDenied(){
+		return "cmn/login/accessDenied";
+	}
+	
+	@RequestMapping(value = "/admin")
+	public String cmnAdminHome(){
+		return "cmn/admin/adminHome";
 	}
 }
