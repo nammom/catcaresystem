@@ -24,6 +24,7 @@ public class cmnController {
 	
 	@RequestMapping(value = "/home")
 	public String cmnHome(){
+//		sampleservice.selectSampleSql();
 		return "cmn/home";
 	}
 	
@@ -32,7 +33,7 @@ public class cmnController {
 		return "cmn/introduction";
 	}
 	
-	@RequestMapping(value = "/login")
+	@RequestMapping(value = "/login/login")
 	public String cmnLogin(){
 		return "cmn/login/login";
 	}
@@ -42,7 +43,7 @@ public class cmnController {
 		return "cmn/login/accessDenied";
 	}
 	
-	@RequestMapping(value = "/admin")
+	@RequestMapping(value = "/admin/adminHome")
 	public String cmnAdminHome(){
 		return "cmn/admin/adminHome";
 	}

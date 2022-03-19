@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ccs.cmn.mapper.S001Mapper">
+
+	<select id="selectUsersByUserName" parameterType="java.lang.String" resultType="org.springframework.security.core.userdetails.UserDetails">
+		select 
+			userid as username
+			, password
+			, enabled 
+		from 
+			tb_user 
+		where 
+			userid = ${username}
+	</select>
+	
+	<select id="selectAuthoritiesByUserName" parameterType="java.lang.String" resultType="java.lang.String">
+		select 
+			a.authority 
+		from 
+			tb_authorities a
+			join tb_user b
+			on(a.user_cd = b.user_cd) 
+		where 
+			b.userid = ${username}
+	</select>
+	
+	<select id="selectGroupAuthoritiesByUserName" parameterType="java.util.Map" resultType="java.util.Map">
+		select 
+			g.group_cd	as id
+			, g.group_name
+			, ga.authority 
+		from 
+			tb_groups g
+			join tb_group_member gm on (g.group_cd = gm.group_cd)
+			join tb_group_authorities ga on (g.group_cd = ga.group_cd) 
+			join tb_user u on(gm.user_cd = u.user_cd)
+		where 
+			u.userid = ${username}
+	</select>
+	
+	
+</mapper>

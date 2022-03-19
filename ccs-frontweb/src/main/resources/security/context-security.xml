@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans
+	xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<!-- 검사 URL -->
+	<http use-expressions="true">
+		<intercept-url pattern="/login/login" access="permitAll" />
+		<intercept-url pattern="/home" access="permitAll" />
+		<intercept-url pattern="/admin/**"
+			access="hasRole('ADMIN')" />
+		<intercept-url pattern="/**"
+			access="hasAnyRole('USER, ADMIN')" />
+		<form-login login-page="/login/login"
+			default-target-url="/home"
+			authentication-failure-url="/login/login?error"
+			username-parameter="id" password-parameter="password" />
+		<logout logout-url="/logout" logout-success-url="/home" />
+		<access-denied-handler
+			error-page="/login/accessDenied" />
+	</http>
+
+
+        
+	<!-- provider -->
+	 <authentication-manager>
+        <authentication-provider user-service-ref="loginService"/>
+    </authentication-manager>
+	
+	
+	<!-- <authentication-manager>
+		<authentication-provider>
+			<jdbc-user-service data-source-ref="dataSource"
+				role-prefix=""
+				users-by-username-query="
+											select 
+												userid as username
+												, password
+												, enabled 
+											from 
+												tb_user 
+											where 
+												userid = ?
+				"
+				authorities-by-username-query="
+												select 
+													b.userid as username
+													, a.authority 
+												from 
+													tb_authorities a
+													join tb_user b
+													on(a.user_cd = b.user_cd) 
+												where 
+													b.userid = ?
+				"
+				group-authorities-by-username-query="
+												select 
+													g.group_cd	as id
+													, g.group_name
+													, ga.authority 
+												from 
+													tb_groups g
+													join tb_group_member gm on (g.group_cd = gm.group_cd)
+													join tb_group_authorities ga on (g.group_cd = ga.group_cd) 
+													join tb_user u on(gm.user_cd = u.user_cd)
+												where 
+													u.userid = ? " />
+		</authentication-provider>
+	</authentication-manager>
+	 -->
+
+
+</beans:beans>
