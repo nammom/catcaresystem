@@ -10,11 +10,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserDetailsDto implements UserDetails{
 
-	private String ID;
+	private String USERID;
 	private String PASSWORD;
 	private boolean ENABLED;
 	private List<GrantedAuthority> authority;
-	
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return authority;
@@ -37,7 +37,7 @@ public class UserDetailsDto implements UserDetails{
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return ID;
+		return USERID;
 	}
 	
 	@Override
