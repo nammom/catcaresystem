@@ -14,7 +14,7 @@ import ccs.cmn.dto.UserDetailsDto;
 import ccs.cmn.mapper.S001Mapper;
 
 @Service(value="loginService")
-public class S001ServiceImpl implements UserDetailsService {
+public class LoginService implements UserDetailsService {
 
 	@Resource(name="S001Mapper")
 	private S001Mapper s001mapper; 

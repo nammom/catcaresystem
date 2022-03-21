@@ -10,7 +10,7 @@
 		from 
 			tb_user 
 		where 
-			userid = ${username}
+			userid = ${value}
 	</select>
 	
 	<select id="selectAuthoritiesByUserName" parameterType="java.lang.String" resultType="java.lang.String">
@@ -21,7 +21,7 @@
 			join tb_user b
 			on(a.user_cd = b.user_cd) 
 		where 
-			b.userid = ${username}
+			b.userid = ${value}
 	</select>
 	
 	<select id="selectGroupAuthoritiesByUserName" parameterType="java.util.Map" resultType="java.util.Map">
@@ -35,7 +35,7 @@
 			join tb_group_authorities ga on (g.group_cd = ga.group_cd) 
 			join tb_user u on(gm.user_cd = u.user_cd)
 		where 
-			u.userid = ${username}
+			u.userid = ${value}
 	</select>
 	
 	
