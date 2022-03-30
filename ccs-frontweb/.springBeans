@@ -9,11 +9,6 @@
 	<configs>
 	</configs>
 	<autoconfigs>
-		<config>src/main/webapp/WEB-INF/config/dispatcher-servlet.xml</config>
-		<config>src/main/resources/spring/context-dataservice.xml</config>
-		<config>src/main/resources/spring/context-sqlMap.xml</config>
-		<config>src/main/resources/spring/context-properties.xml</config>
-		<config>src/main/resources/spring/context-datasource.xml</config>
 	</autoconfigs>
 	<configSets>
 	</configSets>

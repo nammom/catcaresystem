@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="ccs.cmn.mapper.SampleMapper">
-
-	<select id="selectSampleSql" resultType="java.util.Map">
-		select j.no, j.name from jyp j
-	</select>
-	
-</mapper>
