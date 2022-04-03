@@ -21,6 +21,7 @@
 
 	<!-- mvc 사용을 위한 annotation-->
 	<mvc:annotation-driven/>
+	<mvc:resources mapping="/resources/**" location="/resources/" />
 	
 	<context:component-scan base-package="ccs.cmn">	
 		<context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>

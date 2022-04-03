@@ -9,6 +9,7 @@
 	<http use-expressions="true">
 		<intercept-url pattern="/login/login" access="permitAll" />
 		<intercept-url pattern="/home" access="permitAll" />
+		<intercept-url pattern="/resources/**" access="permitAll" />
 		<intercept-url pattern="/admin/**"
 			access="hasRole('ADMIN')" />
 		<intercept-url pattern="/**"
