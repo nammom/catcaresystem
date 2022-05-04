@@ -23,12 +23,6 @@ public class UserInfo  implements java.io.Serializable {
 	private String AUTHOR ;
 	
 	
-	private String ORGN_NM;
-	
-	
-	private String ORGN_ID;
-	
-	
 	private String LAST_LGN_YMD;
 	
 	
@@ -127,27 +121,6 @@ public class UserInfo  implements java.io.Serializable {
 	public void setUSERNM(String uSERNM) {
 		USERNM = uSERNM;
 	}
-
-
-	public String getORGN_NM() {
-		return ORGN_NM;
-	}
-
-
-	public void setORGN_NM(String oRGN_NM) {
-		ORGN_NM = oRGN_NM;
-	}
-
-
-	public String getORGN_ID() {
-		return ORGN_ID;
-	}
-
-
-	public void setORGN_ID(String oRGN_ID) {
-		ORGN_ID = oRGN_ID;
-	}
-
 
 	public String getLAST_LGN_YMD() {
 		return LAST_LGN_YMD;

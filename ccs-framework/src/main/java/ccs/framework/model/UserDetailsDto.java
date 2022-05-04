@@ -1,4 +1,4 @@
-package ccs.cmn.dto;
+package ccs.framework.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,6 +12,8 @@ public class UserDetailsDto implements UserDetails{
 
 	private String USERID;
 	private String PASSWORD;
+	private String NICKNAME;
+	private String BIRTHDATE;
 	private boolean ENABLED;
 	private List<GrantedAuthority> authority;
 
@@ -38,6 +40,17 @@ public class UserDetailsDto implements UserDetails{
 	public String getUsername() {
 		// TODO Auto-generated method stub
 		return USERID;
+	}
+	
+
+	public String getNickname() {
+		// TODO Auto-generated method stub
+		return NICKNAME;
+	}
+	
+	public String getBirthDate() {
+		// TODO Auto-generated method stub
+		return BIRTHDATE;
 	}
 	
 	@Override

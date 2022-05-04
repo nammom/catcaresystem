@@ -1,6 +1,7 @@
 package ccs.framework.model;
 
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -60,20 +61,19 @@ private Map<String,Object> map = new HashMap<String,Object>();
 		 */
 		
 		
-		UserInfo user =null;
+		UserDetailsDto user =null;
 		try {
-			user = SessionUtility.getUserInfo();
+			user = SessionUtility.getUserDetails();
 		} catch (Exception e) {
 		}
 		if(user != null){
 			/**
 			 * 로그인 사용자 정보 추가
 			 */
-			map.put("_SESSION_USER_ID_", 	 user.getUSERID());				// 그룹
-			map.put("_SESSION_USER_ID",   	 user.getUSERID());				// 사업장
-			map.put("_SESSION_USER_NM_",	 user.getUSERNM());				// 로그인한 사원의 회사
-			map.put("_SESSION_USER_BRTHDY_", user.getBRTHDY());
-			map.put("_SESSION_AUTHOR_",		 user.getAUTHOR());
+			map.put("_SESSION_USER_ID_", 	 user.getUsername());				
+			map.put("_SESSION_USER_NM_",	 user.getNickname());				
+			map.put("_SESSION_USER_BRTHDY_", user.getBirthDate());
+			map.put("_SESSION_AUTHOR_",		 user.getAuthorities());
 			
 			/**
 			 * 권한 정보 추가
@@ -84,10 +84,7 @@ private Map<String,Object> map = new HashMap<String,Object>();
 	
 	private void initializeSystem(){
 
-		map.put("_CURRENT_DATE_", new Date());
-/*		map.put("_SESSION_USER_ID_","00000");
-		map.put("_SESSION_USER_ID","00000");
-		map.put("_SESSION_USER_NM_", "홍길동");*/
+		map.put("_CURRENT_DATE_", LocalDateTime.now());
 	}
 	
 

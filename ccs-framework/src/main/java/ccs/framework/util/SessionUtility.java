@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -34,11 +35,11 @@ public class SessionUtility {
 	 * UserInfo 반환
 	 * @return UserInfo
 	 */
-	public static <T extends UserInfo> T getUserInfo(){
+	public static <T extends UserDetails> T getUserDetails(){
 		try {
 			T user =  (T) getAttribute(userSessionName);
 			
-			if(user != null && StringUtility.isNotEmpty(user.getUSERID())) return user;
+			if(user != null && StringUtility.isNotEmpty(user.getUsername())) return user;
 			return null;
 			
 		} catch (Exception e) {
@@ -52,13 +53,13 @@ public class SessionUtility {
 	 * user 로그인 수행
 	 * @param userInfo
 	 */
-	public static <T extends UserInfo> void setUserInfo(T userInfo){
+	public static <T extends UserDetails> void setUserDetails(T userDetail){
 		try {
 			
-			System.out.println("===============================> SESSION setUserInfo================================================================");
+			System.out.println("===============================> SESSION setUserDetails================================================================");
 			
 			
-			setAttribute(userSessionName,userInfo);
+			setAttribute(userSessionName,userDetail);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

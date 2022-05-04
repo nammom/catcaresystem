@@ -2,11 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="ccs.cmn.mapper.S001Mapper">
 
-	<select id="selectUsersByUserName" parameterType="java.lang.String" resultType="ccs.cmn.dto.UserDetailsDto">
+	<select id="selectUsersByUserName" parameterType="java.lang.String" resultType="ccs.framework.model.UserDetailsDto">
 		select 
 			userid
 			, password
 			, enabled 
+			, nickname
 		from 
 			tb_user 
 		where 

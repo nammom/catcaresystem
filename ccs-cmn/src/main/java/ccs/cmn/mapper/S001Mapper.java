@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
-import ccs.cmn.dto.UserDetailsDto;
 import ccs.framework.annotations.Mapper;
+import ccs.framework.model.UserDetailsDto;
 
 
 @Mapper(value="S001Mapper")
