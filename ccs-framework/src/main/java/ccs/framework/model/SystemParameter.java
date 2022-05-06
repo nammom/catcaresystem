@@ -1,6 +1,7 @@
 package ccs.framework.model;
 
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -84,7 +85,7 @@ private Map<String,Object> map = new HashMap<String,Object>();
 	
 	private void initializeSystem(){
 
-		map.put("_CURRENT_DATE_", LocalDateTime.now());
+		map.put("_CURRENT_DATE_", LocalDate.now());
 	}
 	
 

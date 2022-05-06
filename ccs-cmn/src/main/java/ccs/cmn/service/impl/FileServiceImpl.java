@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
 	
-	FileMapper fileMapper;
+	private final FileMapper fileMapper;
 	
 	@Override
 	public List<Map<String, Object>> selectFiles(String FILE_GRUP) throws Exception {

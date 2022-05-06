@@ -3,7 +3,6 @@ package ccs.cmn.service;
 import java.util.List;
 import java.util.Map;
 
-import ccs.cmn.dto.FileInfoDto;
 
 public interface FileService {
 	public List<Map<String, Object>> selectFiles (String FILE_GRUP) throws Exception;

@@ -3,28 +3,27 @@ package ccs.framework.model;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Properties;
+import java.util.UUID;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.logging.Log;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import ccs.framework.dataservice.BeanService;
-import ccs.framework.dataservice.IdGnrService;
+import ccs.framework.util.SessionUtility;
 import ccs.framework.util.StringUtility;
 
 
@@ -59,74 +58,58 @@ public class FileParameter {
 		FileParameter fileParameter = new FileParameter();
 		if(request instanceof MultipartHttpServletRequest){
 			Properties config = BeanService.getBeanService("config", Properties.class);
-        	IdGnrService UUIDService  = BeanService.getBeanService("UUIDService", IdGnrService.class);
+			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest)request;
+			UserDetails userInfo = SessionUtility.getUserDetails();
+			logger.debug("FileParameter create" );
+			
+			//폴더 생성
+			String sBaseUploadPath = config.getProperty("Globals.file.Upload");
+			String sFilePath = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM", Locale.KOREA));
+        	String saveFolderPath = Paths.get(sBaseUploadPath, sFilePath).toString();
+        	File saveFolder = new File(saveFolderPath);
+        	if(!saveFolder.exists() || saveFolder.isFile()) {
+        		saveFolder.mkdirs();
+        	}
         	
-        	MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest)request;
-        	if(logger.isDebugEnabled()){
-				logger.debug("FileParameter create" );
-			}
-        	
-        	String sBaseUpladPath = config.getProperty("Globals.file.Upload");
-			String sFilePath = new SimpleDateFormat("yyyy/MM", Locale.KOREA).format(new Date());
-			String storePathString = Paths.get(sBaseUpladPath,sFilePath).toString();
-			File saveFolder = new File(storePathString);
-	    	if (!saveFolder.exists() || saveFolder.isFile()) {
-			    saveFolder.mkdirs();
-			}
-	    	
-			Iterator<String> fileNames = (Iterator<String>) multiRequest.getFileNames();
-			while(fileNames.hasNext()){
-				String fileName = fileNames.next();
-				List<MultipartFile> filelist = multiRequest.getFiles(fileName);
-				
-				
-				if(logger.isDebugEnabled()){
-					logger.debug("fileName = " + fileName);
-				}
-				
-				for(MultipartFile file : filelist){
-					FileInfoVO fileVO = new FileInfoVO();
-		 		    String orginFileName = file.getOriginalFilename();
-		 		    
-		 		    
-		 		   if(logger.isDebugEnabled()){
-		 			  logger.debug("orginFileName = " + orginFileName);
-					}
-		 		   
-		 		 //--------------------------------------
-				    // �썝 �뙆�씪紐낆씠 �뾾�뒗 寃쎌슦 泥섎━
-				    // (泥⑤�媛� �릺吏� �븡�� input file type)
-				    //--------------------------------------
-				    if ("".equals(orginFileName)) {
-				    	continue;
-				    }
+        	//파일 생성
+        	Iterator<String> fileNames = (Iterator<String>) multiRequest.getFileNames();
+        	while(fileNames.hasNext()) {
+        		String fileName = fileNames.next();
+        		List<MultipartFile> fileList = multiRequest.getFiles(fileName);
+        		
+        		logger.debug("filename = " + fileName);
+        		
+        		for(MultipartFile file : fileList) {
+        			String orginFileName = file.getOriginalFilename();
+        			logger.debug("orginFileName = " + orginFileName);
+        			
+        			if(StringUtils.isEmpty(orginFileName)) {
+        				continue;
+        			}
+        			
+        			String realName = FilenameUtils.getBaseName(orginFileName);
+        			realName = StringUtility.getStringReplace(realName);
+        			String fileExt = FilenameUtils.getExtension(orginFileName);
+        			String saveFileName = UUID.randomUUID().toString() + realName;
+        			long _size = file.getSize();
 				    
-				    int index = orginFileName.lastIndexOf(".");
-					String realName = orginFileName.substring(0, index);
-					realName = StringUtility.getStringReplace(realName); // 怨듬갚, �듅�닔臾몄옄 �젣嫄�
-				    String fileExt = FilenameUtils.getExtension(orginFileName); // �솗�옣�옄
-				    
-				    String saveFileName = (String)UUIDService.getId();
-				    fileVO.setSaveFileName(saveFileName);
-				    long _size = file.getSize();
-				    fileVO.setFileSize(_size);
-				    
-				    // �뙆�씪 �깮�꽦
-				    String sRealfilePath = Paths.get(storePathString ,saveFileName).toString();
+        			String sRealfilePath = Paths.get(saveFolderPath, saveFileName).toString();
 				    file.transferTo(new File(sRealfilePath));
-
-
-			    	fileVO.setSaveFileName(saveFileName);
-			    	fileVO.setSaveFilePath(sFilePath);
-			    	fileVO.setUploadSuccess(true);
-			    	fileVO.setFileExtension(fileExt);
-			    	fileVO.setFileInputName(fileName);
-			    	if(StringUtility.isNullOrBlank(fileExt)){
-			    		fileVO.setOrignalFileName(realName);
-			    	} else{
-			    		fileVO.setOrignalFileName(realName + "." + fileExt);
-			    	}
-			    	
+				    logger.debug("sRealfilePath = " + sRealfilePath);
+				    
+				    if(!StringUtils.isEmpty(fileExt)) {
+				    	orginFileName = orginFileName + "." + fileExt;
+				    }
+				    FileInfoVO fileVO = FileInfoVO.builder()
+				    		.orignalFileName(orginFileName)
+				    		.saveFileName(saveFileName)
+				    		.saveFilePath(sRealfilePath)
+				    		.uploadSuccess(true)
+				    		.fileExtension(fileExt)
+				    		.fileInputName(fileName)
+				    		.fileSize(_size)
+				    		.build();
+				    		
 				    fileParameter.getFiles().add(fileVO);
 				} //- end for
 			} //- end while
