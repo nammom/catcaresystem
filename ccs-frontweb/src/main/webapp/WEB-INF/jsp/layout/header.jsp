@@ -5,19 +5,16 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %> 
 
 <!DOCTYPE html> <html lang="ko"> 
-	<head> 
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
-		<meta name="title" content="고양이 돌봄 시스템">	
-		<meta name="_csrf_header" content="${_csrf.headerName}">
-		<meta name="_csrf" content="${_csrf.token}">
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+	<meta name="title" content="고양이 돌봄 시스템">	
+	<meta name="_csrf_header" content="${_csrf.headerName}">
+	<meta name="_csrf" content="${_csrf.token}">
 
-		<link rel="stylesheet" type="text/css" href="/resources/css/bootstrap/bootstrap.css" />
-		<link rel="stylesheet" type="text/css" href="/resources/css/datatables/datatables.css" />
-    	
-    	<script type="text/javascript" src="/resources/js/jquery-3.6.0.min.js"></script>
-    	<script type="text/javascript" src="/resources/js/common.js"></script>
-    	<script type="text/javascript" src="/resources/js/bootstrap/bootstrap.min.js"></script>
-    	<script type="text/javascript" src="/resources/js/datatables/datatables.min.js"></script>
-	</head>
+	<link rel="stylesheet" type="text/css" href="/resources/css/bootstrap/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="/resources/css/datatables/datatables.css" />
+	<script type="text/javascript" src="/resources/js/jquery-3.6.0.min.js"></script>
+
+</head>
 
 <body class="main"> 

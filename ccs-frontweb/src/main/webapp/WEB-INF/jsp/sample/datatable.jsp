@@ -79,8 +79,8 @@ function fn_page() {
 			},
 			createSearchTable : function() {
 				/* 데이터 ajax 버전 */
-				var header = $("meta[name='_csrf_header']").attr('content');
-				var token = $("meta[name='_csrf']").attr('content');
+				let header = $("meta[name='_csrf_header']").attr('content');
+				let token = $("meta[name='_csrf']").attr('content');
 				
 				$this.$table = $('#tableId').DataTable({
 					destroy: true,//테이블 파괴가능
@@ -135,3 +135,5 @@ function fn_page() {
 }
 
 </script>
+
+<%@ include file="/WEB-INF/jsp/layout/footer.jsp"%>

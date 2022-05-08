@@ -11,7 +11,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import ccs.framework.dataservice.ApplicationContextProvider;
-import ccs.framework.model.UserInfo;
 
 public class SessionUtility {
 	

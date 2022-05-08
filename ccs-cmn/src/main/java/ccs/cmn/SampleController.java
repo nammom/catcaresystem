@@ -5,20 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import ccs.cmn.service.SampleService;
-import ccs.cmn.service.impl.SampleServiceImpl;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import ccs.framework.model.AjaxResult;
 
 @Controller
 public class SampleController {
@@ -55,6 +49,34 @@ public class SampleController {
 		
 		result.put("data", dataList); //data란 key로 결과를 넣어줘야함
 		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/sample/form/save")
+	public AjaxResult save(@RequestBody Map<String, Object> param){
+		
+		try {
+			System.out.println("name : " + param.get("id"));
+			System.out.println("age : " + param.get("password"));
+			
+			//저장 후 조회
+			
+			//저장
+			//service.save(param);
+			
+			//조회
+			//Map<String, Object> data1 = service.select(id);
+			
+			Map<String, Object> data1 = new HashMap<>();
+			data1.put("id", "김지영");
+			data1.put("password", 1234);
+			
+			return new AjaxResult(AjaxResult.STATUS.SUCCESS, data1);
+			
+		}catch(Exception e) {
+			return new AjaxResult(AjaxResult.STATUS.ERROR, "실패하였습니다.");
+		}
+		
 	}
 	
 }

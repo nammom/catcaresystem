@@ -28,4 +28,4 @@
 		</div>
 	</div>
 </div>
-</html>
+<%@ include file="/WEB-INF/jsp/layout/footer.jsp"%>
