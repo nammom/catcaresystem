@@ -1,6 +1,7 @@
 package ccs.framework.model;
 
 
+import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Enumeration;
@@ -58,9 +59,12 @@ public class JsonParameter {
 		String jsonBody;
 		if(request instanceof MultipartHttpServletRequest){
 			jsonBody =(String)request.getParameter(DATA_KEY);
+			if(StringUtils.isNotEmpty(jsonBody)) {
+				jsonBody = URLDecoder.decode(request.getParameter(DATA_KEY), "UTF8");
+			}
 			jsonParameter.setData((Map<String, Object>)getData(jsonBody));
 		}else {
-			jsonBody = IOUtils.toString(request.getInputStream());
+			jsonBody = IOUtils.toString(request.getInputStream(), "UTF-8");
 			if(StringUtils.isNotEmpty(jsonBody)) {
 				jsonParameter.setData((Map<String, Object>)getData(jsonBody).get(DATA_KEY));
 			}

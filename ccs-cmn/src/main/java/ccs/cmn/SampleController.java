@@ -106,7 +106,7 @@ public class SampleController {
 		
 		try {
 			Map<String,Object> parameter = HashMapUtility.<String, Object>create()
-					//.add(param)
+					.add(jsonParameter.getData())
 					.add(systemParameter.toMap())
 					.toMap();
 			//----------------------------------------------------------- 파일 정보 업데이트 ---------------------------------------------
@@ -121,6 +121,9 @@ public class SampleController {
 			parameter.put("FILE_GRP_ID", FILE_GRP_ID);
 			//----------------------------------------------------------- 파일 정보 업데이트 ---------------------------------------------
 
+			//폼정보 저장
+			//service.insertContents(param);
+			
 			return new AjaxResult(AjaxResult.STATUS.SUCCESS);
 			
 		}catch(Exception e) {

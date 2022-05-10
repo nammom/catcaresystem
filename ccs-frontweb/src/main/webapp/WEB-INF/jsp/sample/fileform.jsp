@@ -6,7 +6,7 @@
 <c:url value="/login" var="loginUrl" />
 	<div class="col-md-12">
 		<div class="col-md-6">
-		<form class="form-group contents" id="history-fileForm" method="post" enctype="multipart/form-data">
+		<form class="form-group contents" id="history-fileForm" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
 		    <div class="form-group">
 		        <label for="title" class="form-label mt-4">제목</label>
 		        <input type="text" id="title" name="title" class="form-control"/>
@@ -19,12 +19,10 @@
 				<div id="history-fileList" class="sta-multifile-upload-list"></div>
 			</div>
 			<div class="form-group">
-<!-- 		         <form id="history-fileForm" method="post" enctype="multipart/form-data"> -->
-                     <span id="history-addFileBtn" class="sta-fileinput-btn sta-fileinput-multi-btn sta-fileinput-btn-add fileinput-button">
-                        <span>파일선택</span>
-                        <input type="file" id="history-fileInput" class="file-upload" />            
-                    </span> 
-       <!--     		</form>  -->
+                <span id="history-addFileBtn" class="sta-fileinput-btn sta-fileinput-multi-btn sta-fileinput-btn-add fileinput-button">
+                   <span>파일선택</span>
+                   <input type="file" id="history-fileInput" class="file-upload" />            
+               </span> 
 			</div>
 		    <button type="button" id="btn-save" class="btn btn-warning">저장</button>
 		</form>
