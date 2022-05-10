@@ -1,45 +1,28 @@
 package ccs.cmn.service.impl;
 
-import java.io.File;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
-import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.SystemUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import ccs.cmn.service.FileService;
 import ccs.cmn.service.UploadFileService;
-import ccs.framework.dataservice.BeanService;
 import ccs.framework.model.FileInfoVO;
-import ccs.framework.util.SessionUtility;
-import ccs.framework.util.StringUtility;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@Service("uploadFileService")
 public class UploadFileServiceImpl implements UploadFileService{
 	private static final Logger logger = LogManager.getLogger(UploadFileServiceImpl.class);
 
-	private final FileService fileService;
+	@Resource(name="fileService")
+	private FileService fileService;
 
 	@Override
 	public List<Map<String, Object>> getFiles(String FILE_GRUP, String downloadUrl) throws Exception {
@@ -58,7 +41,7 @@ public class UploadFileServiceImpl implements UploadFileService{
         			Map<String,Object> fileMap = new HashMap<>();
         			
         			fileMap.put("orgnFileNm", file.getOrignalFileName());
-        			fileMap.put("fileNm", file.getFileInputName());
+        			fileMap.put("fileNm", file.getSaveFileName());
         			fileMap.put("fileExtsn", file.getFileExtension());
         			fileMap.put("filePath", file.getSaveFilePath());
         			fileMap.put("fileMg", file.getFileSize());
@@ -71,7 +54,7 @@ public class UploadFileServiceImpl implements UploadFileService{
 		
 		//DB¿˙¿Â
 		fileService.save(FILE_GRUP, systemParameter, filesToInsert, filesToDelete);
-		return null;
+		return FILE_GRUP;
 	}
 
 	@Override

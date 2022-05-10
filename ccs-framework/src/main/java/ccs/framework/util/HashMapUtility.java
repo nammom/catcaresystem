@@ -12,16 +12,16 @@ public class HashMapUtility<T,K> {
 	}
 	
 	public HashMapUtility<T,K> add(T t, K k){
-		map.put(t, k);
+		this.map.put(t, k);
 		return this;
 	}
 	
 	public HashMapUtility<T,K> add(Map<T,K> map){
-		map.putAll(map);
+		this.map.putAll(map);
 		return this;
 	}
 	
 	public Map<T,K> toMap(){
-		return map;
+		return this.map;
 	}
 }

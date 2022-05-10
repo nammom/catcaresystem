@@ -17,7 +17,11 @@
 		
 		<h3> 
 			[<a href="<c:url value="/introduction" />">소개 페이지</a>] 
-			[<a href="<c:url value="/admin/adminHome" />">관리자 홈</a>] 
+			[<a href="<c:url value="/admin/adminHome" />">관리자 홈</a>]
+			<br/><br/> 
+			[<a href="<c:url value="/sample/form" />">form 샘플</a>] 
+			[<a href="<c:url value="/sample/fileform" />">fileform 샘플</a>] 
+			[<a href="<c:url value="/sample/datatable" />">datatables 샘플</a>] 
 		</h3> 
 </div>		
 

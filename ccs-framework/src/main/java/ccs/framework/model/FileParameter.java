@@ -59,7 +59,6 @@ public class FileParameter {
 		if(request instanceof MultipartHttpServletRequest){
 			Properties config = BeanService.getBeanService("config", Properties.class);
 			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest)request;
-			UserDetails userInfo = SessionUtility.getUserDetails();
 			logger.debug("FileParameter create" );
 			
 			//폴더 생성
@@ -83,23 +82,21 @@ public class FileParameter {
         			String orginFileName = file.getOriginalFilename();
         			logger.debug("orginFileName = " + orginFileName);
         			
-        			if(StringUtils.isEmpty(orginFileName)) {
+        			if(StringUtils.isEmpty(orginFileName) || 
+        					(StringUtility.isEqual("___AJAX_DATA___", fileName) && StringUtility.isEqual("blob", orginFileName))) {
         				continue;
         			}
         			
         			String realName = FilenameUtils.getBaseName(orginFileName);
         			realName = StringUtility.getStringReplace(realName);
         			String fileExt = FilenameUtils.getExtension(orginFileName);
-        			String saveFileName = UUID.randomUUID().toString() + realName;
+        			String saveFileName = UUID.randomUUID().toString() + realName + "." + fileExt;
         			long _size = file.getSize();
 				    
         			String sRealfilePath = Paths.get(saveFolderPath, saveFileName).toString();
 				    file.transferTo(new File(sRealfilePath));
 				    logger.debug("sRealfilePath = " + sRealfilePath);
 				    
-				    if(!StringUtils.isEmpty(fileExt)) {
-				    	orginFileName = orginFileName + "." + fileExt;
-				    }
 				    FileInfoVO fileVO = FileInfoVO.builder()
 				    		.orignalFileName(orginFileName)
 				    		.saveFileName(saveFileName)

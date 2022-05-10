@@ -41,31 +41,18 @@ function fn_page() {
 	}
 	
 	this.formManager = {
-			save : function() {
-				$.ccs.ajax({
-					url : "/sample/form/save"
-					, data : JSON.stringify(this.getData())
-					, success : function(){
-						alert("저장되었습니다.");
-					}
-				});
-			},
-			getData : function() {
-				return $(".contents").serializeObject();
-			},
-			getSelectedRows : function() {	//선택한 행 가져오기
-				$this.$table.rows('.selected').data();
-			},
-			getAllRows : function() {	//전체 행 가져오기
-				$this.$table.rows().data();
-			},
-			searchData : function() {	//검색
-				$this.$table.ajax.reload();
-			},
-			clearData : function() {	//데이터 모두 제거
-				$this.$table.clear().draw();
-			}
-			
+		save : function() {
+			$.ccs.ajax({
+				url : "/sample/form/save"
+				, data : this.getData()
+				, success : function(){
+					alert("저장되었습니다.");
+				}
+			});
+		},
+		getData : function() {
+			return $(".contents").serializeObject();
+		}
 	}
 	
 	

@@ -11,6 +11,7 @@
 	<meta name="_csrf_header" content="${_csrf.headerName}">
 	<meta name="_csrf" content="${_csrf.token}">
 
+	<link rel="stylesheet" type="text/css" href="/resources/css/jquery.multifile.css" />
 	<link rel="stylesheet" type="text/css" href="/resources/css/bootstrap/bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="/resources/css/datatables/datatables.css" />
 	<script type="text/javascript" src="/resources/js/jquery-3.6.0.min.js"></script>

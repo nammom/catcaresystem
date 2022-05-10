@@ -71,6 +71,7 @@ private Map<String,Object> map = new HashMap<String,Object>();
 			/**
 			 * 로그인 사용자 정보 추가
 			 */
+			map.put("_SESSION_USER_CD_", 	 user.getUserCd());	
 			map.put("_SESSION_USER_ID_", 	 user.getUsername());				
 			map.put("_SESSION_USER_NM_",	 user.getNickname());				
 			map.put("_SESSION_USER_BRTHDY_", user.getBirthDate());

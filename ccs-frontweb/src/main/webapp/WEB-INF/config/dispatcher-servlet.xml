@@ -22,7 +22,7 @@
 	<!-- mvc 사용을 위한 annotation-->
 	<mvc:annotation-driven>
 		 <mvc:argument-resolvers>
-		       <!--  <bean class="adid.framework.resolvers.JsonArgumentResolver" /> -->
+		    <bean class="ccs.framework.resolvers.JsonArgumentResolver" />
 	        <bean class="ccs.framework.resolvers.SystemArgumentResolver" />
 	        <bean class="ccs.framework.resolvers.FileArgumentResolver" />
 	     </mvc:argument-resolvers>

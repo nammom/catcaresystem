@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserDetailsDto implements UserDetails{
 
+	private Long USERCD;
 	private String USERID;
 	private String PASSWORD;
 	private String NICKNAME;
@@ -53,6 +54,10 @@ public class UserDetailsDto implements UserDetails{
 		return BIRTHDATE;
 	}
 	
+	public Long getUserCd() {
+		// TODO Auto-generated method stub
+		return USERCD;
+	}
 	@Override
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub

@@ -3,8 +3,9 @@
 <mapper namespace="ccs.cmn.mapper.S001Mapper">
 
 	<select id="selectUsersByUserName" parameterType="java.lang.String" resultType="ccs.framework.model.UserDetailsDto">
-		select 
-			userid
+		select
+			user_cd as usercd 
+			, userid
 			, password
 			, enabled 
 			, nickname

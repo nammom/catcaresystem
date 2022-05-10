@@ -28,27 +28,27 @@
 			A.FILE_EXTSN,
 			A.FILE_MG
 		FROM TB_FILE A
-		WHERE A.FILE_ID=#{FileId} -- 파일_순번
+		WHERE A.FILE_ID=#{fileId} -- 파일_순번
 	</select>
 	
-	<insert id="insertFileGrup" parameterType="java.util.Map" useGeneratedKeys="true" keyColumn="FILE_GRP_ID" keyProperty="fileGrpId">
+	<insert id="insertFileGroup" parameterType="java.util.Map" useGeneratedKeys="true" keyColumn="file_grp_id" keyProperty="fileGrpId">
 	    	INSERT INTO TB_FILE_GRP 
 			(
-				REGIST_USER, -- 입력사용자
-				REGIST_DT, -- 입력일자
-				UPDT_USER, -- 변경사용자
-				UPDT_DT -- 변경일자
+				REG_ID,
+				REG_DT,
+				UPDT_ID,
+				UPDT_DT
 			)
 			VALUES
 			(
-				#{userId}, -- 입력사용자
-				TO_CHAR(NOW(),'YYYYMMDDHH24MISS'), -- 입력일자
-				#{userId}, -- 변경사용자
-				TO_CHAR(NOW(),'YYYYMMDDHH24MISS') -- 변경일자
+				#{_SESSION_USER_CD_}, -- 입력사용자
+				NOW(), -- 입력일자
+				#{_SESSION_USER_CD_}, -- 변경사용자
+				NOW() -- 변경일자
 			)
 	</insert>
 	
-	<insert id="insertFile" parameterType="java.util.Map">
+	<insert id="insertFile" parameterType="java.util.Map" useGeneratedKeys="true" keyColumn="file_id"  keyProperty="fileId">
 	    	INSERT INTO TB_FILE 
 			(
 				FILE_GRP_ID, -- 파일_그룹
@@ -57,6 +57,8 @@
 				FILE_EXTSN, -- 확장자
 				FILE_MG, -- 파일 사이즈
 				FILE_PATH,
+				USE_AT,
+				SORT_ORDR,
 				REG_ID,
 				REG_DT,
 				UPDT_ID,
@@ -66,14 +68,16 @@
 			(
 				#{fileGrpId}, -- 파일_그룹
 				#{fileNm}, -- 파일_명
-				#{orgnFileNm} -- 원본 파일 명
+				#{orgnFileNm}, -- 원본 파일 명
 				#{fileExtsn}, -- 확장 자
 				#{fileMg}, -- 파일 사이즈
 				#{filePath},
-				#{userId},
-				TO_CHAR(NOW(),'YYYYMMDDHH24MISS'),
-				#{userId},
-				TO_CHAR(NOW(),'YYYYMMDDHH24MISS')
+				#{useAt},
+				(SELECT COUNT(1) + 1 FROM TB_FILE WHERE FILE_GRP_ID = #{fileGrpId}),
+				#{_SESSION_USER_CD_},
+				NOW(),
+				#{_SESSION_USER_CD_},
+				NOW()
 			)
 	</insert>
 	

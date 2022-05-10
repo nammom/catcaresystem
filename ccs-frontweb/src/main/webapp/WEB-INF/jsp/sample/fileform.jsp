@@ -6,7 +6,7 @@
 <c:url value="/login" var="loginUrl" />
 	<div class="col-md-12">
 		<div class="col-md-6">
-		<form:form class="form-group">
+		<form class="form-group contents" id="history-fileForm" method="post" enctype="multipart/form-data">
 		    <div class="form-group">
 		        <label for="title" class="form-label mt-4">제목</label>
 		        <input type="text" id="title" name="title" class="form-control"/>
@@ -16,15 +16,72 @@
 		        <textarea id="contents" name="contents" class="form-control"></textarea>
 			</div>
 			<div class="form-group">
-		        <label for="password" class="form-label mt-4">첨부파일</label>
-		        <input type="file" id="" name="" class="form-control"/>
+				<div id="history-fileList" class="sta-multifile-upload-list"></div>
 			</div>
-		    <button type="submit" class="btn btn-warning">저장</button>\
-		</form:form>
+			<div class="form-group">
+<!-- 		         <form id="history-fileForm" method="post" enctype="multipart/form-data"> -->
+                     <span id="history-addFileBtn" class="sta-fileinput-btn sta-fileinput-multi-btn sta-fileinput-btn-add fileinput-button">
+                        <span>파일선택</span>
+                        <input type="file" id="history-fileInput" class="file-upload" />            
+                    </span> 
+       <!--     		</form>  -->
+			</div>
+		    <button type="button" id="btn-save" class="btn btn-warning">저장</button>
+		</form>
 		</div>
 	</div>
 </div>
-<script type="text/javascript">
+<script>
+let _mypage = null;
+
+$(document).ready(function() {
+
+	_mypage = new fn_page();
+	_mypage.initialize();
+});
+
+function fn_page() {
+	let $this = this;
+	this.initialize = function() {
+	
+		$("#btn-save").click(function(){
+			$this.formManager.save();
+		});
+		
+		// 첨부파일 추가 이벤트
+		$("#history-fileInput").MultiFile({
+			accept: "pdf|jpg|jpeg|gif|png|bmp|zip|txt|xlsx|hwp|doc|docx|csv|",
+			max: 20,
+			list: "#history-fileList",	// upload / or selected files
+			onFileSelect: function(element, value, master_element) {
+				console.log(master_element);
+			}
+		});
+		
+	}
+	
+	this.formManager = {
+		save : function() {
+			$.ccs.ajax({
+				url : "/sample/fileform/save"
+				, fileform : '#history-fileForm'
+				, data : this.getData()
+				, success : function(){
+					alert("저장되었습니다.");
+				}
+			});
+		},
+		getData : function() {
+			let jsonData = $(".contents").serializeObject();
+			// 기존에 있던 파일이 삭제 되었을 겨웅의 정보 담기.
+			jsonData['deleteFiles'] = $("#schedule-fileInput").MultiFile("toDeletedList");
+			return jsonData;
+		}
+	}
+	
+	
+}
 
 </script>
+
 <%@ include file="/WEB-INF/jsp/layout/footer.jsp"%>

@@ -14,14 +14,14 @@
 	<entry key="Globals.Const.super.password"></entry>
 	
 	<!-- Upload File Information -->
-	<entry key="Globals.file.MaxSize"></entry>
+	<entry key="Globals.file.MaxSize">60000000</entry>
 	
 	
 	<!-- IN / OUT -->
 	<entry key="Globals.Site.Mode"></entry>
 	
 	<!-- 파일업로드 root 경로--> 
-	<entry key="Globals.file.Upload"></entry>
+	<entry key="Globals.file.Upload">C:\Uploads\</entry>
 	<!-- 운영에 패봏시 -->
 	<!-- <entry key="Globals.file.Upload">/data/documents/</entry> -->
 	
