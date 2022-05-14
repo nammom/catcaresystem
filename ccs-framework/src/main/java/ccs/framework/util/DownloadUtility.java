@@ -27,11 +27,11 @@ public class DownloadUtility {
 	
 	private HttpServletResponse response;
 	
-	@Getter@Setter
+	@Getter
 	private String contentType;
-	@Getter@Setter
+	@Getter
 	private String fileName;
-	@Getter@Setter
+	@Getter
 	private String fileExtension;
 	
 	private List<String> files;
@@ -52,6 +52,7 @@ public class DownloadUtility {
 	    this.contentType = mimeType;
 		return this;
 	}
+	
 	
 	public void startDownload() throws Exception{
 		
@@ -144,6 +145,23 @@ public class DownloadUtility {
 			}
 		}
 	}
+
+	public DownloadUtility setContentType(String contentType) {
+		this.contentType = contentType;
+		return this;
+	}
+
+	public DownloadUtility setFileName(String fileName) {
+		this.fileName = fileName;
+		return this;
+	}
+
+	public DownloadUtility setFileExtension(String fileExtension) {
+		this.fileExtension = fileExtension;
+		return this;
+	}
+
+	
 	
 
 }

@@ -142,7 +142,15 @@
 								$targetElement.val(value).prop("selected", true);
 								break;
 							case "INPUT" : 
-								$targetElement.val(value);
+								if($targetElement.attr("type") == "checkbox"){
+									if(typeof(value) !== "object"){
+										if($targetElement.val() == value){
+											$targetElement.prop("checked", true);
+										}
+									}
+								}else{
+									$targetElement.val(value);
+								}
 								break;
 							case "TEXTAREA" : 
 								$targetElement.val(value);

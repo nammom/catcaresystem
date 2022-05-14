@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ccs.cmn.service.FileService;
 import ccs.cmn.service.UploadFileService;
 import ccs.framework.model.FileInfoVO;
+import ccs.framework.util.DownloadUtility;
 
 @Service("uploadFileService")
 public class UploadFileServiceImpl implements UploadFileService{
@@ -59,8 +60,11 @@ public class UploadFileServiceImpl implements UploadFileService{
 
 	@Override
 	public void downloadFile(Long fileId, HttpServletResponse response) throws Exception {
-		// TODO Auto-generated method stub
-		
+		Map<String,Object> file = fileService.selectFile(fileId);
+		DownloadUtility.create(response).writeBodyFromFile((String)file.get("file_path"))
+		.setFileName((String)file.get("orgn_file_nm"))
+		.setFileExtension((String)file.get("file_extsn"))
+		.startDownload();
 	}
 
 }

@@ -34,13 +34,13 @@ public class FileServiceImpl implements FileService {
 		List<Map<String, Object>> files = fileMapper.selectFilesAllForGrup(FILE_GRUP);
 		if(!CollectionUtils.isEmpty(files)) {
 			List<Map<String, Object>> result = new ArrayList<>();
-			String url = variables.getProperty("Url.Relay") + "/downloadfile.do";
+			String url = variables.getProperty("Url.Relay") + "/downloadfile";
 			
 			files.stream().forEach(x ->{
 			Map<String, Object> map = new HashMap<>();
 			map.put("FILEID", x.get("file_id"));
 			map.put("FILENAME", x.get("orgn_file_nm"));
-			map.put("URL", url + "&fileId=" + String.valueOf(x.get("file_id")));
+			map.put("URL", url + "?fileId=" + String.valueOf(x.get("file_id")));
 			map.put("EXTCLASS", x.get("file_extsn"));
 			map.put("FILESIZE", x.get("file_mg"));
 			result.add(map);

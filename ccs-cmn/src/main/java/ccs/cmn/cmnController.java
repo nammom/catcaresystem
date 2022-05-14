@@ -4,11 +4,17 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import ccs.cmn.service.FileService;
 import ccs.cmn.service.SampleService;
+import ccs.cmn.service.UploadFileService;
 import ccs.cmn.service.impl.SampleServiceImpl;
 
 import org.slf4j.Logger;
@@ -22,21 +28,16 @@ public class cmnController {
 	@Resource(name="SampleService")
 	private SampleService sampleservice;
 	
+	@Resource(name="uploadFileService")
+	private UploadFileService uploadFileService;
+	
 	@RequestMapping(value = "/test")
 	public String cmn(){
-		LOGGER.debug("/test 컨트롤러 진입");
-/*		try {
-			
-		}catch(Exception e) {
-			LOGGER.warn("msg", e);
-		}
-*/
 		return "cmn/test";
 	}
 	
 	@RequestMapping(value = "/home")
 	public String cmnHome(){
-//		sampleservice.selectSampleSql();
 		return "cmn/home";
 	}
 	
@@ -58,5 +59,15 @@ public class cmnController {
 	@RequestMapping(value = "/admin/adminHome")
 	public String cmnAdminHome(){
 		return "cmn/admin/adminHome";
+	}
+	
+	@GetMapping(value = "/downloadfile")
+	public void downloadFile(@RequestParam("fileId") Long fileId, HttpServletRequest request, HttpServletResponse response){
+		try {
+			uploadFileService.downloadFile(fileId, response);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

@@ -11,6 +11,7 @@
 		<intercept-url pattern="/home" access="permitAll" />
 		<intercept-url pattern="/sample/**" access="permitAll" />
 		<intercept-url pattern="/resources/**" access="permitAll" />
+		<intercept-url pattern="downloadfile" access="permitAll" />
 		<intercept-url pattern="/admin/**"
 			access="hasRole('ADMIN')" />
 		<intercept-url pattern="/**"
