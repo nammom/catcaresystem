@@ -72,6 +72,7 @@ public class FileUploadController {
 					.add("contents", "³»¿ë")
 					.add("fileGrpId", 11L)
 					.add("color", color)
+					.add("regDt", "2022-11-18")
 					.toMap();
 			
 			Long fileGrpId = (Long) form.get("fileGrpId");
