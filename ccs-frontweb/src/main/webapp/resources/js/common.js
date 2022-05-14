@@ -148,6 +148,12 @@
 											$targetElement.prop("checked", true);
 										}
 									}
+								}else if($targetElement.attr("class") && $targetElement.attr("class").indexOf("datePicker-control") > 0){
+									$targetElement.val(value);
+									let datepicker = $targetElement.datepicker().data('datepicker');
+									if(datepicker){
+										datepicker.selectDate(new Date(value));
+									}
 								}else{
 									$targetElement.val(value);
 								}

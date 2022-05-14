@@ -7,7 +7,11 @@
 	<div class="col-md-12">
 		<div class="col-md-6">
 		<form class="form-group contents" id="sample-fileForm" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
-		    <input type="hidden" id="fileGrpId" name="fileGrpId"/>
+		    <input type="hidden" id="fileGrpId" name="fileGrpId"/> 
+		    <div class="form-group">
+		        <label for="regDt" class="form-label mt-4">등록일자</label>
+		        <input type="text" id="regDt" name="regDt" class="form-control datePicker-control">
+		    </div>
 		    <div class="form-group">
 		        <label for="title" class="form-label mt-4">제목</label>
 		        <input type="text" id="title" name="title" class="form-control"/>
@@ -46,9 +50,14 @@ $(document).ready(function() {
 
 function fn_page() {
 	let $this = this;
+	let $regDtPicker;
 	
 	this.initialize = function() {
 		$this.initData();
+		
+		$regDtPicker = $("#regDt").datepicker({
+	    	language: 'ko'
+	    }); 
 		
 		$("#btn-save").click(function(){
 			$this.formManager.save();
