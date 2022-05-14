@@ -91,6 +91,17 @@
 				//parameterOptions['data'] = JSON.stringify(parameterOptions['data']);
 			}
 			return $.ajax(parameterOptions);
+		},
+		confirm : function(message, callbackFunc){
+			let result = confirm(message);
+			if(result){
+				callbackFunc();
+			}
+		},
+		bindFile : function(selecterName, files){
+			$("#" + selecterName + "-fileList").empty();
+			$("#" + selecterName + "-fileInput").MultiFile('reset');
+	        $("#" + selecterName + "-fileInput").MultiFile('addList',files);
 		}
 	}
 	
@@ -115,6 +126,63 @@
 			
 		} return obj; 
 	} 
+	
+	$.fn.bindJson = function(json){
+		this[0].reset();
+		let $form = $(this);
+		
+		for(let key in json){
+			let value = json[key];
+			if(key){
+				let $targetElement = $("[name=" + key +"]", $form);
+				if($targetElement.length == 1){
+					if(typeof(value) !== "object"){
+						switch($targetElement[0].nodeName){
+							case "SELECT" : 
+								$targetElement.val(value).prop("selected", true);
+								break;
+							case "INPUT" : 
+								$targetElement.val(value);
+								break;
+							case "TEXTAREA" : 
+								$targetElement.val(value);
+								break;
+						}
+					}else{
+						continue;
+					}
+				}else if($targetElement.length > 1){
+					switch($targetElement[0].nodeName){
+							case "INPUT" : 
+								if($targetElement.attr("type") == "checkbox"){
+										$targetElement.each(function(){
+											let $ctl = $(this);
+											if(typeof(value) !== "object"){
+												if($ctl.val() == value){
+													$ctl.prop("checked", true);
+												}
+											}else{
+												if(value.length > 0){
+													value.forEach(function(i){
+														if($ctl.val() == i){
+															$ctl.prop("checked", true);
+														}
+													});
+												}
+											}
+										});
+									}
+									break;
+								}
+								
+						}
+				}
+			}
+		}
+			
+	
+		
+	
 
 })(jQuery);
 

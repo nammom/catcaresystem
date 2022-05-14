@@ -7,15 +7,19 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ccs.cmn.service.FileService;
 import ccs.cmn.service.UploadFileService;
 import ccs.framework.model.AjaxResult;
 import ccs.framework.model.FileInfoVO;
@@ -29,25 +33,10 @@ public class SampleController {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(SampleController.class.getName());
 	
-	@Resource(name="uploadFileService")
-	private UploadFileService uploadFileService;
-	
 	@RequestMapping(value = "/sample/datatable")
 	public String datatables(){
 		
 		return "sample/datatable";
-	}
-	
-	@RequestMapping(value = "/sample/form")
-	public String form(){
-		
-		return "sample/form";
-	}
-	
-	@RequestMapping(value = "/sample/fileform")
-	public String fileform(){
-		
-		return "sample/fileform";
 	}
 	
 	@ResponseBody
@@ -68,6 +57,13 @@ public class SampleController {
 		
 		result.put("data", dataList); //data란 key로 결과를 넣어줘야함
 		return result;
+	}
+	
+	
+	@RequestMapping(value = "/sample/form")
+	public String form(){
+		
+		return "sample/form";
 	}
 	
 	@ResponseBody
@@ -100,37 +96,5 @@ public class SampleController {
 	}
 	
 	
-	@ResponseBody
-	@RequestMapping(value = "/sample/fileform/save")
-	public AjaxResult savefile(JsonParameter jsonParameter, SystemParameter systemParameter , FileParameter fileParameter){
-		
-		try {
-			Map<String,Object> parameter = HashMapUtility.<String, Object>create()
-					.add(jsonParameter.getData())
-					.add(systemParameter.toMap())
-					.toMap();
-			//----------------------------------------------------------- 파일 정보 업데이트 ---------------------------------------------
-			// 업로드한 파일정보
-			List<FileInfoVO> uploadedFiles = fileParameter.getFiles();
-			// 기존에 있었지만 삭제된 파일 정보 목록
-			List<Map<String,Object>> filesToDelete = (List<Map<String,Object>>)parameter.get("deleteFiles");
-			
-			// 기존에 파일 그룹정보가 있으면 업데이트를 위해서 파라미터로 정보 가지고 오기
-			String FILE_GRP_ID = (String)parameter.get("FILE_GRP_ID");
-			FILE_GRP_ID = uploadFileService.uploadFiles(systemParameter.toMap(), FILE_GRP_ID, uploadedFiles, filesToDelete);
-			parameter.put("FILE_GRP_ID", FILE_GRP_ID);
-			//----------------------------------------------------------- 파일 정보 업데이트 ---------------------------------------------
-
-			//폼정보 저장
-			//service.insertContents(param);
-			
-			return new AjaxResult(AjaxResult.STATUS.SUCCESS);
-			
-		}catch(Exception e) {
-			e.printStackTrace();
-			return new AjaxResult(AjaxResult.STATUS.ERROR, "실패하였습니다.");
-		}
-		
-	}
 	
 }

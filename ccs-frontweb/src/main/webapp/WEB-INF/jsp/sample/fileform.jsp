@@ -6,7 +6,8 @@
 <c:url value="/login" var="loginUrl" />
 	<div class="col-md-12">
 		<div class="col-md-6">
-		<form class="form-group contents" id="history-fileForm" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
+		<form class="form-group contents" id="sample-fileForm" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
+		    <input type="hidden" id="fileGrpId" name="fileGrpId"/>
 		    <div class="form-group">
 		        <label for="title" class="form-label mt-4">제목</label>
 		        <input type="text" id="title" name="title" class="form-control"/>
@@ -16,14 +17,19 @@
 		        <textarea id="contents" name="contents" class="form-control"></textarea>
 			</div>
 			<div class="form-group">
-				<div id="history-fileList" class="sta-multifile-upload-list"></div>
+				<label><input type="checkbox" name="color" value="blue"> Blue</label>
+      			<label><input type="checkbox" name="color" value="red"> Red</label>
 			</div>
 			<div class="form-group">
-                <span id="history-addFileBtn" class="sta-fileinput-btn sta-fileinput-multi-btn sta-fileinput-btn-add fileinput-button">
+				<div id="sample-fileList" class="sta-multifile-upload-list"></div>
+			</div>
+			<div class="form-group">
+                <span id="sample-addFileBtn" class="sta-fileinput-btn sta-fileinput-multi-btn sta-fileinput-btn-add fileinput-button">
                    <span>파일선택</span>
-                   <input type="file" id="history-fileInput" class="file-upload" />            
+                   <input type="file" id="sample-fileInput" class="file-upload" />            
                </span> 
 			</div>
+
 		    <button type="button" id="btn-save" class="btn btn-warning">저장</button>
 		</form>
 		</div>
@@ -40,17 +46,19 @@ $(document).ready(function() {
 
 function fn_page() {
 	let $this = this;
-	this.initialize = function() {
 	
+	this.initialize = function() {
+		$this.initData();
+		
 		$("#btn-save").click(function(){
 			$this.formManager.save();
 		});
 		
 		// 첨부파일 추가 이벤트
-		$("#history-fileInput").MultiFile({
+		$("#sample-fileInput").MultiFile({
 			accept: "pdf|jpg|jpeg|gif|png|bmp|zip|txt|xlsx|hwp|doc|docx|csv|",
 			max: 20,
-			list: "#history-fileList",	// upload / or selected files
+			list: "#sample-fileList",	// upload / or selected files
 			onFileSelect: function(element, value, master_element) {
 				console.log(master_element);
 			}
@@ -58,21 +66,49 @@ function fn_page() {
 		
 	}
 	
+	this.initData = function() {
+		let formId = "${formId}";
+		if(formId){
+			$this.formManager.getData(formId);			
+		}
+	}
+	
 	this.formManager = {
-		save : function() {
+		getData : function(formId){
 			$.ccs.ajax({
-				url : "/sample/fileform/save"
-				, fileform : '#history-fileForm'
-				, data : this.getData()
-				, success : function(){
-					alert("저장되었습니다.");
+				url : "/sample/fileform/selectData"
+				, data : {"formId" : formId}
+				, success : function(data){
+					$this.formManager.setData(data);
 				}
 			});
 		},
-		getData : function() {
+		setData : function(data){
+			//form 초기화
+			$("#sample-fileForm")[0].reset();
+			//form 정보
+			$("#sample-fileForm").bindJson(data['form']);
+			// 첨부파일 정보
+			if (data['files']) {
+	            $.ccs.bindFile("sample", data['files']);
+			}
+		},
+		save : function() {
+			$.ccs.ajax({
+				url : "/sample/fileform/save"
+				, fileform : '#sample-fileForm'
+				, data : this.getSaveData()
+				, success : function(data){
+					alert("저장되었습니다.");
+					let formId = data['formId'];
+					location.replace("/sample/fileform/" + formId);
+				}
+			});
+		},
+		getSaveData : function() {
 			let jsonData = $(".contents").serializeObject();
 			// 기존에 있던 파일이 삭제 되었을 겨웅의 정보 담기.
-			jsonData['deleteFiles'] = $("#schedule-fileInput").MultiFile("toDeletedList");
+			jsonData['deleteFiles'] = $("#sample-fileInput").MultiFile("toDeletedList");
 			return jsonData;
 		}
 	}

@@ -973,7 +973,7 @@ if (window.jQuery)(function ($) {
 					if(ev && ev.isTrigger == 3){
 						_deleteFile();
 					} else{
-						$.staframework.message.confirm(attachOption.deleteMsg || 'Do you want delete file?',function(isOK){
+						$.ccs.confirm(attachOption.deleteMsg || 'Do you want delete file?',function(isOK){
 							//if(isOK){
 								_deleteFile();
 							//}

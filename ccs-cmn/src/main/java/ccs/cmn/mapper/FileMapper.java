@@ -10,9 +10,9 @@ import ccs.framework.util.HashMapUtility;
 @Mapper(value="FileMapper")
 public interface FileMapper {
 
-	public Optional<List<Map<String, Object>>> selectFilesAllForGrup(String FILE_GRUP);
+	public List<Map<String, Object>> selectFilesAllForGrup(Long FILE_GRUP);
 
-	public Optional<Map<String, Object>> selectFile(String FILE_ID);
+	public List<Map<String, Object>> selectFile(Long FILE_ID);
 
 	public void deleteFile(Map<String, Object> param);
 

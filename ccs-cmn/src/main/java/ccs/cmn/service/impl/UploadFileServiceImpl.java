@@ -25,14 +25,14 @@ public class UploadFileServiceImpl implements UploadFileService{
 	private FileService fileService;
 
 	@Override
-	public List<Map<String, Object>> getFiles(String FILE_GRUP, String downloadUrl) throws Exception {
+	public List<Map<String, Object>> getFiles(Long FILE_GRUP, String downloadUrl) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Transactional
 	@Override
-	public String uploadFiles(Map<String, Object> systemParameter, String FILE_GRUP, List<FileInfoVO> files, List<Map<String,Object>> filesToDelete) throws Exception {
+	public Long uploadFiles(Map<String, Object> systemParameter, Long FILE_GRUP, List<FileInfoVO> files, List<Map<String,Object>> filesToDelete) throws Exception {
 		
 		List<Map<String, Object>> filesToInsert = new ArrayList<>();
 		
@@ -58,7 +58,7 @@ public class UploadFileServiceImpl implements UploadFileService{
 	}
 
 	@Override
-	public void downloadFile(String fileId, HttpServletResponse response) throws Exception {
+	public void downloadFile(Long fileId, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
