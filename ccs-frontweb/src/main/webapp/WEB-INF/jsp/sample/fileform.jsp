@@ -10,7 +10,19 @@
 		    <input type="hidden" id="fileGrpId" name="fileGrpId"/> 
 		    <div class="form-group">
 		        <label for="regDt" class="form-label mt-4">등록일자</label>
-		        <input type="text" id="regDt" name="regDt" class="form-control datePicker-control">
+		        <input type="text" id="regDt" name="regDt" class="form-control datePicker-control" required>
+		    </div>
+		    <div class="form-group">
+		        <label class="form-label mt-4">기간1</label>
+		        <input type="text" id="startDate" name="startDate" class="form-control datePicker-control startDate" required>
+		        <span>~</span>
+		        <input type="text" id="endDate" name="endDate" class="form-control datePicker-control endDate" required>
+		    </div>
+		    <div class="form-group">
+		        <label class="form-label mt-4">기간2</label>
+		        <input type="text" id="startDate2" name="startDate2" class="form-control datePicker-control startDate">
+		        <span>~</span>
+		        <input type="text" id="endDate2" name="endDate2" class="form-control datePicker-control endDate">
 		    </div>
 		    <div class="form-group">
 		        <label for="title" class="form-label mt-4">제목</label>
@@ -50,14 +62,9 @@ $(document).ready(function() {
 
 function fn_page() {
 	let $this = this;
-	let $regDtPicker;
 	
 	this.initialize = function() {
 		$this.initData();
-		
-		$regDtPicker = $("#regDt").datepicker({
-	    	language: 'ko'
-	    }); 
 		
 		$("#btn-save").click(function(){
 			$this.formManager.save();
@@ -102,20 +109,51 @@ function fn_page() {
 	            $.ccs.bindFile("sample", data['files']);
 			}
 		},
+		validate : function(){
+			//error 메세지 변경 등 .. 옵션 변경 가능 
+			/*
+			$("#sample-fileForm").validate(
+					{ 
+						rules: { 
+							title : {
+								required: true
+							} , 
+							contents: {
+								required: true,
+								rangelength: [2, 10]} 
+							}, 
+						messages: { 
+							title: { 
+								required: "값을 입력해 주십시오." 
+							}, 
+							contents: { 
+								required: "내용을 입력해 주십시오." ,
+								rangelength: "내용은 최소 2자 최대 10자 이내로 입력해 주십시오." 
+							} 
+						} 
+					}
+				);
+
+			*/
+			
+			return $("#sample-fileForm").valid();
+		},
 		save : function() {
-			$.ccs.ajax({
-				url : "/sample/fileform/save"
-				, fileform : '#sample-fileForm'
-				, data : this.getSaveData()
-				, success : function(data){
-					alert("저장되었습니다.");
-					let formId = data['formId'];
-					location.replace("/sample/fileform/" + formId);
-				}
-			});
+			if($this.formManager.validate()){
+				$.ccs.ajax({
+					url : "/sample/fileform/save"
+					, fileform : '#sample-fileForm'
+					, data : this.getSaveData()
+					, success : function(data){
+						alert("저장되었습니다.");
+						let formId = data['formId'];
+						location.replace("/sample/fileform/" + formId);
+					}
+				});
+			}
 		},
 		getSaveData : function() {
-			let jsonData = $(".contents").serializeObject();
+			let jsonData = $("#sample-fileForm").serializeObject();
 			// 기존에 있던 파일이 삭제 되었을 겨웅의 정보 담기.
 			jsonData['deleteFiles'] = $("#sample-fileInput").MultiFile("toDeletedList");
 			return jsonData;

@@ -108,6 +108,9 @@
 	
 	$.extend({"ccs" : ccs});	
 	
+	/*
+		form array data convert to object(json)
+	 */
 	$.fn.serializeObject = function() { 
 		let obj = null;
 		try { 
@@ -127,6 +130,9 @@
 		} return obj; 
 	} 
 	
+	/*
+		bind form data
+	 */
 	$.fn.bindJson = function(json){
 		this[0].reset();
 		let $form = $(this);
@@ -193,9 +199,38 @@
 				}
 			}
 		}
-			
-	
 		
+		/*
+			validation form data
+	 	*/	
+		$.validator.setDefaults({
+			onkeyup:false,
+			onclick:false, 
+			onfocusout:false, 
+			showErrors:function(errorMap, errorList){
+				 if(this.numberOfInvalids()) {
+					 alert(errorList[0].message);
+					 
+				}
+			}
+		});
+
+		//@validate plugin override
+		$.validator.prototype.defaultMessage = function(b, c) {
+			['validate defaultMessage override']
+            "string" == typeof c && (c = {
+                method: c
+            });
+			var label = b.labels[0] ? b.labels[0].innerHTML + "은(는) " 
+							: $(b).parent().children("label") ? $(b).parent().children("label").html() + "은(는) " 
+							: "";
+            var d = this.findDefined(this.customMessage(b.name, c.method), this.customDataMessage(b, c.method), !this.settings.ignoreTitle && b.title || void 0, label + $.validator.messages[c.method], "<strong>Warning: No message defined for " + b.name + "</strong>")
+              , e = /\$?\{(\d+)\}/g;
+
+
+            return "function" == typeof d ? d = d.call(this, c.parameters, b) : e.test(d) && (d = a.validator.format(d.replace(e, "{$1}"), c.parameters)),
+            d
+        } 
 	
 
 })(jQuery);
