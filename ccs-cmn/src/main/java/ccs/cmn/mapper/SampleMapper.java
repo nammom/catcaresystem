@@ -12,4 +12,6 @@ public interface SampleMapper {
 
 	public List<Map<String, Object>> selectSampleSql();
 
+	public List<Map<String, Object>> selectDatatables(Map<String, Object> param);
+
 }

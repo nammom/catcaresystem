@@ -19,7 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+
 import ccs.cmn.service.FileService;
+import ccs.cmn.service.SampleService;
 import ccs.cmn.service.UploadFileService;
 import ccs.framework.model.AjaxResult;
 import ccs.framework.model.FileInfoVO;
@@ -32,6 +36,9 @@ import ccs.framework.util.HashMapUtility;
 public class SampleController {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(SampleController.class.getName());
+
+	@Resource(name="SampleService")
+	private SampleService sampleservice;
 	
 	@RequestMapping(value = "/sample/datatable")
 	public String datatables(){
@@ -47,15 +54,15 @@ public class SampleController {
 		LOGGER.debug("name : " + param.get("name"));
 		LOGGER.debug("age : " + param.get("age"));
 		
+		Page<Map<String, Object>> page = PageHelper.startPage((Integer)param.get("start")+1, (Integer)param.get("length"));
+		List<Map<String, Object>> dataList =  sampleservice.selectDatatables(param);
+
 		Map<String, Object> result = new HashMap<String, Object>();
-		List<Map<String, Object>> dataList = new ArrayList<>();
-		Map<String, Object> data1 = new HashMap<>();
-		data1.put("name", "김지영");
-		data1.put("age", 28);
-		data1.put("city", "서울");
-		dataList.add(data1);
-		
+		result.put("draw", (Integer)param.get("draw"));
+		result.put("recordsTotal", (int)page.getTotal());
+		result.put("recordsFiltered", (int)page.getTotal());
 		result.put("data", dataList); //data란 key로 결과를 넣어줘야함
+		
 		return result;
 	}
 	

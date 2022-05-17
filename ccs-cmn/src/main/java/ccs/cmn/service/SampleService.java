@@ -6,4 +6,6 @@ import java.util.Map;
 public interface SampleService {
 
 	public List<Map<String, Object>> selectSampleSql();
+
+	public List<Map<String, Object>> selectDatatables(Map<String, Object> param);
 }

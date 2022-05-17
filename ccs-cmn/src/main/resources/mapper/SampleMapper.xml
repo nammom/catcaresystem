@@ -3,7 +3,21 @@
 <mapper namespace="ccs.cmn.mapper.SampleMapper">
 
 	<select id="selectSampleSql" resultType="java.util.Map">
-		select j.no, j.name from jyp j
+		SELECT J.NO, J.NAME FROM JYP J
 	</select>
 	
+	<select id="selectDatatables" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT D.NAME
+				, D.AGE
+				, D.CITY 
+		FROM DATATABLES D
+		<where>
+			<if test="name!=null and !name.equals('')">
+				D.NAME = #{name}
+			</if>
+			<if test="age!=null and !age.equals('')">
+				D.AGE = #{age}
+			</if>		
+		</where>
+	</select>
 </mapper>

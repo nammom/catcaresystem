@@ -23,4 +23,10 @@ public class SampleServiceImpl implements SampleService {
 		return samplemapper.selectSampleSql();
 	}
 
+	@Override
+	public List<Map<String, Object>> selectDatatables(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return samplemapper.selectDatatables(param);
+	}
+
 }

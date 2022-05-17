@@ -84,13 +84,18 @@ function fn_page() {
 				
 				$this.$table = $('#tableId').DataTable({
 					destroy: true,//테이블 파괴가능
+				    processing : true,
+				    serverSide : true, 
 					bPaginate: true, //페이징처리
+					lengthChang : true,
 					bLengthChange: true, // n개씩보기
-					lengthMenu : [ [10, 25, 50, -1], [10, 25, 50, "All"] ], // 10/25/50/All 개씩보기
-					bAutoWidth: false, //자동너비
+					lengthMenu : [ [1, 10, 25, 50, -1], [1, 10, 25, 50, "All"] ], // 10/25/50/All 개씩보기
 					ordering: true, //칼럼별 정렬
+					filter : false,
+					bFilter : false,
 					searching: false, //검색기능
-		 			select: true,
+				    bAutoWidth: false, //자동너비
+				    select: true,
 		 			/* $('#example').DataTable( {
 					    	select: 'single' or 'multi'
 						} ); */
@@ -102,7 +107,6 @@ function fn_page() {
 			                d.age = $("#age").val();
 			                return JSON.stringify(d);
 			            },
-						//data:{name: $("#name").val(), age: $("#age").val()},
 						dataType: "JSON",
 						contentType: "application/json; charset=utf-8",
 						beforeSend: function(xhr){

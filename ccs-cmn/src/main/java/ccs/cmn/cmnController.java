@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.github.pagehelper.PageHelper;
+
 import ccs.cmn.service.FileService;
 import ccs.cmn.service.SampleService;
 import ccs.cmn.service.UploadFileService;
@@ -33,6 +35,8 @@ public class cmnController {
 	
 	@RequestMapping(value = "/test")
 	public String cmn(){
+		PageHelper.startPage(2, 1);
+		List<Map<String,Object>> map = sampleservice.selectSampleSql();
 		return "cmn/test";
 	}
 	
