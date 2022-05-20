@@ -3,7 +3,7 @@
 <body>
 <div class="container">
 <div class="col-md-12">
-	<div class="form-group m-3">
+	<form id="search-form" class="form-group m-3">
 		<div class="row">
 			<div class="form-group col-md-1">
 	         	<label for="name" class="form-label">이름</label>
@@ -21,7 +21,7 @@
 	         	<button class="btn btn-secondary my-2 my-sm-0 float-right" type="button" id="btn-search">검색</button>
 	        </div>
 	    </div>
-	</div>	    
+	</form>	    
 </div>
 	<div class="col-md-12">
 		<table id="tableId"></table>
@@ -47,7 +47,9 @@ function fn_page() {
 		});
 		
 		//$this.tableManager.createTable();
-		$this.tableManager.createSearchTable();
+		//$this.tableManager.createSearchTable();
+		$this.tableManager.createSearchTablePaging();
+		
 	}
 	
 	this.tableManager = {
@@ -66,9 +68,9 @@ function fn_page() {
 					    	select: 'single' or 'multi'
 						} ); */
 			        columns: [
-			            {"title":"이름", "data": "name", "visible": true},
-			            {"title":"나이", "data": "age", "visible": true}, 
-			            {"title":"도시", "data": "city", "visible": true}, 
+			            {"title":"이름", "data": "name", "name": "name", "visible": true},
+			            {"title":"나이", "data": "age", "name": "age", "visible": true}, 
+			            {"title":"도시", "data": "city", "name": "city", "visible": true}
 			        ],
 			        data : [
 			        		{name: "김지영", age : 28, "city": "서울"}
@@ -77,6 +79,65 @@ function fn_page() {
 				        	]
 			    });
 			},
+			createSearchTablePaging : function() {
+				/* 데이터 ajax 버전 */
+				let header = $("meta[name='_csrf_header']").attr('content');
+				let token = $("meta[name='_csrf']").attr('content');
+				
+				$this.$table = $('#tableId').DataTable({
+					order: [[0, 'desc']],// 최초 로딩시 정렬 컬럼 설정
+					destroy: true,//테이블 파괴가능
+				    processing : true,
+				    serverSide : true, 
+					bPaginate: true, //페이징처리
+					lengthChang : true,
+					bLengthChange: true, // n개씩보기
+					lengthMenu : [ [3, 10, 25, 50, -1], [3, 10, 25, 50, "All"] ], // * 실 페이지 설정  값 : 10/25/50/All 개씩보기
+					ordering: true, //칼럼별 정렬
+					filter : false,
+					bFilter : false,
+					searching: false, //검색기능 (*false로 두고 ajax로 구현하도록한다)
+				    bAutoWidth: false, //자동너비
+				    select: true,
+		 			/* $('#example').DataTable( {
+					    	select: 'single' or 'multi'
+						} ); */
+					ajax: {
+						url:"/sample/datatable/searchPaging",
+						type: "POST",
+						data: function (d) {
+							//d는 그리드 정보 객체, paging시 필요
+							//검색정보
+							let a = $("#search-form").serializeObject()
+							//그리드 정보 + 검색정보							
+			                return JSON.stringify($.extend({}, a, d));
+			            },
+						dataType: "JSON",
+						contentType: "application/json; charset=utf-8",
+						beforeSend: function(xhr){
+					        xhr.setRequestHeader(header, token);
+					    }
+					},
+			        columns: [
+			        	 {"title": "no", "data": "no", "name": "no", "visible": false}, // 최초 로딩시 정렬 컬럼 (hidden상태)
+			        	 {"title": "no", "data": null, "name":"numbering", "orderable": false, "visible": true},//넘버링 컬럼
+			        	 {"title": "이름", "data": "name", "name": "name", "visible": true},
+				         {"title": "나이", "data": "age", "name": "age", "visible": true}, 
+				         {"title": "도시", "data": "city", "name": "city", "visible": true}
+			        ]
+			    });
+				
+				//https://datatables.net/manual/events#Listening-for-events
+				//https://datatables.net/reference/api/columns()
+				$this.$table.on( 'draw.dt', function () {
+			        var PageInfo = $('#tableId').DataTable().page.info();
+			        var colIdx = $this.$table.column('numbering:name').index(); //.column('넘버링 컬럼의 name:name')
+			        $this.$table.column(colIdx, { page: 'current' }).nodes().each( function (cell, i) {
+			                cell.innerHTML = i + 1 + PageInfo.start;
+			            } );
+			        } );
+			
+			},
 			createSearchTable : function() {
 				/* 데이터 ajax 버전 */
 				let header = $("meta[name='_csrf_header']").attr('content');
@@ -84,9 +145,9 @@ function fn_page() {
 				
 				$this.$table = $('#tableId').DataTable({
 					destroy: true,//테이블 파괴가능
-				    processing : true,
-				    serverSide : true, 
-					bPaginate: true, //페이징처리
+				    //processing : true,
+				    //serverSide : true, 
+					bPaginate: false, //페이징처리
 					lengthChang : true,
 					bLengthChange: true, // n개씩보기
 					lengthMenu : [ [1, 10, 25, 50, -1], [1, 10, 25, 50, "All"] ], // 10/25/50/All 개씩보기
@@ -114,9 +175,9 @@ function fn_page() {
 					    }
 					},
 			        columns: [
-			            {"title":"이름", "data": "name", "visible": true},
-			            {"title":"나이", "data": "age", "visible": true}, 
-			            {"title":"도시", "data": "city", "visible": true}, 
+			        	 {"title":"이름", "data": "name", "name": "name", "visible": true},
+				         {"title":"나이", "data": "age", "name": "age", "visible": true}, 
+				         {"title":"도시", "data": "city", "name": "city", "visible": true}
 			        ]
 			    });
 			},

@@ -7,7 +7,8 @@
 	</select>
 	
 	<select id="selectDatatables" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT D.NAME
+		SELECT  D.NO
+				, D.NAME
 				, D.AGE
 				, D.CITY 
 		FROM DATATABLES D

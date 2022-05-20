@@ -1,36 +1,26 @@
 package ccs.cmn;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
-import ccs.cmn.service.FileService;
 import ccs.cmn.service.SampleService;
-import ccs.cmn.service.UploadFileService;
 import ccs.framework.model.AjaxResult;
-import ccs.framework.model.FileInfoVO;
-import ccs.framework.model.FileParameter;
 import ccs.framework.model.JsonParameter;
-import ccs.framework.model.SystemParameter;
-import ccs.framework.util.HashMapUtility;
+import ccs.framework.model.DataTableInfoVO;
+import ccs.framework.util.PagingUtility;
 
 @Controller
 public class SampleController {
@@ -46,24 +36,39 @@ public class SampleController {
 		return "sample/datatable";
 	}
 	
+	/**
+	 * datatables 페이징 조회
+	 * @param param
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/sample/datatable/searchPaging")
+	public DataTableInfoVO searchPaging(@RequestBody Map<String, Object> param){
+		
+		DataTableInfoVO<Map<String, Object>> pageInfo = PagingUtility.<Map<String, Object>>create()
+																.startPage(param);
+		
+		List<Map<String, Object>> dataList =  sampleservice.selectDatatables(param);
+		pageInfo.setPageInfo(dataList);
+		
+		return pageInfo;
+	}
+	
+	
+	/**
+	 * datatables 페이징 X 조회
+	 * @param param
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/sample/datatable/search")
-	public Map<String, Object> search(@RequestBody Map<String, Object> param){
+	public DataTableInfoVO search(@RequestBody Map<String, Object> param){
 		
-		param.get("name");//검색조건으로 사용
-		LOGGER.debug("name : " + param.get("name"));
-		LOGGER.debug("age : " + param.get("age"));
-		
-		Page<Map<String, Object>> page = PageHelper.startPage((Integer)param.get("start")+1, (Integer)param.get("length"));
 		List<Map<String, Object>> dataList =  sampleservice.selectDatatables(param);
-
-		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("draw", (Integer)param.get("draw"));
-		result.put("recordsTotal", (int)page.getTotal());
-		result.put("recordsFiltered", (int)page.getTotal());
-		result.put("data", dataList); //data란 key로 결과를 넣어줘야함
 		
-		return result;
+		DataTableInfoVO<Map<String,Object>> dataInfo = new DataTableInfoVO<>(dataList);
+		
+		return dataInfo;
 	}
 	
 	
