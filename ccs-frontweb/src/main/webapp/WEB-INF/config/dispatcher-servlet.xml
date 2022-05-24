@@ -19,41 +19,40 @@
     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
 
-	<context:component-scan base-package="ccs">
-		<context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
-		<context:exclude-filter expression="org.springframework.stereotype.Service" type="annotation"/>
-		<context:exclude-filter expression="org.springframework.stereotype.Repository" type="annotation"/>
-	</context:component-scan>
-
-
-
-
-
-	<!-- for JFile-->
-	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="0"/>
-
+	<!-- mvc 사용을 위한 annotation-->
 	<mvc:annotation-driven>
-	    <mvc:argument-resolvers>
+		 <mvc:argument-resolvers>
+		    <bean class="ccs.framework.resolvers.JsonArgumentResolver" />
 	        <bean class="ccs.framework.resolvers.SystemArgumentResolver" />
 	        <bean class="ccs.framework.resolvers.FileArgumentResolver" />
-	        
-	    </mvc:argument-resolvers>
+	     </mvc:argument-resolvers>
 	</mvc:annotation-driven>
 	
+	
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+	
+	<context:component-scan base-package="ccs.cmn">	
+		<context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+	</context:component-scan>
+	
+	
+	<!-- ReqeustMapping 과 Controller 클래스 매핑을 위한 annotation mvc 설정 -->
+    <bean name="handlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"></bean>
+    
 	<!-- 화면처리용 JSP 파일명의  prefix, suffix 처리에 대한 mvc 설정  -->
     <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="1"
 		p:viewClass="org.springframework.web.servlet.view.JstlView" 
     	p:prefix="/WEB-INF/jsp/" p:suffix=".jsp"/>
     
-    
+    <!--
      <bean name="handlerAdapter" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-   		<!-- <property name="customArgumentResolvers" >
+   		 <property name="customArgumentResolvers" >
     		<list>
     			<bean class="ehr.framework.arguments.FileArgumentResolver" />
     			<bean class="ehr.framework.arguments.SystemArgumentResolver" />
     			<bean class="ehr.framework.arguments.FileArgumentResolver" />
     		</list>
-	 	</property> -->
+	 	</property>
         <property name="messageConverters">
         	<list>
         		<bean class='org.springframework.http.converter.ByteArrayHttpMessageConverter'>
@@ -71,19 +70,18 @@
 				<bean class='org.springframework.http.converter.ResourceHttpMessageConverter'></bean>
 				<bean class='org.springframework.http.converter.xml.SourceHttpMessageConverter'></bean>
 				<bean class='org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter'></bean>
-        		
-				<!-- <ref bean="jacksonMessageConverter"/> -->
 			</list>
         </property>
     </bean>
-    
-         <!-- ReqeustMapping 과 Controller 클래스 매핑을 위한 annotation mvc 설정 -->
-    <bean name="handlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
-    	<property name="useTrailingSlashMatch" value="false"></property>
-    </bean>
+     -->
     
     
-    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+	<!-- for JFile-->
+	<!-- <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="0"/> -->	
+	
+	
+    <!--에러 처리  -->
+<!--     <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 		<property name="defaultErrorView" value="error/error"/>
 		<property name="exceptionMappings">
 			<props>
@@ -91,6 +89,10 @@
 				<prop key="adid.framework.exceptions.CustomPermissionException">error/nopermission</prop>
 			</props>
 		</property>
-	</bean>
+	</bean> -->
+	
+	
+
+	
 
 </beans>

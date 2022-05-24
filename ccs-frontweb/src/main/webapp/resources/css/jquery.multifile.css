@@ -1,0 +1,148 @@
+@CHARSET "UTF-8";
+
+.sta-fileinput-btn{
+	display: inline-block;
+	margin-bottom: 0;
+	font-weight: normal;
+	text-align: center; 
+	white-space: nowrap;
+	vertical-align: middle;
+	-ms-touch-action: manipulation;
+		touch-action: manipulation;
+	cursor: pointer;
+	-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+			user-select: none;
+	background-image: none;
+	border: 1px solid transparent;
+	border-radius: 0px;
+	
+}
+
+.sta-fileinput-multi-btn{
+	/* padding: 6px 12px; */
+	padding: 0 6px;
+	font-size: 12px;
+	line-height: 1.42857143;
+}
+
+.sta-fileinput-small-btn{
+	padding: 2px 5px;
+	/* font-size: 14px;
+	line-height: 1.42857143; */
+}
+
+.sta-fileinput-btn-add {
+  color: #666;
+  background-color:  #e6e9ef;
+  border-color: #ccc;
+    border-radius: 0px;
+    width: 62px;
+    height: 23px;
+     padding: 0;
+}
+
+.fileinput-button {
+  position: relative;
+  overflow: hidden;
+}
+.sta-fileinput-btn-add:hover,
+.sta-fileinput-btn-add:focus,
+.sta-fileinput-btn-add.focus,
+.sta-fileinput-btn-add:active,
+.sta-fileinput-btn-add.active,
+.open > .dropdown-toggle.sta-fileinput-btn-add {
+  color: #666;
+  background-color: #e6e9ef;
+  border-color: #ccc;
+}
+.sta-fileinput-btn-add:active,
+.sta-fileinput-btn-add.active,
+.open > .dropdown-toggle.sta-fileinput-btn-add {
+  background-image: none;
+}
+.sta-fileinput-btn-add.disabled,
+.sta-fileinput-btn-add[disabled],
+fieldset[disabled] .sta-fileinput-btn-add,
+.sta-fileinput-btn-add.disabled:hover,
+.sta-fileinput-btn-add[disabled]:hover,
+fieldset[disabled] .sta-fileinput-btn-add:hover,
+.sta-fileinput-btn-add.disabled:focus,
+.sta-fileinput-btn-add[disabled]:focus,
+fieldset[disabled] .sta-fileinput-btn-add:focus,
+.sta-fileinput-btn-add.disabled.focus,
+.sta-fileinput-btn-add[disabled].focus,
+fieldset[disabled] .sta-fileinput-btn-add.focus,
+.sta-fileinput-btn-add.disabled:active,
+.sta-fileinput-btn-add[disabled]:active,
+fieldset[disabled] .sta-fileinput-btn-add:active,
+.sta-fileinput-btn-add.disabled.active,
+.sta-fileinput-btn-add[disabled].active,
+fieldset[disabled] .sta-fileinput-btn-add.active {
+  background-color: #e6e9ef;
+  border-color: #ccc;
+}
+.sta-fileinput-btn-add .badge {
+  color: #666;
+  background-color: #e6e9ef;
+}
+
+.fileinput-button span{
+	height: 23px;
+    line-height: 23px;
+    padding: 0;
+    font-size: 12px;
+    font-family: Dotum, '돋움';
+    color: #666;
+    background-color: #e6e9ef;
+    border-color: #ccc;
+    margin:0;
+}
+
+.sta-fileinput-btn input[type="file"]{
+	position: absolute; 
+	right: 0px; top: 0px; 
+	font-family: Arial; 
+	font-size: 118px; 
+	margin: 0px; 
+	padding: 0px; 
+	cursor: pointer; 
+	opacity: 0; 
+	height: 100%; 
+	width:100%;
+	font-size: 12px;
+    font-family: Dotum, '돋움';
+}
+.sta-multifile-upload-list{
+ 	margin: 0;
+    padding-left: 5px;
+    width:100%;
+}
+.sta-multifile-upload-list div:nth-child(even) {background-color:#f9f9f9}
+.sta-multifile-upload-list div.MultiFile-label{
+	margin: 0;
+    padding: 3px 0px 3px 0px;
+    width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+	/*border-top: 1px solid #e6e6e6;*/
+	line-height: 25px;
+}
+.sta-multifile-upload-list div.MultiFile-label a.MultiFile-remove{
+	padding-right:5px;
+	text-align:center;
+}
+.sta-multifile-upload-list div.MultiFile-label span.MultiFile-title{
+	/* width:300px; */
+	word-wrap: break-word;
+	/* padding-right:20px; */
+}
+
+.sta-multifile-simple-upload-list{float:left;padding-right:50px;}
+
+.sta-multifile-add {margin:5px 0 0 0; padding:0 20px 0 5px; clear:both;}
+
+table.sta-file-list {width:100%; border-collapse:collapse; border-spacing:0; border-top:3px solid #717171; border-bottom:2px solid #e8e8e8;text-align:left;}
+table.sta-file-list td {padding:8px; border-bottom:solid 1px #ddd; color:#777; text-align:left; vertical-align:middle; line-height:1.4em}
+

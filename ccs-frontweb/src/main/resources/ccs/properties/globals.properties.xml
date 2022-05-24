@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-	<!-- postgre 개발 PC/ db -->
-	<!--<entry key="Globals.DB.DriverClassName">org.postgresql.Driver</entry>
-	<entry key="Globals.DB.Url"></entry>
-	<entry key="Globals.DB.UserName"></entry>
-	<entry key="Globals.DB.Password"></entry>
-	<entry key="Globals.DB.validationQuery"></entry>
-	
-	<entry key="Globals.Const.mail.sender"></entry>
-	<entry key="Globals.Const.mail.sender.name"></entry> -->
-	 
-	<entry key="Globals.DB.DriverClassName">oracle.jdbc.driver.OracleDriver</entry>
-	<entry key="Globals.DB.Url">jdbc:oracle:thin:@localhost:1521/xe</entry>
-	<entry key="Globals.DB.UserName">catuser</entry>
-	<entry key="Globals.DB.Password">1234</entry>
+	<!-- postgre 개발 PC/ db -->	 
+	<entry key="Globals.DB.DriverClassName">org.postgresql.Driver</entry>
+	<entry key="Globals.DB.Url">jdbc:postgresql://192.168.149.1:5432/marta</entry>
+	<entry key="Globals.DB.UserName">jy</entry>
+	<entry key="Globals.DB.Password">1111</entry>
 	<entry key="Globals.DB.validationQuery"></entry>
 	
 	<entry key="Globals.Const.mail.sender"></entry>
@@ -23,14 +14,14 @@
 	<entry key="Globals.Const.super.password"></entry>
 	
 	<!-- Upload File Information -->
-	<entry key="Globals.file.MaxSize"></entry>
+	<entry key="Globals.file.MaxSize">60000000</entry>
 	
 	
 	<!-- IN / OUT -->
 	<entry key="Globals.Site.Mode"></entry>
 	
 	<!-- 파일업로드 root 경로--> 
-	<entry key="Globals.file.Upload"></entry>
+	<entry key="Globals.file.Upload">C:\Uploads\</entry>
 	<!-- 운영에 패봏시 -->
 	<!-- <entry key="Globals.file.Upload">/data/documents/</entry> -->
 	

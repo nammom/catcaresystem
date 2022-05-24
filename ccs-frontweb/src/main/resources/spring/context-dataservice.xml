@@ -21,7 +21,8 @@
 	<bean id="UUIDService" class="ccs.framework.dataservice.UUIDService" destroy-method="destroy" init-method="initialize">
 	</bean>	
 	
-	
+	<bean id="applicationContextProvder"    
+			class="ccs.framework.dataservice.ApplicationContextProvider"/>	
 	<!-- ID 생성 용 -->
 	<!-- 게시판용 NTT_ID 생성 -->
     <!--<bean name="pjtCd" class="adid.framework.dataservice.TableIdService" destroy-method="destroy">
