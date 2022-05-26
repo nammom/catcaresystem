@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<!-- <entry key="Url.Main">/mngt/main.do</entry> -->
+	
+	<entry key="Url.Relay"></entry>
+	
+<!-- 	<entry key="Url.Relay"></entry>
+	<entry key="Url.Login">/mngt/lgn100.do</entry>
+	<entry key="Url.Logout">/mngt/lgn100.do</entry>
+	<entry key="Url.Main">/mngt/main.do</entry>
+	<entry key="Url.Test">/mngt/main.do</entry> -->
+
+<!-- 	
+	 <entry key="Url.Main">/main.do</entry>
+	<entry key="Url.Login">/login.do</entry>
+	<entry key="Url.Logout">/logout.do</entry>
+	
+	<entry key="Url.Test">/main.do</entry>  -->
+</properties>
+
+
+
+
+
+
+
+
