@@ -33,8 +33,25 @@
 		        <textarea id="contents" name="contents" class="form-control"></textarea>
 			</div>
 			<div class="form-group">
-				<label><input type="checkbox" name="color" value="blue"> Blue</label>
-      			<label><input type="checkbox" name="color" value="red"> Red</label>
+				<label for="contents" class="form-label mt-4">checkbox</label>
+				<div class="form-check">
+					<input type="checkbox" name="color" value="blue" class='form-check-input'> 
+					<label class='form-check-label'>Blue</label>
+				</div>
+				<div class="form-check">
+      				<input type="checkbox" name="color" value="red" class='form-check-input'> 
+      				<label class='form-check-label'>Red</label>
+      			</div>
+			</div>
+			<div class="form-group">
+				<label for="contents" class="form-label mt-4">checkbox2</label>
+                <ccs:option type="checkbox" code="200" selectedValue="21" includeAll="전체"/>   
+			</div>
+			<div class="form-group">
+				<label for="contents" class="form-label mt-4">select</label>
+				<select id="select" name="select"  class="form-control">
+					<ccs:option type="option" code="100" selectedValue="02" includeAll="전체"/>
+				</select>
 			</div>
 			<div class="form-group">
 				<div id="sample-fileList" class="sta-multifile-upload-list"></div>

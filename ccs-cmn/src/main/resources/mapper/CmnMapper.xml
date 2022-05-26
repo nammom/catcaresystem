@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ccs.cmn.mapper.CmnMapper">
+
+	<select id="selectCmnCodeList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT C.CMMN_CD as value
+			, C.CMMN_CD_NM as name
+			, C.PRNT_CD as prntCode
+		FROM TB_CMNCODE C
+		<where>
+			C.CMMN_GRP_CD  = #{code}
+			<if test="exceptCode!=null and !exceptCode.equals('')">
+				D.CMMN_CD != #{EXCEPTCODE}
+			</if>		
+		</where>
+		ORDER BY C.CMMN_CD_SEQ ASC
+	</select>
+</mapper>

@@ -66,6 +66,7 @@ public class FileUploadController {
 			Map<String, Object> data = new HashMap<>();
 			List<String> color = new ArrayList<String>();
 			color.add("blue");
+			color.add("red");
 			
 			Map<String, Object> form = HashMapUtility.<String,Object>create()
 					.add("title", "Á¦¸ñ")
