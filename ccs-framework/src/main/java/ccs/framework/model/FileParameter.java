@@ -95,12 +95,14 @@ public class FileParameter {
 				    
         			String sRealfilePath = Paths.get(saveFolderPath, saveFileName).toString();
 				    file.transferTo(new File(sRealfilePath));
+				    
+				    String saveFilePath = Paths.get(sFilePath, saveFileName).toString();
 				    logger.debug("sRealfilePath = " + sRealfilePath);
 				    
 				    FileInfoVO fileVO = FileInfoVO.builder()
 				    		.orignalFileName(orginFileName)
 				    		.saveFileName(saveFileName)
-				    		.saveFilePath(sRealfilePath)
+				    		.saveFilePath(saveFilePath)
 				    		.uploadSuccess(true)
 				    		.fileExtension(fileExt)
 				    		.fileInputName(fileName)

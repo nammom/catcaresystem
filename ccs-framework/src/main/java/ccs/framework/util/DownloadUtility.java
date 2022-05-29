@@ -71,7 +71,7 @@ public class DownloadUtility {
 		if(StringUtility.isNullOrBlank(fileExtension)){
 			response.setHeader("Content-Disposition","attachment;filename="+fileEncodeName);
 		} else{
-			response.setHeader("Content-Disposition","attachment;filename="+fileEncodeName+"." +fileExtension);
+			response.setHeader("Content-Disposition","attachment;filename="+fileEncodeName);
 		}
 		ServletOutputStream out = response.getOutputStream();
 		

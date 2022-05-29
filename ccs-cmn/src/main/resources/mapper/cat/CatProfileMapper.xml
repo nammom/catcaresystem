@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ccs.cmn.mapper.cat.CatProfileMapper">
+
+	<select id="selectCatProfile" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT C.CAT_CD 
+			, C.SIDO_CD
+			, C.SIGUNGU_CD 
+			, C.DONG_CD
+			, fn_get_code_name('C0003', TCP.CATKIND_CD) AS CAT_KIND_NM
+			, TCP.INTRODUCTION
+			, TCP.FILE_GRP_ID
+			, TF.FILE_PATH
+			, TCC.CAUTION_YN --평균으로 바꾸기
+			, TCC.AGGRESSION --평균으로 바꾸기
+			, TCC.SENSITIVITY --평균으로 바꾸기 
+			, (SELECT fn_get_code_name('C0002', C.REASON_CD) 
+				FROM TB_CAT_CARE C 
+				WHERE C.CAT_CD  = TCP.CAT_CD 
+					AND C.CARE_TYPE = '1' 
+				ORDER BY C.SUB_DT DESC 
+				LIMIT 1
+				) AS CARE_REASON_NM
+			, TCN.CAT_NAME
+		FROM TB_CAT C
+			LEFT JOIN TB_CAT_PROFILE TCP
+				ON C.CAT_CD = TCP.CAT_CD
+			LEFT JOIN TB_FILE TF
+				ON TCP.FILE_GRP_ID = TF.FILE_GRP_ID  
+			LEFT JOIN TB_CAT_CHARACTERISTIC TCC
+				ON C.CAT_CD = TCC.CAT_CD
+			LEFT JOIN TB_CAT_NAME TCN 
+				ON C.CAT_CD = TCN.CAT_CD 
+				AND TCN.USER_CD = #{_SESSION_USER_CD_}
+		WHERE TCP.CAT_CD = #{cat_cd}
+	</select>
+	
+	
+	<select id="selectCatHealthy" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT fn_get_code_name('C0001', H.DISEASE_CD) AS DISEASE_NM
+			, fn_get_code_name('C0001', H.DISEASE_CD2) AS DISEASE_NM2
+			, fn_get_code_name('C0001', H.DISEASE_CD3) AS DISEASE_NM3
+			, H.DISEASE_DETAIL
+			, H.FILE_GRP_ID
+			, H.USER_CD
+		FROM TB_CAT_HEALTHY H
+		WHERE H.CAT_CD = #{cat_cd}
+	</select>
+	
+	
+</mapper>

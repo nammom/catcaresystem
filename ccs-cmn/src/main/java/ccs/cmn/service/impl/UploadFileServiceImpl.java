@@ -1,9 +1,11 @@
 package ccs.cmn.service.impl;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +27,9 @@ public class UploadFileServiceImpl implements UploadFileService{
 	@Resource(name="fileService")
 	private FileService fileService;
 
+	@Resource (name="config")
+	private Properties config;
+	
 	@Override
 	public List<Map<String, Object>> getFiles(Long FILE_GRUP, String downloadUrl) throws Exception {
 		// TODO Auto-generated method stub
@@ -61,7 +66,9 @@ public class UploadFileServiceImpl implements UploadFileService{
 	@Override
 	public void downloadFile(Long fileId, HttpServletResponse response) throws Exception {
 		Map<String,Object> file = fileService.selectFile(fileId);
-		DownloadUtility.create(response).writeBodyFromFile((String)file.get("file_path"))
+		String basePath = config.getProperty("Globals.file.Upload");
+		String file_path = Paths.get(basePath, (String)file.get("file_path")).toString();
+		DownloadUtility.create(response).writeBodyFromFile(file_path)
 		.setFileName((String)file.get("orgn_file_nm"))
 		.setFileExtension((String)file.get("file_extsn"))
 		.startDownload();
