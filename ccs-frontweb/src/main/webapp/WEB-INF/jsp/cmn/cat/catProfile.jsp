@@ -9,7 +9,7 @@
 <div class="col-md-12">
 		<div class="row">
 			<div id="image">
-				<img class="img-fluid" src="/images/{{if file_path}}{{:file_path}}{{else}}cmn/basiccatprofile.jpg{{/if}}"/>
+				<img class="img-fluid" src="/images/{{if file_path}}{{>file_path}}{{else}}cmn/basic_cat_profile.jpg{{/if}}"/>
 			</div>
 		</div>
 		<table class="table table-hover">
@@ -20,23 +20,23 @@
 			</colgroup>
 			<tr class="table-light">
 				<th>고양이 코드</th>
-				<td colspan="2">{{:cat_cd}}</td>
+				<td colspan="2">{{>cat_cd}}</td>
 			</tr>
 			{{if cat_name}}
 			<tr class="table-light">
 				<th>나의 애칭</th>
-				<td colspan="2">{{:cat_name}}</td>
+				<td colspan="2">{{>cat_name}}</td>
 			</tr>
 			{{/if}}
 			<tr class="table-light">
-				<td colspan="3">{{>sido_cd}} {{>sigungu_cd}} {{>dong_cd}}</td>
+				<td colspan="3">{{>sido_nm}} {{>sigungu_nm}} {{>dong_nm}}</td>
 			</tr>
 			{{if care_reason_nm}}
 			<tr class="table-light">
 				<th>돌봄 종료 사유</th>
 				<td>{{>care_reason_nm}}</td>
 				<td>
-					<button type="button" class="btn btn-primary btn-sm">상세보기</button>
+					<button type="button" id="btn-care-detail" class="btn btn-primary btn-sm">상세보기</button>
 				</td>
 			</tr>
 			{{/if}}
@@ -48,33 +48,35 @@
 				<th>특징</th>
 				<td></td>
 				<td>
-				    <button type="button" class="btn btn-primary btn-sm">상세보기</button>
+				    <button type="button" id="btn-character-detail" class="btn btn-primary btn-sm">상세보기</button>
 				</td>
 			</tr>			
 			<tr class="table-light">
 				<th>돌봄</th>
 				<td colspan="2">
-					<button type="button" id="btn-care" class="btn btn-warning ">♥</button>				
+					<button type="button" id="btn-care" class="btn btn-warning">{{if care_yn == 0}}♡{{else}}♥{{/if}}</button>				
 			    	<button type="button" id="btn-care-list" class="btn btn-warning">목록</button>
 				</td>
 			</tr>
 			<tr class="table-light">
 				<th>즐겨찾기</th>
 				<td colspan="2">
-					<button type="button" id="btn-bookmark" class="btn btn-warning">★</button>				
+					<button type="button" id="btn-bookmark" class="btn btn-warning">{{if bookmark_yn == 0}}☆{{else}}★{{/if}}</button>				
 			    	<button type="button" id="btn-bookmark-list" class="btn btn-warning">목록</button>
 				</td>
 			</tr>
 			{{if caution_yn == "Y"}}
 			<tr class="table-light">
-				<td colspan="2">주의가 필요한 고양이에요!</td>
+				<td colspan="3">
+					<p class="text-danger font-weight-bold">주의가 필요한 고양이에요!</p>
+				</td>
 			</tr>
 			
 			<tr class="table-light">
 				<th>공격성</th>
 				<td>{{>aggression}}</td>
 				<td>
-					<button type="button"  class="btn btn-primary btn-sm">상세보기</button>
+					<button type="button" id="btn-aggression-detail" class="btn btn-primary btn-sm">상세보기</button>
 				</td>					
 			</tr>
 			<tr class="table-light">
@@ -89,11 +91,21 @@
 				<td>
 					<details>
 					    <summary></summary>
-					    <p>{{for disease}}{{>disease.disease_nm}} > {{>disease.disease_nm2}} > {{>disease.disease_nm3}}{{/for}}</p>
+						<div class="bs-component">
+              				<ul class="list-group">
+							{{for disease}}
+                				<li class="list-group-item d-flex justify-content-between align-items-center">
+                  					{{>disease_nm}}
+									{{if disease_nm2}}> {{>disease_nm2}}{{/if}}
+									{{if disease_nm3}}> {{>disease_nm3}}{{/if}}
+                				</li>
+							{{/for}}
+              				</ul>
+						</div>
 				  	</details>
 				</td>
 				<td>
-					<button type="button"  class="btn btn-primary btn-sm">상세보기</button>
+					<button type="button" id="btn-disease-detail" class="btn btn-primary btn-sm">상세보기</button>
 				</td>				
 			</tr>
 			{{/if}}												
@@ -112,6 +124,7 @@ console.log("");
 
 let _mypage = null;
 
+
 $(document).ready(function() {
 
 	_mypage = new fn_page();
@@ -120,29 +133,52 @@ $(document).ready(function() {
 
 function fn_page() {
 	let $this = this;
+	let PAGE_URL = "/cat/catProfile";
 	let $template, $noInfoTmpl;
+	let cat_cd;
 	
 	this.initialize = function() {
 		$template = $("#tmpl");
 		$noInfoTmpl = $("#noInfoTmpl");
-		
+		cat_cd="<c:out value="${cat_cd}" />";
 		$this.initData();
-		/* $("#btn-save").click(function(){
-			$this.formManager.save();
-		}); */
 		
-		
+		$(document).on("click", "#btn-care-detail", function(){
+			
+		});
+		$(document).on("click", "#btn-character-detail", function(){
+			
+		});
+		$(document).on("click", "#btn-aggression-detail", function(){
+			
+		});
+		$(document).on("click", "#btn-disease-detail", function(){
+			
+		});
+		$(document).on("click", "#btn-care", function(){
+			//돌봄
+			$this.actionManager.care();
+		});
+		$(document).on("click", "#btn-care-list", function(){
+			$this.locationManager.careList();
+		});
+		$(document).on("click", "#btn-bookmark", function(){
+			//즐겨찾기
+			$this.actionManager.bookMark();			
+		});
+		$(document).on("click", "#btn-bookmark-list", function(){
+			$this.locationManager.bookMarkList();
+		});
 	}
 	
 	this.initData = function() {
-		let cat_cd="${cat_cd}";
-		$this.dataManager.getData(cat_cd);
+		$this.dataManager.getData();
 	}
 	
 	this.dataManager = {
-		getData : function(cat_cd){
+		getData : function(){
 			$.ccs.ajax({
-				url : "/cat/catProfile/selectData"
+				url : PAGE_URL + "/selectData"
 				, data : {"cat_cd" : Number(cat_cd)}
 				, success : function(data){
 					$this.dataManager.setData(data);
@@ -162,6 +198,57 @@ function fn_page() {
 		}
 	}
 	
+	this.locationManager = {
+			careList : function(page){
+				$this.locationManager.location("/careList");
+			},
+			bookMarkList : function(page){
+				$this.locationManager.location("/bookMarkList");
+			},
+			location : function(page){
+				location.href = PAGE_URL + page + "/" + cat_cd;
+			}
+			
+	}
+	
+	this.actionManager = {
+			care : function(){
+				$.ccs.ajax({
+					url : PAGE_URL + "/care"
+					, data : {"target_cd" : Number(cat_cd)
+							, "target_type" : 1}
+					, success : function(data){
+						//$this.actionManager.careCallback(data);
+						$this.initData();
+					}
+				});
+			},
+			bookMark : function(){
+				$.ccs.ajax({
+					url : PAGE_URL + "/bookmark"
+					, data : {"target_cd" : Number(cat_cd)
+							, "target_type" : 1}
+					, success : function(data){
+						//$this.actionManager.careCallback(data);
+						$this.initData();
+					}
+				});
+			},
+			careCallback : function(data){
+				if(data.status == "Y"){
+					$("btn-care").html("♥");
+				}else{
+					$("btn-care").html("♡");
+				}
+			},
+			bookmarkCallback : function(data){
+				if(data.status == "Y"){
+					$("btn-care").html("★");
+				}else{
+					$("btn-care").html("☆");
+				}
+			}
+	}
 	
 }
 

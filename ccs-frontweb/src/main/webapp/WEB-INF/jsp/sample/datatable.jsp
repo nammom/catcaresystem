@@ -182,10 +182,10 @@ function fn_page() {
 			    });
 			},
 			getSelectedRows : function() {	//선택한 행 가져오기
-				$this.$table.rows('.selected').data();
+				return $this.$table.rows('.selected').data()[0];
 			},
 			getAllRows : function() {	//전체 행 가져오기
-				$this.$table.rows().data();
+				return $this.$table.rows().data()[0];
 			},
 			searchData : function() {	//검색
 				$this.$table.ajax.reload();
