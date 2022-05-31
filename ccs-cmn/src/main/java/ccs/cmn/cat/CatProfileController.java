@@ -137,8 +137,8 @@ public class CatProfileController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/bookmark")
-	public AjaxResult bookmark(JsonParameter jsonParameter, SystemParameter systemParameter) {
+	@RequestMapping(value = "/bookMark")
+	public AjaxResult bookMark(JsonParameter jsonParameter, SystemParameter systemParameter) {
 		try {
 			Map<String,Object> param = HashMapUtility.<String,Object>create()
 					.add(jsonParameter.getData())

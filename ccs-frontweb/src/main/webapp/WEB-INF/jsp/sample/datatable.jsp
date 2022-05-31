@@ -32,7 +32,6 @@
 let _mypage = null;
 
 $(document).ready(function() {
-
 	_mypage = new fn_page();
 	_mypage.initialize();
 });
@@ -56,18 +55,18 @@ function fn_page() {
 			createTable : function() {
 				/* data 하드코딩  버전 */
 				$this.$table = $('#tableId').DataTable({
-					destroy: true,//테이블 파괴가능
-					bPaginate: true, //페이징처리
+					destroy : true,//테이블 파괴가능
+					bPaginate : true, //페이징처리
 					bLengthChange: true, // n개씩보기
 					lengthMenu : [ [10, 25, 50, -1], [10, 25, 50, "All"] ], // 10/25/50/All 개씩보기
-					bAutoWidth: false, //자동너비
-					ordering: true, //칼럼별 정렬
-					searching: false, //검색기능
-		 			select: true,
+					bAutoWidth : false, //자동너비
+					ordering : true, //칼럼별 정렬
+					searching : false, //검색기능
+		 			select : true,
 		 			/* $('#example').DataTable( {
 					    	select: 'single' or 'multi'
 						} ); */
-			        columns: [
+			        columns : [
 			            {"title":"이름", "data": "name", "name": "name", "visible": true},
 			            {"title":"나이", "data": "age", "name": "age", "visible": true}, 
 			            {"title":"도시", "data": "city", "name": "city", "visible": true}
@@ -85,40 +84,40 @@ function fn_page() {
 				let token = $("meta[name='_csrf']").attr('content');
 				
 				$this.$table = $('#tableId').DataTable({
-					order: [[0, 'desc']],// 최초 로딩시 정렬 컬럼 설정
-					destroy: true,//테이블 파괴가능
+					order : [[0, 'desc']],// 최초 로딩시 정렬 컬럼 설정
+					destroy : true,//테이블 파괴가능
 				    processing : true,
 				    serverSide : true, 
 					bPaginate: true, //페이징처리
 					lengthChang : true,
-					bLengthChange: true, // n개씩보기
+					bLengthChange : true, // n개씩보기
 					lengthMenu : [ [3, 10, 25, 50, -1], [3, 10, 25, 50, "All"] ], // * 실 페이지 설정  값 : 10/25/50/All 개씩보기
 					ordering: true, //칼럼별 정렬
 					filter : false,
 					bFilter : false,
-					searching: false, //검색기능 (*false로 두고 ajax로 구현하도록한다)
-				    bAutoWidth: false, //자동너비
-				    select: true,
+					searching : false, //검색기능 (*false로 두고 ajax로 구현하도록한다)
+				    bAutoWidth : false, //자동너비
+				    select : true,
 		 			/* $('#example').DataTable( {
 					    	select: 'single' or 'multi'
 						} ); */
 					ajax: {
-						url:"/sample/datatable/searchPaging",
-						type: "POST",
-						data: function (d) {
+						url :"/sample/datatable/searchPaging",
+						type : "POST",
+						data : function (d) {
 							//d는 그리드 정보 객체, paging시 필요
 							//검색정보
 							let a = $("#search-form").serializeObject()
 							//그리드 정보 + 검색정보							
 			                return JSON.stringify($.extend({}, a, d));
 			            },
-						dataType: "JSON",
-						contentType: "application/json; charset=utf-8",
-						beforeSend: function(xhr){
+						dataType : "JSON",
+						contentType : "application/json; charset=utf-8",
+						beforeSend : function(xhr){
 					        xhr.setRequestHeader(header, token);
 					    }
 					},
-			        columns: [
+			        columns : [
 			        	 {"title": "no", "data": "no", "name": "no", "visible": false}, // 최초 로딩시 정렬 컬럼 (hidden상태)
 			        	 {"title": "no", "data": null, "name":"numbering", "orderable": false, "visible": true},//넘버링 컬럼
 			        	 {"title": "이름", "data": "name", "name": "name", "visible": true},

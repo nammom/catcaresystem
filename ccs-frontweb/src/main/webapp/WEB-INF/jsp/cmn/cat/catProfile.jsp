@@ -120,13 +120,9 @@
 	</div>
 </script>
 <script>
-console.log("");
-
 let _mypage = null;
 
-
 $(document).ready(function() {
-
 	_mypage = new fn_page();
 	_mypage.initialize();
 });
@@ -225,7 +221,7 @@ function fn_page() {
 			},
 			bookMark : function(){
 				$.ccs.ajax({
-					url : PAGE_URL + "/bookmark"
+					url : PAGE_URL + "/bookMark"
 					, data : {"target_cd" : Number(cat_cd)
 							, "target_type" : 1}
 					, success : function(data){

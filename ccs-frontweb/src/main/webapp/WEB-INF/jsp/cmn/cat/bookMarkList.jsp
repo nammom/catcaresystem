@@ -33,12 +33,13 @@
 let _mypage = null;
 
 $(document).ready(function() {
-
 	_mypage = new fn_page();
 	_mypage.initialize();
 });
+
 function fn_page() {
 	let $this = this;
+	let PAGE_URL = "/cat/catProfile/bookMarkList";
 	this.$table;
 	this.initialize = function() {
 		$this.tableManager.createTable();
@@ -46,8 +47,6 @@ function fn_page() {
 		$("#btn-search").click(function(){
 			$this.tableManager.searchData();
 		});
-		
-		
 		
 	}
 	
@@ -73,9 +72,9 @@ function fn_page() {
 					searching : false, //검색기능 (*false로 두고 ajax로 구현하도록한다)
 				    bAutoWidth : false, //자동너비
 					ajax: {
-						url:"/cat/catProfile/bookMarkList/selectData",
-						type: "POST",
-						data: function (d) {
+						url : PAGE_URL + "/selectData",
+						type : "POST",
+						data : function (d) {
 							//d는 그리드 정보 객체, paging시 필요
 							//검색정보
 							let data = $("#search-form").serializeObject();
@@ -85,13 +84,13 @@ function fn_page() {
 							//그리드 정보 + 검색정보							
 			                return JSON.stringify(d);
 			            },
-						dataType: "JSON",
-						contentType: "application/json; charset=utf-8",
-						beforeSend: function(xhr){
+						dataType : "JSON",
+						contentType : "application/json; charset=utf-8",
+						beforeSend : function(xhr){
 					        xhr.setRequestHeader(header, token);
 					    }
 					},
-			        columns: [
+			        columns : [
 			        	 		{
 			        	 			"title": "등록일"
 				        		 	, "data": "reg_dt"

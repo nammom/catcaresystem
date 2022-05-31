@@ -33,12 +33,13 @@
 let _mypage = null;
 
 $(document).ready(function() {
-
 	_mypage = new fn_page();
 	_mypage.initialize();
 });
+
 function fn_page() {
 	let $this = this;
+	let PAGE_URL = "/cat/catProfile/careList";
 	this.$table;
 	this.initialize = function() {
 		$this.tableManager.createTable();
@@ -73,9 +74,9 @@ function fn_page() {
 					searching : false, //검색기능 (*false로 두고 ajax로 구현하도록한다)
 				    bAutoWidth : false, //자동너비
 					ajax: {
-						url:"/cat/catProfile/careList/selectData",
-						type: "POST",
-						data: function (d) {
+						url : PAGE_URL + "/selectData",
+						type : "POST",
+						data : function (d) {
 							//d는 그리드 정보 객체, paging시 필요
 							//검색정보
 							let data = $("#search-form").serializeObject();
@@ -85,13 +86,13 @@ function fn_page() {
 							//그리드 정보 + 검색정보							
 			                return JSON.stringify(d);
 			            },
-						dataType: "JSON",
-						contentType: "application/json; charset=utf-8",
-						beforeSend: function(xhr){
+						dataType : "JSON",
+						contentType : "application/json; charset=utf-8",
+						beforeSend : function(xhr){
 					        xhr.setRequestHeader(header, token);
 					    }
 					},
-			        columns: [
+			        columns : [
 			        	 		{
 			        	 			"title": "등록일"
 				        		 	, "data": "reg_dt"
@@ -141,7 +142,7 @@ function fn_page() {
 				return $this.$table.rows(obj).data()[0];
 			},
 			getSelectedRows : function() {	//선택한 행 가져오기
-				return $('#careList').DataTable().rows('.selected').data()[0];
+				return $this.$table.rows('.selected').data()[0];
 			},
 			searchData : function() {	//검색
 				return $this.$table.ajax.reload();

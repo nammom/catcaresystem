@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ccs.cmn.mapper.cat.CatGroupMapper">
+
+<!-- ** 고양이 상세 프로필 조회 ** -->
+
+	<!-- 고양이 그룹 멤버 정보 조회 -->
+	<select id="selectCatGroupMemberList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT G.CAT_CD
+				, G.REG_DT
+				, FN_GET_AREA_NAME(C.SIDO_CD) || ' ' ||
+					FN_GET_AREA_NAME(C.SIGUNGU_CD) || ' ' || 
+					FN_GET_AREA_NAME(C.DONG_CD)                     AS AREA_NM
+				, FN_GET_CODE_NAME('C0003', P.CATKIND_CD) 			AS CAT_KIND_NM
+				, F.FILE_PATH
+				, N.CAT_NAME
+		FROM TB_CAT_GRP_INFO G
+			LEFT JOIN TB_CAT C 
+				ON G.CAT_CD  = C.CAT_CD
+			LEFT JOIN TB_CAT_PROFILE P 
+				ON G.CAT_CD  = P.CAT_CD
+			LEFT JOIN TB_FILE F
+				ON P.FILE_GRP_ID = F.FILE_GRP_ID
+			LEFT JOIN TB_CAT_NAME N
+				ON G.CAT_CD = N.CAT_CD
+					AND N.USER_CD = #{_SESSION_USER_CD_}
+		WHERE G.CAT_GRP_CD = #{cat_cd}
+	</select>
+	
+		<!-- 고양이 그룹 정보 조회 -->
+	<select id="selectCatGroupList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT G.CAT_GRP_CD										AS CAT_CD
+				, G.REG_DT
+				, FN_GET_AREA_NAME(C.SIDO_CD) || ' ' ||
+					FN_GET_AREA_NAME(C.SIGUNGU_CD) || ' ' || 
+					FN_GET_AREA_NAME(C.DONG_CD)                     AS AREA_NM
+				, F.FILE_PATH
+				, N.CAT_NAME
+		FROM TB_CAT_GRP_INFO G
+			LEFT JOIN TB_CAT C 
+				ON G.CAT_CD  = C.CAT_CD
+			LEFT JOIN TB_CAT_GRP_PROFILE P 
+				ON G.CAT_CD  = P.CAT_CD
+			LEFT JOIN TB_FILE F
+				ON P.FILE_GRP_ID = F.FILE_GRP_ID
+			LEFT JOIN TB_CAT_NAME N
+				ON G.CAT_GRP_CD = N.CAT_CD
+					AND N.USER_CD = #{_SESSION_USER_CD_}
+		WHERE G.CAT_CD = #{cat_cd}
+	</select>
+	
+
+
+</mapper>
