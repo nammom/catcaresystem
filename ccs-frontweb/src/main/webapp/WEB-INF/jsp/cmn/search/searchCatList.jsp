@@ -63,7 +63,7 @@ $(document).ready(function() {
 
 function fn_modal() {
 	let $this = this;
-	let PAGE_URL = "/cat/catGroup";
+	let PAGE_URL = "/search/cat";
 	let groupFlag;
 	
 	this.$table;
