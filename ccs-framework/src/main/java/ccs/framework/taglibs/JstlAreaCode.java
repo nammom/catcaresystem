@@ -18,14 +18,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter@Setter
-public class JstlCmmCode extends SimpleTagSupport{
+public class JstlAreaCode extends SimpleTagSupport{
 	
-	private String type;
 	private String code;
 	private String prntCode;
-	private String name;
 	private String selectedValue;
-	private String exceptCode;
 	private String includeAll;
 	
 	
@@ -44,12 +41,11 @@ public class JstlCmmCode extends SimpleTagSupport{
 			String code = this.code;
 			String prntCode = this.prntCode;
 			String selectedValue = this.selectedValue;
-			String exceptCode = this.exceptCode;
 			String includeAll = this.includeAll;
 			
 			//DB조회
 			String serviceName,beanName;
-			serviceName = "selectCmnCodeList";
+			serviceName = "selectAreaCodeList";
 			beanName = "CmnService";
 			
 			Map<String, Object> parameters = new HashMap<>();
@@ -57,45 +53,17 @@ public class JstlCmmCode extends SimpleTagSupport{
 			if(StringUtils.isNotEmpty(prntCode)) {
 				parameters.put("prntCode", prntCode);
 			}
-			if(StringUtils.isNotEmpty(exceptCode)) {
-				parameters.put("exceptCode", exceptCode);
-			}
 			ServiceCall service = new ServiceCall(beanName, serviceName);
 			service.callMethod(parameters);
 			List<Map<String, Object>> codeList = (List<Map<String, Object>>)service.getData();
 			
-			//html 생성
-			String html = "";
-			
-			switch(this.type) {
-			case "option" : html = this.getOptionHtml(codeList);
-				break;
-			case "checkbox" : html = this.getCheckBoxHtml(codeList);
-			}
 			//출력
-			out.print(html);
+			out.print(this.getOptionHtml(codeList));
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-
-	private String getCheckBoxHtml(List<Map<String, Object>> codeList) {
-		String resultHtml = "";
-		if(StringUtils.isNotEmpty(this.includeAll)) {
-			resultHtml = String.format("<div class=\"form-check\"><input type='checkbox' name ='%s' value=''/ class='form-check-input'><label class='form-check-label'>%s</label></div>", this.name, this.includeAll);
-		}
-		for(Map<String, Object> e : codeList) {
-			resultHtml += String.format("<div class=\"form-check\"><input type='checkbox' name ='%s' value='%s' class='form-check-input' %s/><label class='form-check-label'>%s</label></div>",
-							this.name,
-							(String)e.get("value"),
-							this.selectedValue.equals((String)e.get("value"))? "checked" : "",
-							(String)e.get("name"));
-		}
-		
-		return resultHtml;
 	}
 
 

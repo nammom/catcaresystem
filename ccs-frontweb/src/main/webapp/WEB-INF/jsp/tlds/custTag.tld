@@ -26,6 +26,12 @@
 	</attribute>
 	
 	<attribute>
+		<name>prntCode</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	
+	<attribute>
 		<name>name</name>
 		<required>false</required>
 		<rtexprvalue>true</rtexprvalue>
@@ -39,6 +45,37 @@
 	
 	<attribute>
 		<name>exceptCode</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	
+	<attribute>
+		<name>includeAll</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	
+</tag>
+
+<tag>
+	<name>area</name>
+	<tag-class>ccs.framework.taglibs.JstlAreaCode</tag-class>
+	<body-content>empty</body-content>
+	
+	<attribute>
+		<name>code</name>
+		<required>true</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	
+	<attribute>
+		<name>prntCode</name>
+		<required>false</required>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	
+	<attribute>
+		<name>selectedValue</name>
 		<required>false</required>
 		<rtexprvalue>true</rtexprvalue>
 	</attribute>
