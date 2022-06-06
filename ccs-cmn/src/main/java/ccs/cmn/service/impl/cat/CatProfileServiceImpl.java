@@ -6,9 +6,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import ccs.cmn.mapper.cat.CatProfileMapper;
 import ccs.cmn.service.cat.CatProfileService;
@@ -28,7 +28,7 @@ public class CatProfileServiceImpl implements CatProfileService {
 	@Override
 	public Map<String, Object> selectCatProfile(Map<String, Object> param) {
 		List<Map<String, Object>> list = catProfileMapper.selectCatProfile(param);
-		if(CollectionUtils.isNotEmpty(list)) {
+		if(!CollectionUtils.isEmpty(list)) {
 			return list.get(0);
 		}
 		return null;
@@ -101,6 +101,7 @@ public class CatProfileServiceImpl implements CatProfileService {
 	public List<Map<String, Object>> selectBookMarkList(Map<String, Object> param) {
 		return catProfileMapper.selectBookMarkList(param);
 	}
+
 
 
 }

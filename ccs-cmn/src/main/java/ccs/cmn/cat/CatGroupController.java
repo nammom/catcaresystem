@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ccs.cmn.service.CmnService;
 import ccs.cmn.service.cat.CatGroupService;
 import ccs.cmn.service.cat.CatProfileService;
 import ccs.framework.model.AjaxResult;
@@ -39,6 +41,9 @@ public class CatGroupController {
 
 	@Resource(name="CatGroupService")
 	private CatGroupService catGroupService;
+
+	@Resource(name="CmnService")
+	private CmnService cmnService;
 	
 	/**
 	 * 고양이 무리 페이지
@@ -47,38 +52,36 @@ public class CatGroupController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/{catcd}/{groupFlag}")
-	public String catGroup(@PathVariable("catcd") Long catcd ,
+	@RequestMapping("/{target_cd}/{groupFlag}")
+	public String catGroup(@PathVariable("target_cd") Long target_cd ,
 							@PathVariable("groupFlag") String groupFlag ,
 							Model model) throws Exception{
-		model.addAttribute("cat_cd", catcd);
+		model.addAttribute("target_cd", target_cd);
 		model.addAttribute("groupFlag", groupFlag);
 		return "cmn/cat/catGroup";
 	}
 	
-	
 	/**
-	 * 돌봄 목록  조회
-	 * @param param
+	 * 고양이 검색 페이지
+	 * @param target_cd
+	 * @param model
 	 * @return
+	 * @throws Exception
 	 */
-	@ResponseBody
-	@RequestMapping(value = "/selectCatGroupMemberList")
-	public DataTableInfoVO selectCatGroupMemberList(@RequestBody Map<String, Object> param, SystemParameter systemParameter){
-		Map<String,Object> data = HashMapUtility.<String,Object>create()
-				.add(systemParameter.toMap())
-				.add((Map<String,Object>)param.get("data"))
-				.toMap();	
-		DataTableInfoVO<Map<String, Object>> pageInfo = PagingUtility.<Map<String, Object>>create()
-																.startPage(param);
+	@RequestMapping("/searchCat/{target_cd}/{groupFlag}")
+	public String searchCat(@PathVariable("target_cd") Long target_cd,
+							@PathVariable("groupFlag") String groupFlag,
+							SystemParameter systemParameter,
+							Model model) throws Exception{
 		
-		List<Map<String, Object>> dataList =  catGroupService.selectCatGroupMemberList(data);
-		pageInfo.setPageInfo(dataList);
+		Map<String, Object> catArea = cmnService.selectCatArea(target_cd);
+		model.addAttribute("catArea", catArea);
+		model.addAttribute("target_cd", target_cd);
+		model.addAttribute("groupFlag", groupFlag);
 		
-		return pageInfo;
+		return "cmn/cat/searchCatList";
 	}
-	
-	
+
 	/**
 	 * 돌봄 목록  조회
 	 * @param param
@@ -91,13 +94,84 @@ public class CatGroupController {
 				.add(systemParameter.toMap())
 				.add((Map<String,Object>)param.get("data"))
 				.toMap();	
-		DataTableInfoVO<Map<String, Object>> pageInfo = PagingUtility.<Map<String, Object>>create()
-																.startPage(param);
 		
 		List<Map<String, Object>> dataList =  catGroupService.selectCatGroupList(data);
-		pageInfo.setPageInfo(dataList);
 		
-		return pageInfo;
+		DataTableInfoVO<Map<String,Object>> dataInfo = new DataTableInfoVO<>(dataList);
+		
+		return dataInfo;
+	}
+	
+	/**
+	 * 고양이 그룹 등록
+	 * @param jsonParameter
+	 * @param systemParameter
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/save")
+	public AjaxResult insertCatGroup(JsonParameter jsonParameter, SystemParameter systemParameter){
+		try {
+			Map<String,Object> data = HashMapUtility.<String, Object>create()
+					.add(jsonParameter.getData())
+					.add(systemParameter.toMap())
+					.toMap();
+			
+			catGroupService.insertCatGroup(data);
+			
+			return new AjaxResult(AjaxResult.STATUS.SUCCESS);
+			
+		}catch(Exception e) {
+			LOGGER.warn("insertCatGroup error", e);
+			e.printStackTrace();
+			return new AjaxResult(AjaxResult.STATUS.ERROR, "실패하였습니다.");
+		}
+	}
+	
+	/**
+	 * 고양이 그룹 삭제
+	 * @param jsonParameter
+	 * @param systemParameter
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/delete")
+	public AjaxResult deleteCatGroup(JsonParameter jsonParameter, SystemParameter systemParameter){
+		try {
+			Map<String,Object> data = HashMapUtility.<String, Object>create()
+					.add(jsonParameter.getData())
+					.add(systemParameter.toMap())
+					.toMap();
+			
+			catGroupService.deleteCatGroup(data);
+			
+			return new AjaxResult(AjaxResult.STATUS.SUCCESS);
+			
+		}catch(Exception e) {
+			LOGGER.warn("deleteCatGroup error", e);
+			e.printStackTrace();
+			return new AjaxResult(AjaxResult.STATUS.ERROR, "실패하였습니다.");
+		}
+	}
+
+	/**
+	 * 고양이 검색 목록 조회
+	 * @param param
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/selectSearchCatList")
+	public DataTableInfoVO selectSearchCatList(@RequestBody Map<String, Object> param, SystemParameter systemParameter){
+		Map<String,Object> data = HashMapUtility.<String,Object>create()
+				.add(systemParameter.toMap())
+				.add((Map<String,Object>)param.get("data"))
+				.toMap();	
+		
+		List<Map<String, Object>> dataList =  cmnService.selectSearchCatList(data);
+		
+		DataTableInfoVO<Map<String,Object>> dataInfo = new DataTableInfoVO<>(dataList);
+		
+		return dataInfo;
 	}
 	
 }

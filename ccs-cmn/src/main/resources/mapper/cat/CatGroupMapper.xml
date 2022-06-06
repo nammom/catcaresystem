@@ -24,7 +24,7 @@
 			LEFT JOIN TB_CAT_NAME N
 				ON G.CAT_CD = N.CAT_CD
 					AND N.USER_CD = #{_SESSION_USER_CD_}
-		WHERE G.CAT_GRP_CD = #{cat_cd}
+		WHERE G.CAT_GRP_CD = #{target_cd}
 	</select>
 	
 		<!-- 고양이 그룹 정보 조회 -->
@@ -46,9 +46,70 @@
 			LEFT JOIN TB_CAT_NAME N
 				ON G.CAT_GRP_CD = N.CAT_CD
 					AND N.USER_CD = #{_SESSION_USER_CD_}
-		WHERE G.CAT_CD = #{cat_cd}
+		WHERE G.CAT_CD = #{target_cd}
 	</select>
 	
-
-
+	<!-- 고양이 그룹 멤버 등록 -->
+	<insert id="insertCatGroupMember" parameterType="java.util.Map" >
+		insert into TB_CAT_GRP_INFO
+		(
+			cat_grp_cd
+			, cat_cd
+			, REG_ID
+			, REG_DT
+			, UPDT_ID
+			, UPDT_DT
+		)
+		VALUES 
+		(
+			#{target_cd}
+			, #{cat_cd}
+			, #{_SESSION_USER_CD_} -- 입력사용자
+			, NOW() -- 입력일자
+			, #{_SESSION_USER_CD_} -- 변경사용자
+			, NOW() -- 변경일자
+		)
+	</insert>
+	
+	<!-- 고양이 그룹 등록 -->
+	<insert id="insertCatGroup" parameterType="java.util.Map" >
+		INSERT INTO TB_CAT_GRP_INFO 
+		(
+			CAT_GRP_CD
+			, CAT_CD
+			, REG_ID
+			, REG_DT
+			, UPDT_ID
+			, UPDT_DT
+		)
+		VALUES 
+		(
+			#{cat_cd}
+			, #{target_cd}
+			, #{_SESSION_USER_CD_} -- 입력사용자
+			, NOW() -- 입력일자
+			, #{_SESSION_USER_CD_} -- 변경사용자
+			, NOW() -- 변경일자
+		)
+	</insert>
+	
+	<!-- 고양이 그룹 삭제 -->
+	<delete id="deleteCatGroup" parameterType="java.util.Map">
+		DELETE FROM TB_CAT_GRP_INFO C
+		WHERE C.CAT_CD = #{target_cd}
+			AND C.CAT_GRP_CD IN
+		<foreach item="item" index="index" collection="deleteList" open="(" separator="," close=")">
+			 #{item.cat_cd}
+		</foreach>
+	</delete>
+	
+	<!-- 고양이 그룹 멤버 삭제 -->
+	<delete id="deleteCatGroupMember" parameterType="java.util.Map">
+		DELETE FROM TB_CAT_GRP_INFO C
+		WHERE C.CAT_GRP_CD = #{target_cd}
+			AND C.CAT_CD IN
+		<foreach item="item" index="index" collection="deleteList" open="(" separator="," close=")">
+			 #{item.cat_cd}
+		</foreach>
+	</delete>
 </mapper>

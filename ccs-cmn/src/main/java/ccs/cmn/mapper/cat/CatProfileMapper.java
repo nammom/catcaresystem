@@ -74,5 +74,4 @@ public interface CatProfileMapper {
 	 */
 	public List<Map<String, Object>> selectBookMarkList(Map<String, Object> param);
 
-
 }

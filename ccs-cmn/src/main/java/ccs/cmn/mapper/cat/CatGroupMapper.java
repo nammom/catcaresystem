@@ -22,5 +22,29 @@ public interface CatGroupMapper {
 	 */
 	public List<Map<String, Object>> selectCatGroupList(Map<String, Object> data);
 
+	/**
+	 * 고양이 그룹 등록
+	 * @param data
+	 */
+	public void insertCatGroup(Map<String, Object> data);
+
+	/**
+	 * 고양이 그룹 멤버 등록
+	 * @param data
+	 */
+	public void insertCatGroupMember(Map<String, Object> data);
+
+	/**
+	 * 고양이 그룹 삭제
+	 * @param data
+	 */
+	public void deleteCatGroup(Map<String, Object> data);
+
+	/**
+	 * 고양이 그룹 멤버 삭제
+	 * @param data
+	 */
+	public void deleteCatGroupMember(Map<String, Object> data);
+
 	
 }
