@@ -85,10 +85,7 @@
 	
 	        	parameterOptions = $.extend({}, parameterOptions, attachFileOptions);
 	        }else{
-				if(parameterOptions['contentType'] == "application/json; charset=utf-8" && parameterOptions['data']){
-					parameterOptions['data'] = JSON.stringify({"___AJAX_DATA___" : parameterOptions['data']});
-				}
-				//parameterOptions['data'] = JSON.stringify(parameterOptions['data']);
+				parameterOptions['data'] = JSON.stringify(parameterOptions['data']);
 			}
 			return $.ajax(parameterOptions);
 		},
@@ -98,10 +95,100 @@
 				callbackFunc();
 			}
 		},
+		modal : {
+			modalOption : {},
+			create : function(url, option){
+				let defaultOption = {
+					id : "ccsModal",
+					title : "",
+					button : [],
+					size : "modal-xl",	//modal-xl, modal-l, modal-sm
+					closeFunction : null
+				};
+				this.modalOption = {};
+				this.modalOption =  $.extend({}, defaultOption, option);
+				if($("#" + $.ccs.modal.modalOption.id).length == 0){
+					//모달 div 생성
+					let modalHtml = '<div class="modal" id=\"'+$.ccs.modal.modalOption.id+'\" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">'
+									+ '<div class="modal-dialog '+$.ccs.modal.modalOption.size+' modal-dialog-centered" role="document">'
+					    			+ '<div class="modal-content"><div class="modal-header">'
+							        + '<h5 class="modal-title" id="exampleModalLongTitle">'+$.ccs.modal.modalOption.title+'</h5>'
+							        + '<button type="button" class="close" data-dismiss="modal" ><span aria-hidden="true">&times;</span></button></div>'
+							      	+ '<div class="modal-body"></div><div class="modal-footer"></div></div></div></div>'
+					$(".container").after(modalHtml);
+					
+					//모달 body 생성
+					$(".modal-body", "#" + $.ccs.modal.modalOption.id).load(url, function(){
+						//버튼 생성
+						if($.ccs.modal.modalOption.button){
+							let btnHtml = "";
+							$.ccs.modal.modalOption.button.forEach(function(e, idx){
+								btnHtml += '<button type="button" class="btn btn-primary" id="'+e['id']+'">'+e['title']+'</button>';
+							});
+						    $(".modal-footer", "#" + $.ccs.modal.modalOption.id).html(btnHtml);
+						}
+						$.ccs.modal.show($.ccs.modal.modalOption.id);
+					});
+					
+					//버튼 클릭 이벤트 바인딩 
+					if($.ccs.modal.modalOption.button){
+						$.ccs.modal.modalOption.button.forEach(function(e, idx){
+							let el = "#" + e['id'];
+							$("#" + $.ccs.modal.modalOption.id).on("click", el, e['click']);
+						});
+					}
+					
+					//모달 숨김 이벤트
+					$("#" + $.ccs.modal.modalOption.id).on('hide.bs.modal', function(){
+						if($.ccs.modal.modalOption.button){
+							$.ccs.modal.modalOption.button.forEach(function(e, idx){
+								let el = "#" + e['id'];
+								$("#" + $.ccs.modal.modalOption.id).off("click", el);
+							});
+						}
+						if($.ccs.modal.modalOption.closeFunction) this.modalOption.closeFunction();
+					});
+	
+					//모달 숨겨진 뒤 이벤트
+					$("#" + $.ccs.modal.modalOption.id).on('hidden.bs.modal', function(){
+					    $(this).closest(".modal").remove();
+					});
+					
+					
+				}else{
+					$.ccs.modal.show($.ccs.modal.modalOption.id);
+				}
+			},
+			show : function(id){
+				$('#' + id).modal('show');
+			},
+			close : function(id){
+				let $modal;
+				if(id){
+					$modal = "#" + id;
+				}else{
+					$modal = "#" +$(this).closest(".modal").attr("id");
+				}
+				$(".close", $modal).click();
+			}
+		},
 		bindFile : function(selecterName, files){
 			$("#" + selecterName + "-fileList").empty();
 			$("#" + selecterName + "-fileInput").MultiFile('reset');
 	        $("#" + selecterName + "-fileInput").MultiFile('addList',files);
+		},
+		findObjectByKey : function(list, key, name){
+			return list.filter(function(e, idx){if(e[key] == name) return e;});
+		},
+		findIndexByKey : function(list, key, name){
+			let result = null;
+			list.filter(function(e, idx){if(e[key] == name) result = idx;});
+			return result;
+		},
+		pluck : function(list, key){
+			let result = [];
+			list.each(function(e, idx){result.push(e[key])});
+			return result;
 		}
 	}
 	

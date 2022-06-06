@@ -66,18 +66,17 @@ public class JsonParameter {
 		}else {
 			jsonBody = IOUtils.toString(request.getInputStream(), "UTF-8");
 			if(StringUtils.isNotEmpty(jsonBody)) {
-				jsonParameter.setData((Map<String, Object>)getData(jsonBody).get(DATA_KEY));
+				jsonParameter.setData((Map<String, Object>)getData(jsonBody));
 			}
 		}
 		return jsonParameter;
 	}
 	
 	public static Map<String,Object> getData(String jsonString) throws Exception{
-		ObjectMapper mapper = new ObjectMapper();
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		mapper.setDateFormat(df);
-		Map<String, Object> map = mapper.readValue(jsonString, new TypeReference<Map<String, Object>>(){});
-		
-		return (Map<String, Object>)map;
+		 ObjectMapper mapper = new ObjectMapper(); 
+		 DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); mapper.setDateFormat(df);
+		 Map<String, Object> map = mapper.readValue(jsonString, new TypeReference<Map<String, Object>>(){});
+		 
+		 return map;
 	}
 }
