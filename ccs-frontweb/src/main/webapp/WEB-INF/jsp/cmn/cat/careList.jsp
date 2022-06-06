@@ -103,6 +103,8 @@ function fn_page() {
 			        		 		"title": "프로필"
 			        		 		, "data": "file_path"
 			        		 		, "name": "file_path"
+		        		 			, "orderable": false
+			        		 		, "searchable": false
 			        		 		, "render": function ( data, type, row, meta ) {
 			        		 						if(data){
 							        		 	      	return '<img class="img-profile-s" src="/images/' + data + '"/>';
@@ -139,10 +141,10 @@ function fn_page() {
 
 			},
 			getRowData : function(obj){
-				return $this.$table.rows(obj).data()[0];
+				return $this.$table.rows(obj).data().toArray();
 			},
 			getSelectedRows : function() {	//선택한 행 가져오기
-				return $this.$table.rows('.selected').data()[0];
+				return $this.$table.rows('.selected').data().toArray();
 			},
 			searchData : function() {	//검색
 				return $this.$table.ajax.reload();
