@@ -5,5 +5,32 @@ import java.util.Map;
 
 public interface CmnService {
 
+	/**
+	 * 공통 코드 조회
+	 * @param param
+	 * @return
+	 */
 	public List<Map<String, Object>> selectCmnCodeList(Map<String, Object> param);
+	
+	/**
+	 * 지역 코드 조회
+	 * @param param
+	 * @return
+	 */
+	public List<Map<String, Object>> selectAreaCodeList(Map<String, Object> param);
+	
+	/**
+	 * 고양이 지역 조회
+	 * @param target_cd
+	 * @return
+	 */
+	public Map<String, Object> selectCatArea(Long target_cd);
+
+	/**
+	 * 고양이 검색 목록 조회
+	 * @param data
+	 * @return
+	 */
+	public List<Map<String, Object>> selectSearchCatList(Map<String, Object> data);
+
 }

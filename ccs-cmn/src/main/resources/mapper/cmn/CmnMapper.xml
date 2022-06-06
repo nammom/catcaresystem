@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="ccs.cmn.mapper.CmnMapper">
 
+	<!-- 공통 코드 조회 -->
 	<select id="selectCmnCodeList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT C.CMMN_CD as value
 			, C.CMMN_CD_NM as name
@@ -9,10 +10,78 @@
 		FROM TB_CMNCODE C
 		<where>
 			C.CMMN_GRP_CD  = #{code}
+			<if test="prntCode!=null and !prntCode.equals('')">
+				C.PRNT_CD = #{prntCode}		
+			</if>
 			<if test="exceptCode!=null and !exceptCode.equals('')">
-				D.CMMN_CD != #{EXCEPTCODE}
+				D.CMMN_CD != #{exceptCode}
 			</if>		
 		</where>
 		ORDER BY C.CMMN_CD_SEQ ASC
+	</select>
+	
+		<!-- 지역 코드 조회 -->
+	<select id="selectAreaCodeList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT C.AREA_CD as value
+			, C.AREA_NM as name
+			, C.AREA_UPPER_CD as prntCode
+		FROM TB_AREA C
+		<where>
+			C.AREA_GRP_CD = #{code}
+			<if test="prntCode!=null and !prntCode.equals('')">
+				C.AREA_UPPER_CD = #{prntCode}		
+			</if>
+		</where>
+		ORDER BY C.AREA_CD_SEQ ASC
+	</select>
+	
+	
+	<!-- 고양이 지역 조회 -->
+	<select id="selectCatArea" parameterType="java.lang.Long" resultType="java.util.Map">
+		SELECT  C.SIDO_CD
+				, C.SIGUNGU_CD
+				, C.DONG_CD
+				, fn_get_area_name(C.SIDO_CD)			AS SIDO_NM
+				, fn_get_area_name(C.SIGUNGU_CD)        AS SIGUNGU_NM
+				, fn_get_area_name(C.DONG_CD)           AS DONG_NM
+		FROM TB_CAT C
+		WHERE C.CAT_CD = #{target_cd}
+	</select>
+	
+	<!-- 고양이 검색  -->
+	<select id="selectSearchCatList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT C.CAT_CD
+			, FN_GET_AREA_NAME(C.SIDO_CD) || ' ' ||
+				FN_GET_AREA_NAME(C.SIGUNGU_CD) || ' ' || 
+				FN_GET_AREA_NAME(C.DONG_CD)                     AS AREA_NM
+			, FN_GET_CODE_NAME('C0003', P.CATKIND_CD) 			AS CAT_KIND_NM
+			, F.FILE_PATH
+			, N.CAT_NAME
+		FROM TB_CAT C 
+			LEFT JOIN TB_CAT_PROFILE P 
+				ON C.CAT_CD  = P.CAT_CD
+			LEFT JOIN TB_FILE F
+				ON P.FILE_GRP_ID = F.FILE_GRP_ID
+			LEFT JOIN TB_CAT_NAME N
+				ON C.CAT_CD = N.CAT_CD
+					AND N.USER_CD = #{_SESSION_USER_CD_}
+		<where>
+			C.GROUP_YN = #{group_yn}
+			<if test="sido != null and !sido.equals('')">
+				AND C.SIDO_CD = #{sido}
+			</if>
+			<if test="sigungu != null and !sigungu.equals('')">
+				AND C.SIGUNGU_CD = #{sigungu}
+			</if>
+			<if test="dong != null and !dong.equals('')">
+				AND C.DONG_CD = #{dong}
+			</if>
+			<if test="cat_cd != null and !cat_cd.equals('')">
+				AND C.CAT_CD like '%'|| #{cat_cd} ||'%'
+			</if>
+			<if test="cat_name != null and !cat_name.equals('')">
+				AND N.CAT_NAME like '%'|| #{cat_name} ||'%'
+			</if>
+		</where>
 	</select>
 </mapper>
