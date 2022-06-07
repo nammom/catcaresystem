@@ -64,4 +64,14 @@ public class CmnServiceImpl implements CmnService {
 	public List<Map<String, Object>> selectSearchCatList(Map<String, Object> data) {
 		return cmnMapper.selectSearchCatList(data);
 	}
+
+	/**
+	 * 서식지 검색 목록 조회
+	 * @param data
+	 * @return
+	 */
+	@Override
+	public List<Map<String, Object>> selectSearchHabitatList(Map<String, Object> data) {
+		return cmnMapper.selectSearchHabitatList(data);
+	}
 }

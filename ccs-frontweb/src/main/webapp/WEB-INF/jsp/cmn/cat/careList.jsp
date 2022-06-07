@@ -135,7 +135,9 @@ function fn_page() {
 				$this.$table.on( 'select', function ( e, dt, type, indexes ) {
 				    if ( type === 'row' ) {
 				        let row = $this.tableManager.getSelectedRows();
-						location.href = "/user/userProfile/" + row.user_cd;
+				        if(row[0]['user_cd']){
+							location.href = "/user/userProfile/" + row[0]['user_cd'];
+				        }
 				    }
 				} );
 

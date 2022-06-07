@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ccs.cmn.mapper.cat.CatHabitatMapper">
+
+<!-- ** 고양이 상세 프로필 조회 ** -->
+
+	<!-- 고양이 서식지 정보 조회 -->
+	<select id="selectCatHabitatList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT H.HABITAT_CD 
+			, H.HABITAT_NM
+			, FN_GET_AREA_NAME(H.SIDO_CD) || ' ' ||
+				FN_GET_AREA_NAME(H.SIGUNGU_CD) || ' ' || 
+				FN_GET_AREA_NAME(H.DONG_CD)                     AS AREA_NM
+			, H.ADDRESS
+			, F.FILE_PATH 
+		FROM TB_HABITAT_INFO I 
+			JOIN TB_HABITAT H 
+				ON I.HABITAT_CD = H.HABITAT_CD
+			LEFT JOIN TB_FILE F 
+				ON H.FILE_GRP_ID = F.FILE_GRP_ID 
+		WHERE I.CAT_CD = #{cat_cd}
+		ORDER BY H.REG_DT DESC
+	</select>
+	
+	<!-- 고양이 서식지 등록 -->
+	<insert id="insertCatHabitat" parameterType="java.util.Map" >
+		insert into TB_HABITAT_INFO
+		(
+			CAT_CD
+			, HABITAT_CD
+			, REG_ID
+			, REG_DT
+			, UPDT_ID
+			, UPDT_DT
+		)
+		VALUES 
+		(
+			#{cat_cd}
+			, #{habitat_cd}
+			, #{_SESSION_USER_CD_} -- 입력사용자
+			, NOW() -- 입력일자
+			, #{_SESSION_USER_CD_} -- 변경사용자
+			, NOW() -- 변경일자
+		)
+	</insert>
+	
+	<!-- 고양이 서식지 삭제 -->
+	<delete id="deleteCatHabitat" parameterType="java.util.Map">
+		DELETE FROM TB_HABITAT_INFO H
+		WHERE H.CAT_CD = #{cat_cd}
+			AND H.HABITAT_CD IN
+		<foreach item="item" index="index" collection="deleteList" open="(" separator="," close=")">
+			 #{item.habitat_cd}
+		</foreach>
+	</delete>
+	
+</mapper>

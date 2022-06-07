@@ -77,11 +77,45 @@
 				AND C.DONG_CD = #{dong}
 			</if>
 			<if test="cat_cd != null and !cat_cd.equals('')">
-				AND C.CAT_CD like '%'|| #{cat_cd} ||'%'
+				AND C.CAT_CD = #{cat_cd}
 			</if>
 			<if test="cat_name != null and !cat_name.equals('')">
 				AND N.CAT_NAME like '%'|| #{cat_name} ||'%'
 			</if>
 		</where>
+		ORDER BY C.CAT_CD DESC
 	</select>
+	
+		<!-- 고양이 검색  -->
+	<select id="selectSearchHabitatList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT H.HABITAT_CD 
+			, H.HABITAT_NM
+			, FN_GET_AREA_NAME(H.SIDO_CD) || ' ' ||
+				FN_GET_AREA_NAME(H.SIGUNGU_CD) || ' ' || 
+				FN_GET_AREA_NAME(H.DONG_CD)                     AS AREA_NM
+			, H.ADDRESS
+			, F.FILE_PATH 
+		FROM TB_HABITAT H 
+			LEFT JOIN TB_FILE F 
+				ON H.FILE_GRP_ID = F.FILE_GRP_ID 
+		<where>
+			<if test="sido != null and !sido.equals('')">
+				H.SIDO_CD = #{sido}
+			</if>
+			<if test="sigungu != null and !sigungu.equals('')">
+				H.SIGUNGU_CD = #{sigungu}
+			</if>
+			<if test="dong != null and !dong.equals('')">
+				H.DONG_CD = #{dong}
+			</if>
+			<if test="habitat_cd != null and !habitat_cd.equals('')">
+				H.HABITAT_CD = #{habitat_cd}
+			</if>
+			<if test="habitat_nm != null and !habitat_nm.equals('')">
+				H.HABITAT_NM like '%'|| #{habitat_nm} ||'%'
+			</if>
+		</where>
+		ORDER BY H.HABITAT_CD DESC
+	</select>
+	
 </mapper>

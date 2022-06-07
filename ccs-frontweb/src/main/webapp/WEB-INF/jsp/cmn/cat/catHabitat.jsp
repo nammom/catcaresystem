@@ -3,9 +3,8 @@
 <body>
 <div class="container">
 	<div class="col-md-12">
-		<form id="catGroup-search-form" class="form-group m-3">
-			<input type="hidden" id="target_cd" name="target_cd" value="<c:out value="${target_cd}" />">
-			<input type="hidden" id="groupFlag" name="groupFlag" value="<c:out value="${groupFlag}" />">
+		<form id="catHabitat-search-form" class="form-group m-3">
+			<input type="hidden" id="cat_cd" name="cat_cd" value="<c:out value="${cat_cd}" />">
 		</form>	    
 	</div>
 	<div class="col-md-12">
@@ -15,60 +14,32 @@
 		</div>
 	</div>
 	<div class="col-md-12">	
-		<ul class="nav nav-tabs">
-		<c:if test="${groupFlag eq 'grp'}">
-          <li class="nav-item">
-            <a class="nav-link active" data-bs-toggle="tab" href="#catGroup">무리</a>
-          </li>
-		</c:if>
-		<c:if test="${groupFlag eq 'cat'}">
-          <li class="nav-item">
-            <a class="nav-link active" data-bs-toggle="tab" href="#cat">개별</a>
-          </li>
-        </c:if>
-        </ul>
-        <div id="myTabContent" class="tab-content">
-        <c:if test="${groupFlag eq 'grp'}">
-          <div class="tab-pane fade active show" id="catGroup">
-          	<div class="col-md-12">
-				<table id="catGroupList"></table>
-			</div>
-          </div>
-        </c:if>
-        <c:if test="${groupFlag eq 'cat'}">
-          <div class="tab-pane fade active show" id="cat">
-          	<div class="col-md-12">
-				<table id="catList"></table>
-			</div>
-          </div>
-        </c:if>
-        </div>
+		<table id="catHabitatList"></table>
     </div>
 </div>
 <script>
 let _catGroupPage = null;
 
 $(document).ready(function() {
-	_catGroupPage = new fn_catGroupPage();
-	_catGroupPage.initialize();
+	_catHabitatPage = new fn_catHabitatPage();
+	_catHabitatPage.initialize();
 });
 
-function fn_catGroupPage() {
+function fn_catHabitatPage() {
 	let $this = this;
-	let PAGE_URL = "/cat/catGroup";
-	let target_cd, groupFlag;
+	let PAGE_URL = "/cat/catHabitat";
+	let cat_cd;
 	
 	this.$table;
 	this.initialize = function() {
-		target_cd = $("#target_cd").val();
-		groupFlag = $("#groupFlag").val();
+		cat_cd = $("#cat_cd").val();
 		
 		$this.tableManager.createTable();
 
 		$("#btn-add").click(function(){
 			$this.searchManager.openSearchModal();
 		});
-		
+
 		$("#btn-delete").click(function(){
 			$this.tableManager.deleteRow();
 		});
@@ -80,62 +51,7 @@ function fn_catGroupPage() {
 			let header = $("meta[name='_csrf_header']").attr('content');
 			let token = $("meta[name='_csrf']").attr('content');
 			
-			let columnArr = [
-								{
-			        		 		"title": ""
-			        		 		, "data": null
-			        		 		, "name": ""
-			        		 		, "orderable": false
-			        		 		, "searchable": false
-			        		 		, "render": function ( data, type, row, meta ) {
-			        		 						return '<input type="checkbox" name="input-check"/>';
-								            	}
-			        		 	},
-					        	{
-			        		 		"title": "프로필"
-			        		 		, "data": "file_path"
-			        		 		, "name": "file_path"
-		        		 			, "orderable": false
-			        		 		, "searchable": false
-			        		 		, "render": function ( data, type, row, meta ) {
-			        		 						if(data){
-							        		 	      	return '<img class="img-profile-s" src="/images/' + data + '"/>';
-			        		 						}else{
-			        		 							return '<img class="img-profile-s" src="/images/cmn/basic_cat_profile.jpg"/>';
-			        		 						}
-								            	}
-			        		 	},
-						        {
-			        		 		"title": "나의 애칭"
-			        		 		, "data": "cat_name"
-			        		 		, "name": "cat_name"
-			        		 	},
-						        {
-			        		 		"title": "고유코드"
-			        		 		, "data": "cat_cd"
-			        		 		, "name": "cat_cd"
-			        		 	}, 
-						        {
-			        		 		"title": "주소"
-			        		 		, "data": "area_nm"
-			        		 		, "name": "area_nm"
-			        		 	},
-						        {
-			        		 		"title": "품종"
-			        		 		, "data": "cat_kind_nm"
-			        		 		, "name": "cat_kind_nm"
-			        		 	}
-	        				];
-			
-			let tableId = "catList";
-			if(groupFlag == "grp"){
-				//그룹인 경우 품종 컬럼 제거
-				let colIdx = $.ccs.findIndexByKey(columnArr, "name", "cat_kind_nm"); 
-				columnArr.splice(colIdx,1);
-				tableId = "catGroupList";
-			}
-			
-			$this.$table = $('#'+tableId).DataTable({
+			$this.$table = $('#catHabitatList').DataTable({
 				destroy : true,//테이블 파괴가능
 				lengthChang : true,
 				bLengthChange : true, // n개씩보기
@@ -153,17 +69,16 @@ function fn_catGroupPage() {
 				searching : false, //검색기능 (*false로 두고 ajax로 구현하도록한다)
 			    bAutoWidth : false, //자동너비
 				ajax: {
-					url : PAGE_URL + "/selectCatGroupList",
+					url : PAGE_URL + "/selectCatHabitatList",
 					type : "POST",
 					data : function (d) {
 						//d는 그리드 정보 객체, paging시 필요
 						//검색정보
-						let data = $("#catGroup-search-form").serializeObject();
-						data['target_cd'] = Number(data['target_cd']);
-						d['data'] = data;
+						let data = $("#catHabitat-search-form").serializeObject();
+						data['cat_cd'] = Number(data['cat_cd']);
 						
 						//그리드 정보 + 검색정보							
-		                return JSON.stringify(d);
+		                return JSON.stringify(data);
 		            },
 					dataType : "JSON",
 					contentType : "application/json; charset=utf-8",
@@ -171,13 +86,53 @@ function fn_catGroupPage() {
 				        xhr.setRequestHeader(header, token);
 				    }
 				},
-		        columns : columnArr
+		        columns : [
+							{
+		        		 		"title": ""
+		        		 		, "data": null
+		        		 		, "name": ""
+		        		 		, "orderable": false
+		        		 		, "searchable": false
+		        		 		, "render": function ( data, type, row, meta ) {
+		        		 						return '<input type="checkbox" name="input-check"/>';
+							            	}
+		        		 	},
+				        	{
+		        		 		"title": "프로필"
+		        		 		, "data": "file_path"
+		        		 		, "name": "file_path"
+		    		 			, "orderable": false
+		        		 		, "searchable": false
+		        		 		, "render": function ( data, type, row, meta ) {
+		        		 						if(data){
+						        		 	      	return '<img class="img-profile-s" src="/images/' + data + '"/>';
+		        		 						}else{
+		        		 							return '<img class="img-profile-s" src="/images/cmn/basic_habitat_profile.jpg"/>';
+		        		 						}
+							            	}
+		        		 	},
+					        {
+		        		 		"title": "고유코드"
+		        		 		, "data": "habitat_cd"
+		        		 		, "name": "habitat_cd"
+		        		 	}, 
+					        {
+		        		 		"title": "주소"
+		        		 		, "data": "area_nm"
+		        		 		, "name": "area_nm"
+		        		 	},
+					        {
+		        		 		"title": "상세주소"
+		        		 		, "data": "address"
+		        		 		, "name": "address"
+		        		 	}
+				]
 		    });
 			
 			$this.$table.on( 'select', function ( e, dt, type, indexes ) {
 		        let row = $this.tableManager.getSelectedRows();
-		        if(row[0]['cat_cd']){
-					location.href = "/cat/catProfile/" + row[0]['cat_cd'];
+		        if(row[0]['habitat_cd']){
+					location.href = "/cat/habitatProfile/" + row['habitat_cd'];
 		        }
 			} );
 		},
@@ -223,8 +178,8 @@ function fn_catGroupPage() {
 			return null;
 		},
 		getDeleteData : function(deleteRows){	//삭제 데이터 가져오기
-			let data = $("#catGroup-search-form").serializeObject();
-			data['target_cd'] = Number(data['target_cd']);
+			let data = $("#catHabitat-search-form").serializeObject();
+			data['cat_cd'] = Number(data['cat_cd']);
 			data['deleteList'] = deleteRows;
 			return data;
 		}
@@ -232,21 +187,21 @@ function fn_catGroupPage() {
 	
 	this.searchManager = {
 		openSearchModal : function(){
-			let url = "/search/cat/" + Number(target_cd) + "/" + groupFlag;
+			let url = "/search/habitat/" + Number(cat_cd);
 			let option = {
-					id : "searchCatModal",
-					title : "고양이 검색",
+					id : "searchHabitatModal",
+					title : "서식지 검색",
 					button : [{"title" : "저장", id : "btn-save", "click" : this.save}]
 				};
 			$.ccs.modal.create(url, option);
 		},
 		getSaveData : function(arr){
-			let data = $("#catGroup-search-form").serializeObject();
-			data['target_cd'] = Number(data['target_cd']);
+			let data = $("#catHabitat-search-form").serializeObject();
+			data['cat_cd'] = Number(data['cat_cd']);
 			//이미 등록된 고양이 제거 
-			let catCdArr = $.ccs.pluck($this.tableManager.getAllRows(), "cat_cd");
+			let catCdArr = $.ccs.pluck($this.tableManager.getAllRows(), "habitat_cd");
 			let saveList = arr.filter(function(e, idx){
-				if(catCdArr.indexOf(e['cat_cd']) < 0){
+				if(catCdArr.indexOf(e['habitat_cd']) < 0){
 					return e;
 				}
 			});
@@ -254,7 +209,6 @@ function fn_catGroupPage() {
 			return data;
 		},
 		save : function(){	//저장
-			
 			if(!_modal.tableManager.getCheckedRows().length){
 				alert("선택한 행이 없습니다.");
 			}else{
@@ -276,7 +230,7 @@ function fn_catGroupPage() {
 		saveCallback : function(){
 			alert("저장되었습니다.");
 			$this.tableManager.searchData();
-			$.ccs.modal.close("searchCatModal");
+			$.ccs.modal.close("searchHabitatModal");
 		}
 	}
 	

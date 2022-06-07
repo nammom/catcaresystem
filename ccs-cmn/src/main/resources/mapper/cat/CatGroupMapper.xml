@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="ccs.cmn.mapper.cat.CatGroupMapper">
 
-<!-- ** 고양이 상세 프로필 조회 ** -->
+<!-- ** 고양이 무리(멤버) 조회 ** -->
 
 	<!-- 고양이 그룹 멤버 정보 조회 -->
 	<select id="selectCatGroupMemberList" parameterType="java.util.Map" resultType="java.util.Map">
@@ -25,6 +25,7 @@
 				ON G.CAT_CD = N.CAT_CD
 					AND N.USER_CD = #{_SESSION_USER_CD_}
 		WHERE G.CAT_GRP_CD = #{target_cd}
+		ORDER BY G.REG_DT DESC
 	</select>
 	
 		<!-- 고양이 그룹 정보 조회 -->

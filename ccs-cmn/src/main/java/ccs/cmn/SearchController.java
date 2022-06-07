@@ -72,4 +72,42 @@ public class SearchController {
 		return dataInfo;
 	}
 	
+	/**
+	 * 서식지 검색 페이지
+	 * @param cat_cd
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/habitat/{cat_cd}")
+	public String searchCat(@PathVariable("cat_cd") Long cat_cd,
+							Model model) throws Exception{
+		
+		Map<String, Object> catArea = cmnService.selectCatArea(cat_cd);
+		model.addAttribute("catArea", catArea);
+		model.addAttribute("cat_cd", cat_cd);
+		
+		return "cmn/search/searchHabitatList";
+	}
+	
+	/**
+	 * 서식지 검색 목록 조회
+	 * @param param
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/habitat/selectSearchHabitatList")
+	public DataTableInfoVO selectSearchHabitatList(@RequestBody Map<String, Object> param, SystemParameter systemParameter){
+		Map<String,Object> data = HashMapUtility.<String,Object>create()
+				.add(systemParameter.toMap())
+				.add((Map<String,Object>)param.get("data"))
+				.toMap();	
+		
+		List<Map<String, Object>> dataList =  cmnService.selectSearchHabitatList(data);
+		
+		DataTableInfoVO<Map<String,Object>> dataInfo = new DataTableInfoVO<>(dataList);
+		
+		return dataInfo;
+	}
+	
 }
