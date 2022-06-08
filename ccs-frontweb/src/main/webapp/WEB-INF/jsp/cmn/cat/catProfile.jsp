@@ -9,7 +9,8 @@
 <div class="col-md-12">
 		<div class="row">
 			<div id="image">
-				<img class="img-fluid" src="/images/{{if file_path}}{{>file_path}}{{else}}cmn/basic_cat_profile.jpg{{/if}}"/>
+				<img class="img-fluid" 
+					src="/images/{{if file_path}}{{>file_path}}{{else}}cmn/{{if group_yn == "N"}}basic_cat_profile.jpg{{else}}basic_cat_grp_profile.jpg{{/if}}{{/if}}"/>
 			</div>
 		</div>
 		<table class="table table-hover">
@@ -41,9 +42,34 @@
 			</tr>
 			{{/if}}
 			<tr class="table-light">
+				<th>소개</th>
+				<td colspan="2">
+					<details open>
+					    <summary></summary>
+						<div class="bs-component">
+							{{>introduction}}
+						</div>
+				  	</details>
+				</td>			
+			</tr>
+			{{if group_yn == "N"}}
+			<tr class="table-light">
 				<th>품종</th>
 				<td colspan="2">{{>cat_kind_nm}}</td>
 			</tr>
+			<tr class="table-light">
+				<th>추정나이</th>
+				<td colspan="2">{{>age}}</td>
+			</tr>
+			<tr class="table-light">
+				<th>성별</th>
+				<td colspan="2">{{>gender}}</td>
+			</tr>
+			<tr class="table-light">
+				<th>중성화 여부</th>
+				<td colspan="2">{{>neutering_yn}}</td>
+			</tr>
+			{{/if}}
 			<tr class="table-light">
 				<th>특징</th>
 				<td></td>
@@ -71,7 +97,6 @@
 					<p class="text-danger font-weight-bold">주의가 필요한 고양이에요!</p>
 				</td>
 			</tr>
-			
 			<tr class="table-light">
 				<th>공격성</th>
 				<td>{{>aggression}}</td>

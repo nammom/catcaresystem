@@ -7,7 +7,8 @@
 	<!-- 고양이 프로필 정보 조회 -->
 	<select id="selectCatProfile" parameterType="java.util.Map" resultType="java.util.Map">
 	SELECT C.CAT_CD 
-			, MAX(TCC2.care_type) 												AS care_type
+			, MAX(C.GROUP_YN) 													AS GROUP_YN
+			, MAX(TCC2.CARE_TYPE) 												AS CARE_TYPE
 			, MAX(fn_get_code_name('C0002', TCC2.REASON_CD)) 					AS CARE_REASON_NM	
 			, MAX(fn_get_area_name(C.SIDO_CD))									AS SIDO_NM
 			, MAX(fn_get_area_name(C.SIGUNGU_CD))                               AS SIGUNGU_NM
@@ -24,6 +25,49 @@
 			, COUNT(TBM.TARGET_CD)												AS BOOKMARK_YN		
 		FROM TB_CAT C
 			LEFT JOIN TB_CAT_PROFILE TCP
+				ON C.CAT_CD = TCP.CAT_CD
+			LEFT JOIN TB_FILE TF
+				ON TCP.FILE_GRP_ID = TF.FILE_GRP_ID  
+			LEFT JOIN TB_CAT_CHARACTERISTIC TCC
+				ON C.CAT_CD = TCC.CAT_CD  
+			LEFT JOIN TB_CAT_CARE TCC2
+				ON C.CAT_CD = TCC2.CAT_CD
+					AND TCC2.CATCARE_CD = (SELECT MAX(T.CATCARE_CD) 
+											FROM TB_CAT_CARE T 
+											WHERE T.CAT_CD = C.CAT_CD)
+			LEFT JOIN TB_CAT_NAME TCN 
+				ON C.CAT_CD = TCN.CAT_CD 
+				AND TCN.USER_CD = #{_SESSION_USER_CD_}
+			LEFT JOIN TB_CARE TCR 
+				ON C.CAT_CD = TCR.TARGET_CD 
+				AND TCR.USER_CD = #{_SESSION_USER_CD_}
+			LEFT JOIN TB_BOOKMARK TBM 
+				ON C.CAT_CD = TBM.TARGET_CD 
+				AND TBM.USER_CD = #{_SESSION_USER_CD_}
+		WHERE TCP.CAT_CD = #{cat_cd}
+		GROUP BY C.CAT_CD
+	</select>
+	
+	<!-- 고양이 무리 프로필 정보 조회 -->
+	<select id="selectCatGrpProfile" parameterType="java.util.Map" resultType="java.util.Map">
+	SELECT C.CAT_CD 
+			, MAX(C.GROUP_YN) 													AS GROUP_YN
+			, MAX(TCC2.CARE_TYPE) 												AS CARE_TYPE
+			, MAX(FN_GET_CODE_NAME('C0002', TCC2.REASON_CD)) 					AS CARE_REASON_NM	
+			, MAX(FN_GET_AREA_NAME(C.SIDO_CD))									AS SIDO_NM
+			, MAX(FN_GET_AREA_NAME(C.SIGUNGU_CD))                               AS SIGUNGU_NM
+			, MAX(FN_GET_AREA_NAME(C.DONG_CD))                                  AS DONG_NM
+			, MAX(TCP.INTRODUCTION)                                             AS INTRODUCTION
+			, MAX(TCP.FILE_GRP_ID)                                              AS FILE_GRP_ID
+			, MAX(TF.FILE_PATH)                                                 AS FILE_PATH
+			, MAX(CASE WHEN TCC.CAUTION_YN = 'Y' THEN 'Y' ELSE NULL END)        AS CAUTION_YN
+			, AVG(TCC.AGGRESSION)                                               AS AGGRESSION
+			, AVG(TCC.SENSITIVITY)                                              AS SENSITIVITY
+			, MAX(TCN.CAT_NAME)													AS CAT_NAME
+			, COUNT(TCR.TARGET_CD)												AS CARE_YN
+			, COUNT(TBM.TARGET_CD)												AS BOOKMARK_YN	
+		FROM TB_CAT C
+			LEFT JOIN TB_CAT_GRP_PROFILE TCP
 				ON C.CAT_CD = TCP.CAT_CD
 			LEFT JOIN TB_FILE TF
 				ON TCP.FILE_GRP_ID = TF.FILE_GRP_ID  

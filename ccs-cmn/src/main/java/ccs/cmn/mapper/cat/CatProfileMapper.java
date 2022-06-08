@@ -16,6 +16,14 @@ public interface CatProfileMapper {
 	public List<Map<String, Object>> selectCatProfile(Map<String, Object> param);
 
 	/**
+	 * 고양이 무리 프로필 정보 조회
+	 * @param param
+	 * @return
+	 */
+	public List<Map<String, Object>> selectCatGrpProfile(Map<String, Object> param);
+
+	
+	/**
 	 * 고양이 건강 정보 조회
 	 * @param param
 	 * @return

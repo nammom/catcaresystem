@@ -55,6 +55,16 @@ public class CmnServiceImpl implements CmnService {
 		return null;
 	}
 
+
+	/**
+	 * 고양이 무리 여부 조회
+	 * @param target_cd
+	 * @return
+	 */
+	@Override
+	public String selectCatGroupYn(Long target_cd) {
+		return cmnMapper.selectCatGroupYn(target_cd);
+	}
 	/**
 	 * 고양이 검색 목록 조회
 	 * @param data
@@ -74,4 +84,5 @@ public class CmnServiceImpl implements CmnService {
 	public List<Map<String, Object>> selectSearchHabitatList(Map<String, Object> data) {
 		return cmnMapper.selectSearchHabitatList(data);
 	}
+
 }

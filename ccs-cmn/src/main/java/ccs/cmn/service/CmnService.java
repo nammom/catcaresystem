@@ -27,6 +27,13 @@ public interface CmnService {
 	public Map<String, Object> selectCatArea(Long target_cd);
 
 	/**
+	 * 고양이 무리 여부 조회
+	 * @param target_cd
+	 * @return
+	 */
+	public String selectCatGroupYn(Long target_cd);
+	
+	/**
 	 * 고양이 검색 목록 조회
 	 * @param data
 	 * @return

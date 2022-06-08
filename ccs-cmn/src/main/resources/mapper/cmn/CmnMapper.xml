@@ -48,6 +48,13 @@
 		WHERE C.CAT_CD = #{target_cd}
 	</select>
 	
+	<!-- 고양이 무리 여부 조회 -->
+	<select id="selectCatGroupYn" parameterType="java.lang.Long" resultType="java.lang.String">
+		SELECT  C.GROUP_YN
+		FROM TB_CAT C
+		WHERE C.CAT_CD = #{item}
+	</select>
+	
 	<!-- 고양이 검색  -->
 	<select id="selectSearchCatList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT C.CAT_CD

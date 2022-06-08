@@ -25,6 +25,13 @@ public interface CmnMapper {
 	public List<Map<String, Object>> selectAreaCodeList(Map<String, Object> param);
 
 	/**
+	 * 고양이 무리 여부 조회
+	 * @param target_cd
+	 * @return
+	 */
+	public String selectCatGroupYn(Long target_cd);
+
+	/**
 	 * 고양이 지역 조회
 	 * @param target_cd
 	 * @return

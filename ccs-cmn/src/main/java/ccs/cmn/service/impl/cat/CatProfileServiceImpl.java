@@ -6,10 +6,12 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import ccs.cmn.mapper.CmnMapper;
 import ccs.cmn.mapper.cat.CatProfileMapper;
 import ccs.cmn.service.cat.CatProfileService;
 
@@ -20,6 +22,9 @@ public class CatProfileServiceImpl implements CatProfileService {
 	@Resource(name="CatProfileMapper")
 	CatProfileMapper catProfileMapper;
 
+	@Resource(name="CmnMapper")
+	CmnMapper cmnMapper;
+	
 	/**
 	 * 고양이 프로필 정보 조회
 	 * @param param
@@ -27,8 +32,14 @@ public class CatProfileServiceImpl implements CatProfileService {
 	 */
 	@Override
 	public Map<String, Object> selectCatProfile(Map<String, Object> param) {
-		List<Map<String, Object>> list = catProfileMapper.selectCatProfile(param);
-		if(!CollectionUtils.isEmpty(list)) {
+		String group_yn = cmnMapper.selectCatGroupYn(Long.valueOf(String.valueOf(param.get("cat_cd"))));
+		List<Map<String, Object>> list;
+		if (StringUtils.equals(group_yn, "Y")) {
+			list = catProfileMapper.selectCatGrpProfile(param);
+		}else {
+			list = catProfileMapper.selectCatProfile(param);
+		}
+		if (!CollectionUtils.isEmpty(list)) {
 			return list.get(0);
 		}
 		return null;
@@ -101,6 +112,8 @@ public class CatProfileServiceImpl implements CatProfileService {
 	public List<Map<String, Object>> selectBookMarkList(Map<String, Object> param) {
 		return catProfileMapper.selectBookMarkList(param);
 	}
+
+
 
 
 
