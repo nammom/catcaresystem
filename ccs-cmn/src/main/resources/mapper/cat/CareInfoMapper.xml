@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ccs.cmn.mapper.cat.CareInfoMapper">
+
+<!-- ** 고양이 돌봄 정보 조회 ** -->
+
+	<!-- 고양이 돌봄 정보 조회 -->
+	<select id="selectCareInfoList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT C.CATCARE_CD
+				, C.CAT_CD
+				, C.USER_CD
+				, U.NICKNAME 
+				, C.CARE_TYPE
+				, (CASE WHEN C.CARE_TYPE = 'E' THEN '종료' ELSE '재개' END) AS CARE_TYPE_NM
+				, C.SUB_DT
+				, C.REASON_CD
+				, FN_GET_CODE_NAME('C0002', C.REASON_CD) AS REASON_NM
+				, C.REASON_DETAIL
+		FROM TB_CAT_CARE C
+			JOIN TB_USER U 
+				ON C.USER_CD = U.USER_CD
+		<where>
+			<if test="cat_cd != null and !cat_cd.equals('')">
+				AND C.CAT_CD = #{cat_cd}
+			</if>
+			<if test="catcare_cd != null and !catcare_cd.equals('')">
+				AND C.CATCARE_CD = #{catcare_cd}
+			</if>
+		</where>
+	</select>
+
+	<insert id="insertCareInfo" parameterType="java.util.Map" useGeneratedKeys="true" keyColumn="catcare_cd" keyProperty="catcare_cd">
+	    	INSERT INTO TB_CAT_CARE
+			(
+				CAT_CD
+				, USER_CD
+				, CARE_TYPE
+				, SUB_DT
+				, REASON_CD
+				, REASON_DETAIL
+				, REG_ID
+				, REG_DT
+				, UPDT_ID
+				, UPDT_DT
+			)
+			VALUES
+			(
+				#{cat_cd}
+				, #{_SESSION_USER_CD_}
+				, #{care_type}
+				, NOW()
+				, #{reason_cd}
+				, #{reason_detail}
+				, #{_SESSION_USER_CD_} -- 입력사용자
+				, NOW() -- 입력일자
+				, #{_SESSION_USER_CD_} -- 변경사용자
+				, NOW() -- 변경일자
+			)
+	</insert>
+	
+	<update id="updateCareInfo" parameterType="java.util.Map">
+	    	UPDATE TB_CAT_CARE
+			SET REASON_CD = #{reason_cd}
+				, REASON_DETAIL = #{reason_detail}
+				, UPDT_ID = #{_SESSION_USER_CD_}
+				, UPDT_DT = NOW()
+			WHERE CATCARE_CD = #{catcare_cd}
+	</update>
+	
+	<delete id="deleteCareInfo" parameterType="java.util.Map">
+	    	DELETE FROM TB_CAT_CARE
+			WHERE CATCARE_CD = #{catcare_cd}
+	</delete>
+</mapper>
