@@ -172,24 +172,138 @@
 				$(".close", $modal).click();
 			}
 		},
+		/**
+			파일 데이터 바인딩
+		 */
 		bindFile : function(selecterName, files){
 			$("#" + selecterName + "-fileList").empty();
 			$("#" + selecterName + "-fileInput").MultiFile('reset');
 	        $("#" + selecterName + "-fileInput").MultiFile('addList',files);
 		},
+		/**
+			listMap에서 key가 name인 map 반환
+			@return list
+		 */
 		findObjectByKey : function(list, key, name){
 			return list.filter(function(e, idx){if(e[key] == name) return e;});
 		},
+		/**
+			listMap에서 key가 name인 map의 인덱스 반환
+			@return list
+		 */
 		findIndexByKey : function(list, key, name){
 			let result = null;
 			list.filter(function(e, idx){if(e[key] == name) result = idx;});
 			return result;
 		},
+		/**
+			listMap의 map[key] list를 반환
+			@return list
+		 */
 		pluck : function(list, key){
 			let result = [];
 			list.each(function(e, idx){result.push(e[key])});
 			return result;
+		},
+		/**
+			상하계층 구조 공통코드 select option 생성
+		 */
+		cmnCodeOption : {
+			/**
+				공통 코드 select option 생성
+				@param obj : 타겟 컴포넌트 or 선택자 텍스트 
+			 */
+			getCmnCodeList : function(obj){
+				$.ccs.cmnCodeOption.getCodeList(obj, "/selectCmnCode", "tree-select");
+			},
+			/**
+				지역 코드 select option 생성
+				@param obj : 타겟 컴포넌트 or 선택자 텍스트 
+			 */
+			getAreaCodeList :  function(obj){
+				$.ccs.cmnCodeOption.getCodeList(obj, "/selectAreaCode", "area-select");
+			},
+			/**
+				공통 코드 조회 후 옵션 생성
+				@param obj : 타겟 컴포넌트 or 선택자 텍스트 
+				@param url : 코드 조회 ajax url
+				@param className : "tree-select" or "area-select"
+			 */
+			getCodeList : function(obj, url, className) {
+				let length = $("." + className).length;
+				let idx = $("." + className).index($(obj));
+
+				$.ccs.cmnCodeOption.selectCodeList(url, className, idx, length);
+			},
+			/**
+				공통 코드 서버조회
+				@param url : 코드 조회 ajax url
+				@param className : "tree-select" or "area-select"
+				@param idx : 컴포넌트그룹 중 타겟 컴포넌트 순서
+				@param length : 컴포넌트그룹의 사이즈
+			 */
+			selectCodeList : function(url, className, idx, length) {
+				
+				let $selectedOption = $("." + className + ":eq(" + (idx) + ") option:selected");
+				let $targetSelect = $("." + className).eq(++idx);
+				let _code = $targetSelect.data("code");
+				let _prntCode = $selectedOption.val();
+				let _data = {
+								"code" : _code
+								, "prntCode" : _prntCode
+							};
+							
+				$.ccs.ajax({
+					url : url
+					, data : _data
+					, success : function(data){
+						$.ccs.cmnCodeOption.createOption($targetSelect, data["codeList"]);
+						if((length-1) > idx){
+							$.ccs.cmnCodeOption.selectCodeList(url, className, idx, length);
+						}
+					}
+				});
+			},
+			/**
+				옵션생성
+				@param targetSelect : 타겟 컴포넌트의 next 컴포넌트 객체
+				@param codeList : next 컴포넌트의 코드리스트
+			 */
+			createOption : function(targetSelect, codeList) {
+				let optionHtml = "";
+				let firstOption = targetSelect.children().first();
+				let selectedOption = targetSelect.filter(':selected');
+				if(!firstOption.val() && firstOption.html()){
+					optionHtml += "<option value=\"\">" + (firstOption.html() || "전체")  + "</option>";
+				}
+				codeList.forEach(function(e, idx){
+					if(selectedOption.val() == e['value']){
+						optionHtml += "<option value=\"" + e['value'] + "\" data=prnt=\"" + e['prntcode'] + "\" selected>" + e['name'] + "</option>";
+					}else{
+						optionHtml += "<option value=\"" + e['value'] + "\" data=prnt=\"" + e['prntcode'] + "\">" + e['name'] + "</option>";
+					}
+				});
+				targetSelect.html(optionHtml);
+			},
+			/**
+				하위계층 select 옵션 초기화
+				@param idx : 컴포넌트그룹 중 타겟 컴포넌트 순서
+				@param className : "tree-select" or "area-select"
+			 */
+			initSelect : function(idx, className){
+				$.each($("." + className), function(i, e){
+					if(i > idx){
+						let optionHtml = "";
+						let firstOption = $(e).children().first();
+						if(!firstOption.val() && firstOption.html()){
+							optionHtml += "<option value=\"\">" + (firstOption.html() || "전체") + "</option>";
+						}
+						$(e).html(optionHtml);
+					}
+				})
+			}
 		}
+		
 	}
 	
 	
