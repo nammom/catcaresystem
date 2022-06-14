@@ -44,8 +44,6 @@ public class SearchController {
 							SystemParameter systemParameter,
 							Model model) throws Exception{
 		
-		Map<String, Object> catArea = cmnService.selectCatArea(target_cd);
-		model.addAttribute("catArea", catArea);
 		model.addAttribute("target_cd", target_cd);
 		model.addAttribute("groupFlag", groupFlag);
 		
@@ -83,8 +81,6 @@ public class SearchController {
 	public String searchCat(@PathVariable("cat_cd") Long cat_cd,
 							Model model) throws Exception{
 		
-		Map<String, Object> catArea = cmnService.selectCatArea(cat_cd);
-		model.addAttribute("catArea", catArea);
 		model.addAttribute("cat_cd", cat_cd);
 		
 		return "cmn/search/searchHabitatList";

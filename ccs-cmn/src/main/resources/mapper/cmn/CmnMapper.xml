@@ -9,12 +9,14 @@
 			, C.PRNT_CD as prntCode
 		FROM TB_CMNCODE C
 		<where>
-			C.CMMN_GRP_CD  = #{code}
+			<if test="code!=null and !code.equals('')">
+				AND C.CMMN_GRP_CD  = #{code}
+			</if>
 			<if test="prntCode!=null and !prntCode.equals('')">
-				C.PRNT_CD = #{prntCode}		
+				AND C.PRNT_CD = #{prntCode}		
 			</if>
 			<if test="exceptCode!=null and !exceptCode.equals('')">
-				D.CMMN_CD != #{exceptCode}
+				AND D.CMMN_CD != #{exceptCode}
 			</if>		
 		</where>
 		ORDER BY C.CMMN_CD_SEQ ASC
@@ -26,10 +28,12 @@
 			, C.AREA_NM as name
 			, C.AREA_UPPER_CD as prntCode
 		FROM TB_AREA C
-		<where>
-			C.AREA_GRP_CD = #{code}
+		<where>			
+			<if test="code!=null and !code.equals('')">
+				AND C.AREA_GRP_CD = #{code}
+			</if>
 			<if test="prntCode!=null and !prntCode.equals('')">
-				C.AREA_UPPER_CD = #{prntCode}		
+				AND C.AREA_UPPER_CD = #{prntCode}		
 			</if>
 		</where>
 		ORDER BY C.AREA_CD_SEQ ASC
@@ -74,14 +78,14 @@
 					AND N.USER_CD = #{_SESSION_USER_CD_}
 		<where>
 			C.GROUP_YN = #{group_yn}
-			<if test="sido != null and !sido.equals('')">
-				AND C.SIDO_CD = #{sido}
+			<if test="sido_cd != null and !sido_cd.equals('')">
+				AND C.SIDO_CD = #{sido_cd}
 			</if>
-			<if test="sigungu != null and !sigungu.equals('')">
-				AND C.SIGUNGU_CD = #{sigungu}
+			<if test="sigungu_cd != null and !sigungu_cd.equals('')">
+				AND C.SIGUNGU_CD = #{sigungu_cd}
 			</if>
-			<if test="dong != null and !dong.equals('')">
-				AND C.DONG_CD = #{dong}
+			<if test="dong_cd != null and !dong_cd.equals('')">
+				AND C.DONG_CD = #{dong_cd}
 			</if>
 			<if test="cat_cd != null and !cat_cd.equals('')">
 				AND C.CAT_CD = #{cat_cd}
@@ -106,14 +110,14 @@
 			LEFT JOIN TB_FILE F 
 				ON H.FILE_GRP_ID = F.FILE_GRP_ID 
 		<where>
-			<if test="sido != null and !sido.equals('')">
-				H.SIDO_CD = #{sido}
+			<if test="sido_cd != null and !sido_cd.equals('')">
+				H.SIDO_CD = #{sido_cd}
 			</if>
-			<if test="sigungu != null and !sigungu.equals('')">
-				H.SIGUNGU_CD = #{sigungu}
+			<if test="sigungu_cd != null and !sigungu_cd.equals('')">
+				H.SIGUNGU_CD = #{sigungu_cd}
 			</if>
-			<if test="dong != null and !dong.equals('')">
-				H.DONG_CD = #{dong}
+			<if test="dong_cd != null and !dong_cd.equals('')">
+				H.DONG_CD = #{dong_cd}
 			</if>
 			<if test="habitat_cd != null and !habitat_cd.equals('')">
 				H.HABITAT_CD = #{habitat_cd}

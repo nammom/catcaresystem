@@ -4,24 +4,24 @@
 <div class="container">
 <div class="col-md-12">
 	<form id="search-form" class="form-group m-3">
+		<input type="hidden" id="target_cd" name="cat_cd" value="<c:out value="${cat_cd}" />">
 		<div class="row">
 			<div class="form-group col-md-1">
 				<label for="sido" class="form-label">지역</label>
-				
 			</div>
 			<div class="form-group col-md-3">
-				<select id="sido" name="sido"  class="form-control" disabled>
-                	<ccs:area code="sido" selectedValue="100" />
+				<select id="sido_cd" name="sido_cd" data-code="sido" class="form-control area-select" disabled>
+                	<ccs:area code="sido" />
                 </select>
 			</div>
 			<div class="form-group col-md-3">
-				<select id="sigungu" name="sigungu"  class="form-control" disabled>
-                	<ccs:area code="sigungu" selectedValue="110" />
+				<select id="sigungu_cd" name="sigungu_cd" data-code="sigungu" class="form-control area-select" disabled>
+                	<ccs:area code="sigungu" />
                 </select>
 			</div>
 			<div class="form-group col-md-3">
-				<select id="dong" name="dong"  class="form-control">
-                	<ccs:area code="dong" includeAll="전체"/> 
+				<select id="dong_cd" name="dong_cd" data-code="dong" class="form-control area-select">
+                	<ccs:area code="dong" includeAll="전체" /> 
                 </select> 
 			</div>
 		</div>
@@ -62,6 +62,9 @@ function fn_modal() {
 	
 	this.$table;
 	this.initialize = function() {
+		cat_cd = Number($("#cat_cd").val());
+		
+		$this.formManager.getData();
 		$this.tableManager.createTable();
 		
 		$("#btn-search").click(function(){
@@ -173,6 +176,25 @@ function fn_modal() {
 		
 	}
 	
+	this.formManager = {
+		getData : function() {
+			$.ccs.ajax({
+				url : "/selectCatArea"
+				, data : {
+							"target_cd" : cat_cd
+						}
+				, success : function(data){
+					$this.formManager.setData(data);
+				}
+			});
+		},
+		setData : function(data) {
+			//form 정보
+			$("#search-form").bindJson(data);
+			//트리계층 select option생성
+			$.ccs.cmnCodeOption.getAreaCodeList("#sido_cd");
+		}
+	}
 	
 }
 
