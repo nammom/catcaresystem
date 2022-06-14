@@ -32,10 +32,10 @@
 			<tr class="table-light">
 				<td colspan="3">{{>sido_nm}} {{>sigungu_nm}} {{>dong_nm}}</td>
 			</tr>
-			{{if care_reason_nm}}
+			{{if care_type_nm}}
 			<tr class="table-light">
-				<th>돌봄 종료 사유</th>
-				<td>{{>care_reason_nm}}</td>
+				<th>돌봄 상태</th>
+				<td>{{>care_type_nm}} : {{>care_reason_nm}}</td>
 				<td>
 					<button type="button" id="btn-care-detail" class="btn btn-primary btn-sm">상세보기</button>
 				</td>

@@ -8,7 +8,7 @@
 	<select id="selectCatProfile" parameterType="java.util.Map" resultType="java.util.Map">
 	SELECT C.CAT_CD 
 			, MAX(C.GROUP_YN) 													AS GROUP_YN
-			, MAX(TCC2.CARE_TYPE) 												AS CARE_TYPE
+			, MAX(CASE WHEN TCC2.CARE_TYPE = 'E' THEN '종료' ELSE '재개' END) 		AS CARE_TYPE_NM
 			, MAX(fn_get_code_name('C0002', TCC2.REASON_CD)) 					AS CARE_REASON_NM	
 			, MAX(fn_get_area_name(C.SIDO_CD))									AS SIDO_NM
 			, MAX(fn_get_area_name(C.SIGUNGU_CD))                               AS SIGUNGU_NM
@@ -17,7 +17,7 @@
 			, MAX(TCP.INTRODUCTION)                                             AS INTRODUCTION
 			, MAX(TCP.FILE_GRP_ID)                                              AS FILE_GRP_ID
 			, MAX(TF.FILE_PATH)                                                 AS FILE_PATH
-			, MAX(case when TCC.CAUTION_YN = 'Y' then 'Y' else null end)        AS CAUTION_YN
+			, MAX(CASE WHEN TCC.CAUTION_YN = 'Y' THEN 'Y' ELSE null END)        AS CAUTION_YN
 			, AVG(TCC.AGGRESSION)                                               AS AGGRESSION
 			, AVG(TCC.SENSITIVITY)                                              AS SENSITIVITY
 			, MAX(TCN.CAT_NAME)													AS CAT_NAME
