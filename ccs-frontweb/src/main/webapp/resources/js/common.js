@@ -28,13 +28,17 @@
 				let status = _data['status'];
 				if (status == "101"){
 					if (originalCallbackFunction != null) {
-                		originalCallbackFunction(_data['data'], responseStatus, jqXHR);
+                		originalCallbackFunction(_data['data'] || null, responseStatus, jqXHR);
            		 	}	
 				}else if (status == "102"){
-					alert(_data['data']['msg']);
+					if(_data['data']){
+						alert(_data['data']['msg']);
+					}
 				}else if (status == "103"){
-					alert(_data['data']['msg']);
-				} 
+					if(_data['data']){
+						alert(_data['data']['msg']);
+					}
+				}
 	        };
 	        parameterOptions.success = successCallbackFunction;
 	
@@ -185,7 +189,10 @@
 			@return list
 		 */
 		findObjectByKey : function(list, key, name){
-			return list.filter(function(e, idx){if(e[key] == name) return e;});
+			if(list && list.length){
+				return list.filter(function(e, idx){if(e[key] == name) return e;});
+			}
+			return [];
 		},
 		/**
 			listMap에서 key가 name인 map의 인덱스 반환
@@ -193,7 +200,9 @@
 		 */
 		findIndexByKey : function(list, key, name){
 			let result = null;
-			list.filter(function(e, idx){if(e[key] == name) result = idx;});
+			if(list && list.length){
+				list.filter(function(e, idx){if(e[key] == name) result = idx;});
+			}
 			return result;
 		},
 		/**
@@ -202,7 +211,9 @@
 		 */
 		pluck : function(list, key){
 			let result = [];
-			list.each(function(e, idx){result.push(e[key])});
+			if(list && list.length){
+				list.forEach(function(e, idx){result.push(e[key])});
+			}
 			return result;
 		},
 		/**
@@ -276,14 +287,31 @@
 				if(!firstOption.val() && firstOption.html()){
 					optionHtml += "<option value=\"\">" + (firstOption.html() || "전체")  + "</option>";
 				}
-				codeList.forEach(function(e, idx){
+				optionHtml += this.createOptionHtml(codeList, selectedOption.val());
+				/*codeList.forEach(function(e, idx){
 					if(selectedOption.val() == e['value']){
 						optionHtml += "<option value=\"" + e['value'] + "\" data=prnt=\"" + e['prntcode'] + "\" selected>" + e['name'] + "</option>";
 					}else{
 						optionHtml += "<option value=\"" + e['value'] + "\" data=prnt=\"" + e['prntcode'] + "\">" + e['name'] + "</option>";
 					}
-				});
+				});*/
 				targetSelect.html(optionHtml);
+			},
+			/**
+				옵션 html 생성
+				@param codeList : next 컴포넌트의 코드리스트
+				@param selectValue : 선택 값
+			 */
+			createOptionHtml : function(codeList, selectValue) {
+				let optionHtml = "";
+				codeList.forEach(function(e, idx){
+					if(selectValue == e['value']){
+						optionHtml += "<option value=\"" + e['value'] + "\" data=prnt=\"" + e['prntcode'] + "\" selected>" + e['name'] + "</option>";
+					}else{
+						optionHtml += "<option value=\"" + e['value'] + "\" data=prnt=\"" + e['prntcode'] + "\">" + e['name'] + "</option>";
+					}
+				});
+				return optionHtml;
 			},
 			/**
 				하위계층 select 옵션 초기화
@@ -302,7 +330,85 @@
 					}
 				})
 			}
+		},
+		/**
+			datatables 메서드 
+		 */
+		table : {
+			remove : function(table) {	//datatables 제거 
+				table.destroy();
+				let tableId = table.table().node().id;
+				$('#' + tableId).empty();
+			},
+			getSelectedRowsObj : function(table) {	//선택한 행 객체 가져오기
+				return table.rows('.selected');
+			},
+			getSelectedRows : function(table) {	//선택한 행 데이터 가져오기
+				return table.rows('.selected').data().toArray();
+			},
+			clearData : function(table){	//테이블  데이터 초기화
+				table.rows().data().clear().draw();
+			},
+			deleteRow : function(table){	//행삭제
+				let rowsArr = this.getCheckedRows(table);
+				if(!rowsArr.length){
+					alert("선택한 행이 없습니다.");
+				}else{
+					let deleteRows = this.getCheckedRows(table);
+					table.rows(deleteRows).remove().draw();
+				}
+			},
+			addRow : function(table, data){	//행추가
+				table.rows.add(data).draw();
+			},
+			getAllRows : function(table) {	//전체 행 가져오기
+				//테이블 전체 행 td 데이터
+				let rowsDataArr = table.rows().data().toArray();
+				//테이블 전체 행 input, select value 데이터
+				let inputRowsDataArr = table.$("input, select").serializeArray();
+			 	if(inputRowsDataArr && inputRowsDataArr.length){
+					let resultArr = [];
+					//input, select 있는 경우
+					let rowCnt = table.rows().data().length;
+					let divideCount = inputRowsDataArr.length / rowCnt;
+					inputRowsDataArr = inputRowsDataArr.division(divideCount);
+			
+					$.each(inputRowsDataArr, function(i, e) { 
+						let targetArr = this;
+						let obj = {};
+						$.each(targetArr, function() { 
+							obj[this.name] = this.value; 
+						});
+						//td 데이터와 input, select 데이터 합치기
+						let resultObj = $.extend({}, rowsDataArr[i], obj);
+						resultArr.push(resultObj);
+					}); 
+					return resultArr;
+				}else{
+					//input, select 없는 경우
+					return rowsDataArr;
+				}
+				
+			},
+			getCheckedRows : function(table) {	//체크박스 체크된 행 가져오기
+				let rowsArr = []; 
+				let tableId = table.table().node().id;
+				$.each($("input[name='input-check']:checked", "#" + tableId),function(i,e){
+					rowsArr.push($(e).closest('tr').index());
+				});
+				return rowsArr;
+			},
+			getCheckedRowsData : function(table) {	//체크박스 체크된 행 데이터 가져오기
+				let arr = this.getCheckedRows(table);
+				if(arr.length > 0){
+					return table.rows(arr).data().toArray();
+				};
+				return null;
+			}
 		}
+		
+		
+		
 		
 	}
 	
@@ -316,7 +422,9 @@
 		let obj = null;
 		try { 
 			if(this[0].tagName && this[0].tagName.toUpperCase() == "FORM" ) {
+				let disableds = $(this).find(':disabled').removeAttr('disabled');
 				let arr = this.serializeArray();
+				disableds.attr('disabled', 'disabled');
 			 	if(arr){ 
 					obj = {};
 					$.each(arr, function() { 
@@ -429,10 +537,26 @@
               , e = /\$?\{(\d+)\}/g;
 
 
-            return "function" == typeof d ? d = d.call(this, c.parameters, b) : e.test(d) && (d = a.validator.format(d.replace(e, "{$1}"), c.parameters)),
+            return "function" == typeof d ? d = d.call(this, c.parameters, b) : e.test(d) && (d = $.validator.format(d.replace(e, "{$1}"), c.parameters)),
             d
         } 
 	
+		/**
+			array를 count로 묶어 분할
+		 */
+		Array.prototype.division = function(count) {
+		  let arr = JSON.parse(JSON.stringify(this));
+		  let length = arr.length;
+		  let divide = Math.floor(length / count) + (Math.floor( length % count ) > 0 ? 1 : 0);
+		  let newArray = [];
+		
+		  for (let i = 0; i < divide; i++) {
+		    // 배열 0부터 n개씩 잘라 새 배열에 넣기
+		    newArray.push(arr.splice(0, count)); 
+		  }
+		
+		  return newArray;
+		}
 
 })(jQuery);
 

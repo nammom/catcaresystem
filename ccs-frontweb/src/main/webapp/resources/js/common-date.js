@@ -14,7 +14,7 @@
 						onSelect : function(fd, date){
 							let sDate = date.getDate();
 							let $eDate = $sDate.next().next();
-							if($eDate){
+							if($eDate && $eDate.attr("class").indexOf("endDate") > 0){
 								let eDatepicker = $eDate.datepicker().data("datepicker");
 								eDatepicker.update("minDate", new Date(fd))
 							}
