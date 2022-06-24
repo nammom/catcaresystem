@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ccs.cmn.mapper.care.FeedMapper">
+
+<!-- ** 고양이 급여 관리 ** -->
+
+	<!-- 고양이 급여 정보 목록 조회 -->
+	<select id="selectFeedList" parameterType="java.util.Map" resultType="java.util.Map">
+				SELECT F.FEED_CD
+					, F.CAT_CD
+					, C.GROUP_YN
+					, F.USER_CD
+					, U.NICKNAME
+					, TO_CHAR(F.FEED_DT, 'YYYY-MM-DD')	AS FEED_DT
+					, F.FEED_TIME1
+					, F.FEED_TIME2
+					, N.CAT_NAME
+					, T.FILE_PATH
+				FROM TB_CAT C
+					JOIN TB_FEED F
+						ON C.CAT_CD = F.CAT_CD
+					JOIN TB_USER U
+						ON F.USER_CD = U.USER_CD
+		<choose>
+			<when test="cat_cd != null and !cat_cd.equals('')">
+					LEFT JOIN TB_CAT_PROFILE P
+						ON C.CAT_CD = P.CAT_CD
+					LEFT JOIN TB_FILE T
+						ON P.FILE_GRP_ID = T.FILE_GRP_ID
+					LEFT JOIN TB_CAT_NAME N
+						ON C.CAT_CD = N.CAT_CD
+							AND N.USER_CD = #{_SESSION_USER_CD_}
+			</when>		
+			<when test="cat_grp_cd != null and !cat_grp_cd.equals('')">
+					LEFT JOIN TB_CAT_GRP_INFO G
+						ON C.CAT_CD = G.CAT_CD
+					LEFT JOIN TB_CAT_PROFILE CP
+						ON C.CAT_CD = CP.CAT_CD
+					LEFT JOIN TB_CAT_PROFILE GP
+						ON C.CAT_CD = GP.CAT_CD
+					LEFT JOIN TB_FILE T
+						ON CP.FILE_GRP_ID = T.FILE_GRP_ID
+							OR GP.FILE_GRP_ID = T.FILE_GRP_ID
+					LEFT JOIN TB_CAT_NAME N
+						ON C.CAT_CD = N.CAT_CD
+							AND N.USER_CD = #{_SESSION_USER_CD_}
+			</when>
+			<when test="habitat_cd != null and !habitat_cd.equals('')">
+					JOIN TB_HABITAT_INFO H
+						ON C.CAT_CD = H.CAT_CD
+					LEFT JOIN TB_CAT_PROFILE CP
+						ON C.CAT_CD = CP.CAT_CD
+					LEFT JOIN TB_CAT_PROFILE GP
+						ON C.CAT_CD = GP.CAT_CD
+					LEFT JOIN TB_FILE T
+						ON CP.FILE_GRP_ID = T.FILE_GRP_ID
+							OR GP.FILE_GRP_ID = T.FILE_GRP_ID
+					LEFT JOIN TB_CAT_NAME N
+							ON C.CAT_CD = N.CAT_CD
+								AND N.USER_CD = #{_SESSION_USER_CD_}
+			</when>
+		</choose>
+		<where>
+			<choose>
+				<when test="cat_cd != null and !cat_cd.equals('')">
+					C.CAT_CD = #{cat_cd}
+				</when>		
+				<when test="cat_grp_cd != null and !cat_grp_cd.equals('')">
+					C.CAT_CD = #{cat_grp_cd}
+					OR G.CAT_GRP_CD = #{cat_grp_cd}
+				</when>
+				<when test="habitat_cd != null and !habitat_cd.equals('')">
+					H.HABITAT_CD = #{habitat_cd}
+				</when>
+			</choose>
+				AND TO_CHAR(F.FEED_DT, 'YYYYMM') = #{feed_date}
+		</where>
+		ORDER BY F.FEED_DT DESC, F.CAT_CD
+	</select>
+
+	<!-- 고양이 급여 갯수 조회 -->
+	<select id="selectFeedCountList" parameterType="java.util.Map" resultType="java.util.Map">
+			SELECT TO_CHAR(F.FEED_DT, 'YYYY-MM-DD')							AS FEED_DT
+				, COUNT(CASE WHEN D.FEED_CD1 = '100' THEN 1 ELSE NULL END) 	AS MAIN_FEED_COUNT
+				, COUNT(CASE WHEN D.FEED_CD1 = '200' THEN 1 ELSE NULL END) 	AS SNACK_COUNT
+				, COUNT(CASE WHEN D.FEED_CD1 = '300' THEN 1 ELSE NULL END) 	AS ETC_COUNT
+				, COUNT(CASE WHEN D.FEED_CD1 = '400' THEN 1 ELSE NULL END) 	AS WATER_COUNT
+				, COUNT(1) 													AS ALL_COUNT
+			FROM TB_CAT C
+				JOIN TB_FEED F
+					ON C.CAT_CD = F.CAT_CD
+				JOIN TB_FEED_DETAIL D
+					ON F.FEED_CD = D.FEED_CD
+		<choose>
+			<when test="cat_cd != null and !cat_cd.equals('')">
+					LEFT JOIN TB_CAT_NAME N
+						ON C.CAT_CD = N.CAT_CD
+							AND N.USER_CD = #{_SESSION_USER_CD_}
+			</when>		
+			<when test="cat_grp_cd != null and !cat_grp_cd.equals('')">
+					LEFT JOIN TB_CAT_GRP_INFO G
+						ON C.CAT_CD = G.CAT_CD
+					LEFT JOIN TB_CAT_NAME N
+						ON C.CAT_CD = N.CAT_CD
+							AND N.USER_CD = #{_SESSION_USER_CD_}
+			</when>
+			<when test="habitat_cd != null and !habitat_cd.equals('')">
+					JOIN TB_HABITAT_INFO H
+						ON C.CAT_CD = H.CAT_CD
+					LEFT JOIN TB_CAT_NAME N
+							ON C.CAT_CD = N.CAT_CD
+								AND N.USER_CD = #{_SESSION_USER_CD_}
+			</when>
+		</choose>
+		<where>
+			<choose>
+				<when test="cat_cd != null and !cat_cd.equals('')">
+					C.CAT_CD = #{cat_cd}
+				</when>		
+				<when test="cat_grp_cd != null and !cat_grp_cd.equals('')">
+					C.CAT_CD = #{cat_grp_cd}
+					OR G.CAT_GRP_CD = #{cat_grp_cd}
+				</when>
+				<when test="habitat_cd != null and !habitat_cd.equals('')">
+					H.HABITAT_CD = #{habitat_cd}
+				</when>
+			</choose>
+				AND TO_CHAR(F.FEED_DT, 'YYYYMM') = #{feed_date}
+		</where>
+			GROUP BY F.FEED_DT
+			ORDER BY F.FEED_DT DESC
+	</select>
+	
+	<!-- 고양이 급여 정보 조회 - 단건 -->
+	<select id="selectFeedByCd" parameterType="java.util.Map" resultType="java.util.Map">
+			SELECT F.FEED_CD 
+				, F.CAT_CD
+				, F.USER_CD
+				, U.NICKNAME
+				, F.FEED_DT
+				, F.FEED_TIME1
+				, F.FEED_TIME2
+				, N.CAT_NAME
+			FROM TB_CAT C
+				JOIN TB_FEED F
+					ON C.CAT_CD = F.CAT_CD
+				JOIN TB_USER U
+						ON F.USER_CD = U.USER_CD
+				LEFT JOIN TB_CAT_NAME N
+						ON C.CAT_CD = N.CAT_CD
+							AND N.USER_CD = #{_SESSION_USER_CD_}
+			WHERE F.FEED_CD = #{feed_cd}
+	</select>
+	
+	<!-- 고양이 급여 상세 조회 -->
+	<select id="selectFeedDetailList" parameterType="java.util.Map" resultType="java.util.Map">
+			SELECT F.FEED_CD 
+				, F.FEED_CD1
+				, fn_get_code_name('C0004', F.FEED_CD1) 	AS FEED_CD1_NM
+				, F.FEED_CD2
+				, fn_get_code_name('C0004', F.FEED_CD2) 	AS FEED_CD2_NM
+				, F.FEED_NM
+				, F.FEED_AMT
+				, F.COMMENT
+			FROM TB_FEED_DETAIL F
+			WHERE F.FEED_CD = #{feed_cd}
+	</select>
+	
+	<!-- 급여 정보 저장 -->
+	<insert id="insertFeed" parameterType="java.util.Map" useGeneratedKeys="true" keyColumn="feed_cd" keyProperty="feed_cd">
+	    	INSERT INTO TB_FEED
+			(
+				CAT_CD
+				, USER_CD
+				, FEED_DT
+				, FEED_TIME1
+				, FEED_TIME2
+				, REG_ID
+				, REG_DT
+				, UPDT_ID
+				, UPDT_DT
+			)
+			VALUES
+			(
+				#{cat_cd}
+				, #{_SESSION_USER_CD_}
+				, TO_DATE(#{feed_dt}, 'YYYY-MM-DD')
+				, #{feed_time1}
+				, #{feed_time2}
+				, #{_SESSION_USER_CD_} -- 입력사용자
+				, NOW() -- 입력일자
+				, #{_SESSION_USER_CD_} -- 변경사용자
+				, NOW() -- 변경일자
+			)
+	</insert>
+
+	<!-- 급여 상세 저장 -->
+	<insert id="insertFeedDetail" parameterType="java.util.Map">
+	    	INSERT INTO TB_FEED_DETAIL
+			(
+				FEED_CD
+				, FEED_CD1	-- 음식 카테고리
+				<if test="feed_cd2 != null and !feed_cd2.equals('')">
+				, FEED_CD2	-- 음식 구분
+				</if>
+				<if test="feed_nm != null and !feed_nm.equals('')">
+				, FEED_NM	-- 음식 명
+				</if>
+				<if test="feed_amt != null and !feed_amt.equals('')">
+				, FEED_AMT	-- 음식 양
+				</if>
+				<if test="comment != null and !comment.equals('')">
+				, COMMENT	-- 내용
+				</if>
+				, REG_ID
+				, REG_DT
+				, UPDT_ID
+				, UPDT_DT
+			)
+			VALUES
+			(
+				#{feed_cd}
+				, #{feed_cd1}
+				<if test="feed_cd2 != null and !feed_cd2.equals('')">
+				, #{feed_cd2}
+				</if>
+				<if test="feed_nm != null and !feed_nm.equals('')">
+				, #{feed_nm}
+				</if>
+				<if test="feed_amt != null and !feed_amt.equals('')">
+				, #{feed_amt}
+				</if>
+				<if test="comment != null and !comment.equals('')">
+				, #{comment}
+				</if>
+				, #{_SESSION_USER_CD_} -- 입력사용자
+				, NOW() -- 입력일자
+				, #{_SESSION_USER_CD_} -- 변경사용자
+				, NOW() -- 변경일자
+			)
+	</insert>
+	
+	<!-- 급여 정보 수정 -->	
+	<update id="updateFeed" parameterType="java.util.Map">
+	    	UPDATE TB_FEED
+			SET FEED_DT = TO_DATE(#{feed_dt}, 'YYYY-MM-DD')
+				, FEED_TIME1 = #{feed_time1}
+				, FEED_TIME2 = #{feed_time2}
+				, UPDT_ID = #{_SESSION_USER_CD_}
+				, UPDT_DT = NOW()
+			WHERE FEED_CD = #{feed_cd}
+	</update>
+	
+	<!-- 급여 정보 삭제 -->
+	<delete id="deleteFeed" parameterType="java.util.Map">
+	    	DELETE FROM TB_FEED
+			WHERE FEED_CD = #{feed_cd}
+	</delete>
+	
+	<!-- 급여 상세 삭제 -->
+	<delete id="deleteFeedDetail" parameterType="java.util.Map">
+	    	DELETE FROM TB_FEED_DETAIL
+			WHERE FEED_CD = #{feed_cd}
+	</delete>
+	
+</mapper>
