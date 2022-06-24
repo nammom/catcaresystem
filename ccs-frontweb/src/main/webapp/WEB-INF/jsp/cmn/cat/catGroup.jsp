@@ -232,7 +232,7 @@ function fn_catGroupPage() {
 	
 	this.searchManager = {
 		openSearchModal : function(){
-			let url = "/search/cat/" + Number(target_cd) + "/" + groupFlag;
+			let url = "/search/cat?groupFlag=" + groupFlag + "&target_cd=" + Number(target_cd); 
 			let option = {
 					id : "searchCatModal",
 					title : "고양이 검색",

@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ccs.cmn.service.CmnService;
@@ -38,14 +39,17 @@ public class SearchController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/cat/{target_cd}/{groupFlag}")
-	public String searchCat(@PathVariable("target_cd") Long target_cd,
-							@PathVariable("groupFlag") String groupFlag,
+	@RequestMapping("/cat")
+	public String searchCat(@RequestParam(required = false) String groupFlag,
+							@RequestParam(required = false) Long target_cd,
 							SystemParameter systemParameter,
 							Model model) throws Exception{
-		
-		model.addAttribute("target_cd", target_cd);
-		model.addAttribute("groupFlag", groupFlag);
+		if(target_cd != null) {
+			model.addAttribute("groupFlag", groupFlag);
+		}
+		if(target_cd != null) {
+			model.addAttribute("target_cd", target_cd);
+		}
 		
 		return "cmn/search/searchCatList";
 	}
@@ -77,11 +81,13 @@ public class SearchController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/habitat/{cat_cd}")
-	public String searchCat(@PathVariable("cat_cd") Long cat_cd,
+	@RequestMapping("/habitat")
+	public String searchCat(@RequestParam(required = false) Long cat_cd,
 							Model model) throws Exception{
 		
-		model.addAttribute("cat_cd", cat_cd);
+		if(cat_cd != null) {
+			model.addAttribute("cat_cd", cat_cd);
+		}
 		
 		return "cmn/search/searchHabitatList";
 	}
