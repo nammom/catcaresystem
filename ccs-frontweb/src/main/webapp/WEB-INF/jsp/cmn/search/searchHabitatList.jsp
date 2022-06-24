@@ -59,17 +59,24 @@ $(document).ready(function() {
 function fn_modal() {
 	let $this = this;
 	let PAGE_URL = "/search/habitat";
+	let CAT_CD;
 	
 	this.$table;
 	this.initialize = function() {
-		cat_cd = Number($("#cat_cd").val());
-		
-		$this.formManager.getData();
-		$this.tableManager.createTable();
+		$this.initData();
 		
 		$("#btn-search").click(function(){
 			$this.tableManager.searchData();
 		});
+	}
+	
+	this.initData = function() {
+		CAT_CD = $("#cat_cd").val()? Number($("#cat_cd").val()) : null;
+		if(CAT_CD){
+			$this.formManager.getData();
+		}
+		$this.tableManager.createTable();
+		
 	}
 	
 	this.tableManager = {
@@ -181,7 +188,7 @@ function fn_modal() {
 			$.ccs.ajax({
 				url : "/selectCatArea"
 				, data : {
-							"target_cd" : cat_cd
+							"target_cd" : CAT_CD
 						}
 				, success : function(data){
 					$this.formManager.setData(data);

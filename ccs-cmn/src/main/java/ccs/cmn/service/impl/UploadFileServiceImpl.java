@@ -36,7 +36,7 @@ public class UploadFileServiceImpl implements UploadFileService{
 		return null;
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Long uploadFiles(Map<String, Object> systemParameter, Long FILE_GRUP, List<FileInfoVO> files, List<Map<String,Object>> filesToDelete) throws Exception {
 		
