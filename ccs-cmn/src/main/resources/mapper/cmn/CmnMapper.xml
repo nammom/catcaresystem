@@ -10,7 +10,7 @@
 		FROM TB_CMNCODE C
 		<where>
 			<if test="code!=null and !code.equals('')">
-				AND C.CMMN_GRP_CD  = #{code}
+				C.CMMN_GRP_CD  = #{code}
 			</if>
 			<if test="prntCode!=null and !prntCode.equals('')">
 				AND C.PRNT_CD = #{prntCode}		
@@ -30,7 +30,7 @@
 		FROM TB_AREA C
 		<where>			
 			<if test="code!=null and !code.equals('')">
-				AND C.AREA_GRP_CD = #{code}
+				C.AREA_GRP_CD = #{code}
 			</if>
 			<if test="prntCode!=null and !prntCode.equals('')">
 				AND C.AREA_UPPER_CD = #{prntCode}		
@@ -62,6 +62,7 @@
 	<!-- 고양이 검색  -->
 	<select id="selectSearchCatList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT C.CAT_CD
+			, C.GROUP_YN
 			, FN_GET_AREA_NAME(C.SIDO_CD) || ' ' ||
 				FN_GET_AREA_NAME(C.SIGUNGU_CD) || ' ' || 
 				FN_GET_AREA_NAME(C.DONG_CD)                     AS AREA_NM
@@ -77,7 +78,9 @@
 				ON C.CAT_CD = N.CAT_CD
 					AND N.USER_CD = #{_SESSION_USER_CD_}
 		<where>
-			C.GROUP_YN = #{group_yn}
+			<if test="group_yn != null and !group_yn.equals('')">
+				C.GROUP_YN = #{group_yn}
+			</if>
 			<if test="sido_cd != null and !sido_cd.equals('')">
 				AND C.SIDO_CD = #{sido_cd}
 			</if>
@@ -114,16 +117,16 @@
 				H.SIDO_CD = #{sido_cd}
 			</if>
 			<if test="sigungu_cd != null and !sigungu_cd.equals('')">
-				H.SIGUNGU_CD = #{sigungu_cd}
+				AND H.SIGUNGU_CD = #{sigungu_cd}
 			</if>
 			<if test="dong_cd != null and !dong_cd.equals('')">
-				H.DONG_CD = #{dong_cd}
+				AND H.DONG_CD = #{dong_cd}
 			</if>
 			<if test="habitat_cd != null and !habitat_cd.equals('')">
-				H.HABITAT_CD = #{habitat_cd}
+				AND H.HABITAT_CD = #{habitat_cd}
 			</if>
 			<if test="habitat_nm != null and !habitat_nm.equals('')">
-				H.HABITAT_NM like '%'|| #{habitat_nm} ||'%'
+				AND H.HABITAT_NM like '%'|| #{habitat_nm} ||'%'
 			</if>
 		</where>
 		ORDER BY H.HABITAT_CD DESC
