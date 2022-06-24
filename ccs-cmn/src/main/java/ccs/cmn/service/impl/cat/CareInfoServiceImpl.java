@@ -70,6 +70,11 @@ public class CareInfoServiceImpl implements CareInfoService {
 		
 	}
 
+	/**
+	 * 게시글 작성자 여부 확인
+	 * @param param
+	 * @return
+	 */
 	private boolean checkUserCd(Map<String, Object> param) {
 		List<Map<String, Object>> result = careInfoMapper.selectCareInfoList(param);
 		if(CollectionUtils.isEmpty(result)) {

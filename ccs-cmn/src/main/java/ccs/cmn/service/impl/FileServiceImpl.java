@@ -57,7 +57,7 @@ public class FileServiceImpl implements FileService {
 		return CollectionUtils.isEmpty(files) ? null : files.get(0);
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Long save(Long FILE_GRUP, Map<String, Object> systemParameter, List<Map<String, Object>> filesToInsert,
 			List<Map<String, Object>> filesToDelete) throws Exception {
