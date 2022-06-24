@@ -8,10 +8,8 @@
 		</form>	    
 	</div>
 	<div class="col-md-12">
-		<div class="row">
-			<button class="btn btn-secondary my-2 my-sm-0" type="button" id="btn-add">등록</button>
-			<button class="btn btn-secondary my-2 my-sm-0" type="button" id="btn-delete">삭제</button>
-		</div>
+		<button class="btn btn-secondary my-2 my-sm-0" type="button" id="btn-add">등록</button>
+		<button class="btn btn-secondary my-2 my-sm-0" type="button" id="btn-delete">삭제</button>
 	</div>
 	<div class="col-md-12">	
 		<table id="catHabitatList"></table>
@@ -187,7 +185,7 @@ function fn_catHabitatPage() {
 	
 	this.searchManager = {
 		openSearchModal : function(){
-			let url = "/search/habitat/" + Number(cat_cd);
+			let url = "/search/habitat?cat_cd=" + Number(cat_cd);
 			let option = {
 					id : "searchHabitatModal",
 					title : "서식지 검색",

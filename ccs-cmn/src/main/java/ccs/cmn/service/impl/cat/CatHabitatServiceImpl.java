@@ -10,6 +10,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ccs.cmn.mapper.cat.CatGroupMapper;
 import ccs.cmn.mapper.cat.CatHabitatMapper;
@@ -37,6 +38,7 @@ public class CatHabitatServiceImpl implements CatHabitatService {
 	 * 고양이 서식지 등록
 	 * @param data
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void insertCatHabitat(Map<String, Object> data) {
 		List<Map<String, Object>> saveList = (List<Map<String, Object>>)data.get("saveList");
