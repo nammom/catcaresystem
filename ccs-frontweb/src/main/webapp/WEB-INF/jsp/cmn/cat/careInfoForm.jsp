@@ -6,36 +6,58 @@
 	<div class="col-md-12">
 		<div class="col-md-6">
 		<form class="form-group contents" id="careInfo-form" method="post">
-			<input type="hidden" id="catcare_cd" name="catcare_cd" value="<c:out value="${catcare_cd}" />"/>
-			<input type="hidden" id="s_user_cd" name="s_user_cd" value="<c:out value="${_SESSION_USER_CD_}" />"/>
+			<input type="hidden" 
+				id="catcare_cd" name="catcare_cd" 
+				value="<c:out value="${catcare_cd}" />"/>
+			<input type="hidden" 
+				id="s_user_cd" name="s_user_cd" 
+				value="<c:out value="${_SESSION_USER_CD_}" />"/>
 			<div class="form-group">
 		        <label for="nickname" class="form-label mt-4">신청자</label>
-		        <input type="text" id="nickname" name="nickname" class="form-control" disabled/>
+		        <input type="text" 
+			        id="nickname" name="nickname" 
+			        class="form-control" 
+			        value="<c:out value="${_SESSION_USER_NM_}" />"
+			        disabled/>
 		    </div>
 		    <div class="form-group">
 		        <label for="sub_dt" class="form-label mt-4">신청일</label>
-		        <input type="text" id="sub_dt" name="sub_dt" class="form-control datePicker-control" disabled>
+		        <input type="text" 
+			        id="sub_dt" name="sub_dt" 
+			        class="form-control datePicker-control startDate" 
+			        readonly disabled>
 		    </div>
 		    <div class="form-group">
 		        <label for="cat_cd" class="form-label mt-4">고양이 고유코드</label>
-		        <input type="text" id="cat_cd" name="cat_cd" class="form-control" value="<c:out value="${cat_cd}" />" disabled/>
+		        <input type="text" 
+			        id="cat_cd" name="cat_cd" 
+			        class="form-control" 
+			        value="<c:out value="${cat_cd}" />" 
+			        disabled/>
 		    </div>
 			<div class="form-group">
 				<label for="care_type" class="form-label mt-4">구분</label>
-				<select id="care_type" name="care_type"  class="form-control tree-select" <c:if test="${not empty catcare_cd}">disabled</c:if> required>
+				<select id="care_type" name="care_type" 
+				 	class="form-control tree-select" 
+				 	<c:if test="${not empty catcare_cd}">disabled</c:if> required>
 					<option value="E">종료</option>
 					<option value="S">재개</option>
 				</select>
 			</div>
 			<div class="form-group">
 				<label for="reason_cd" class="form-label mt-4" data-code="C0002" >사유</label>
-				<select id="reason_cd" name="reason_cd"  class="form-control tree-select" required <c:if test="${not empty catcare_cd}">disabled</c:if> required>
+				<select id="reason_cd" name="reason_cd"  
+					class="form-control tree-select" 
+					<c:if test="${not empty catcare_cd}">disabled</c:if> required>
 					<ccs:option type="option" code="C0002"/>
 				</select>
 			</div>
 		    <div class="form-group">
 		        <label for="reason_detail" class="form-label mt-4">상세설명</label>
-		        <textarea id="reason_detail" name="reason_detail" class="form-control" <c:if test="${not empty catcare_cd}">disabled</c:if> required></textarea>
+		        <textarea id="reason_detail" name="reason_detail" 
+		        	class="form-control" 
+		        	<c:if test="${not empty catcare_cd}">disabled</c:if> required>
+		        </textarea>
 			</div>
 			<button type="button" id="btn-list" class="btn btn-warning">목록</button>
 			<c:if test="${not empty catcare_cd}">
@@ -61,7 +83,7 @@ $(document).ready(function() {
 function fn_page() {
 	let $this = this;
 	let PAGE_URL = "/cat/careInfo/form";
-	let cat_cd, catcare_cd, s_user_cd;
+	let CAT_CD, CATCARE_CD, S_USER_CD;
 	
 	this.initialize = function() {
 		$this.initData();
@@ -80,12 +102,12 @@ function fn_page() {
 	}
 	
 	this.initData = function() {
-		catcare_cd = $("#catcare_cd").val();
-		cat_cd = $("#cat_cd").val();
-		s_user_cd = $("#s_user_cd").val();
+		CATCARE_CD = $("#catcare_cd").val();
+		CAT_CD = $("#cat_cd").val();
+		S_USER_CD = $("#s_user_cd").val();
 		
-		if(catcare_cd){
-			$this.formManager.getData(catcare_cd);			
+		if(CATCARE_CD){
+			$this.formManager.getData(CATCARE_CD);			
 		}else{
 			//트리계층 select option생성
 			$this.formManager.setSelect();
@@ -99,7 +121,6 @@ function fn_page() {
 				, data : {"catcare_cd" : Number(catcare_cd)}
 				, success : function(data){
 					$this.formManager.setData(data);
-					cat_cd = $("#cat_cd").val();
 				}
 			});
 		},
@@ -111,7 +132,7 @@ function fn_page() {
 			//트리계층 select option생성
 			$this.formManager.setSelect();
 			
-			if(s_user_cd == data['user_cd']){
+			if(S_USER_CD == data['user_cd']){
 				$("#reason_cd").attr("disabled", false);
 				$("#reason_detail").attr("disabled", false);
 			}else{
@@ -141,7 +162,7 @@ function fn_page() {
 		},
 		getSaveData : function() {
 			let jsonData = $("#careInfo-form").serializeObject();
-			jsonData['cat_cd'] = Number(cat_cd);
+			jsonData['cat_cd'] = Number(CAT_CD);
 			if(jsonData['catcare_cd']){
 				jsonData['catcare_cd'] = Number(jsonData['catcare_cd']);
 			}
@@ -163,7 +184,7 @@ function fn_page() {
 	
 	this.actionManager = {
 		list : function() {
-			location.href = "/cat/careInfo/" + cat_cd;	
+			location.href = "/cat/careInfo/" + CAT_CD;	
 		},
 		detail : function(_catcare_cd) {
 			location.href = "/cat/careInfo/detail/" + _catcare_cd;				

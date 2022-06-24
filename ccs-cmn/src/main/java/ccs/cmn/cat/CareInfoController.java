@@ -64,8 +64,13 @@ public class CareInfoController {
 	}
 	
 	@RequestMapping("/form/{cat_cd}")
-	public String careInfoForm(@PathVariable("cat_cd") Long cat_cd , Model model) throws Exception{
+	public String careInfoForm(@PathVariable("cat_cd") Long cat_cd,
+								SystemParameter systemParameter,
+								Model model) throws Exception{
+		
 		model.addAttribute("cat_cd", cat_cd);
+		model.addAllAttributes(systemParameter.toMap());
+		
 		return "cmn/cat/careInfoForm";
 	}
 	
