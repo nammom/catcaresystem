@@ -530,8 +530,10 @@
             "string" == typeof c && (c = {
                 method: c
             });
+
 			var label = b.labels[0] ? b.labels[0].innerHTML + "은(는) " 
-							: $(b).parent().children("label") ? $(b).parent().children("label").html() + "은(는) " 
+							: $(b).parent().children("label").length > 0 ? $(b).parent().children("label").html() + "은(는) " 
+							: $(b).attr("caption").length > 0 ? $(b).attr("caption") + "은(는) "
 							: "";
             var d = this.findDefined(this.customMessage(b.name, c.method), this.customDataMessage(b, c.method), !this.settings.ignoreTitle && b.title || void 0, label + $.validator.messages[c.method], "<strong>Warning: No message defined for " + b.name + "</strong>")
               , e = /\$?\{(\d+)\}/g;
@@ -539,6 +541,22 @@
 
             return "function" == typeof d ? d = d.call(this, c.parameters, b) : e.test(d) && (d = $.validator.format(d.replace(e, "{$1}"), c.parameters)),
             d
+        } 
+
+		//@validate plugin override
+		$.validator.prototype.checkForm = function(b, c) {
+			['validate checkForm 동일한 name array element 체크']
+             this.prepareForm();
+		    for (var i = 0, elements = (this.currentElements = this.elements()); elements[i]; i++) {
+		        if (this.findByName(elements[i].name).length != undefined && this.findByName(elements[i].name).length > 1) {
+		            for (var cnt = 0; cnt < this.findByName(elements[i].name).length; cnt++) {
+		                this.check(this.findByName(elements[i].name)[cnt]);
+		            }
+		        } else {
+		            this.check(elements[i]);
+		        }
+		    }
+		    return this.valid();
         } 
 	
 		/**

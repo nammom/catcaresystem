@@ -7,6 +7,8 @@
 	<script type="text/javascript" src="/resources/js/validate/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="/resources/js/validate/jquery.validate.ko.min.js"></script>
 	<script type="text/javascript" src="/resources/js/validate/additional-methods.min.js"></script>
+	<script type="text/javascript" src="/resources/js/fullcalendar/main.js"></script>
+	<script type="text/javascript" src="/resources/js/fullcalendar/ko.js"></script>
 	<script type="text/javascript" src="/resources/js/jsrender.js"></script>
 	<script type="text/javascript" src="/resources/js/common.js"></script>
 	<script type="text/javascript" src="/resources/js/common-date.js"></script>
