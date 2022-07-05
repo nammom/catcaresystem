@@ -43,7 +43,7 @@ public class FeedController {
 	private CmnService cmnService;
 	
 	/**
-	 * 고양이 급여 정보 페이지
+	 * 고양이 급여 정보 목록 페이지
 	 * @param target_type 	: "cat" or "grp" or "habitat"
 	 * @param target_cd		: cat_cd or cat_grp_cd or habitat_cd
 	 * @param model
@@ -51,7 +51,7 @@ public class FeedController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/{target_type}/{target_cd}")
-	public String feed(@PathVariable("target_type") String target_type,
+	public String feedList(@PathVariable("target_type") String target_type,
 					   @PathVariable("target_cd") Long target_cd,
 					   Model model) throws Exception{
 		
@@ -59,6 +59,25 @@ public class FeedController {
 		model.addAttribute("target_cd", target_cd);
 		
 		return "cmn/care/feedList";
+	}
+	
+	/**
+	 * 고양이 급여 정보 달력 페이지
+	 * @param target_type 	: "cat" or "grp" or "habitat"
+	 * @param target_cd		: cat_cd or cat_grp_cd or habitat_cd
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/calendar/{target_type}/{target_cd}")
+	public String feedCalendar(@PathVariable("target_type") String target_type,
+					   @PathVariable("target_cd") Long target_cd,
+					   Model model) throws Exception{
+		
+		model.addAttribute("target_type", target_type);
+		model.addAttribute("target_cd", target_cd);
+		
+		return "cmn/care/feedCalendar";
 	}
 	
 	
@@ -113,6 +132,28 @@ public class FeedController {
 		Map<String,Object> data = HashMapUtility.<String,Object>create()
 				.add(systemParameter.toMap())
 				.add(jsonParameter.getData())
+				.toMap();
+		
+		List<Map<String, Object>> feedList = feedService.selectFeedMapList(data);
+		
+		Map<String,Object> result = new HashedMap();
+		result.put("feedList", feedList);
+		
+		return new AjaxResult(AjaxResult.STATUS.SUCCESS, result);
+	}
+	
+	/**
+	 * 고양이 급여 정보 조회
+	 * @param param
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/calendar/selectData")
+	public AjaxResult calendarFeedList(@RequestBody Map<String, Object> param, SystemParameter systemParameter){
+		
+		Map<String,Object> data = HashMapUtility.<String,Object>create()
+				.add(systemParameter.toMap())
+				.add(param)
 				.toMap();
 		
 		List<Map<String, Object>> feedList = feedService.selectFeedList(data);

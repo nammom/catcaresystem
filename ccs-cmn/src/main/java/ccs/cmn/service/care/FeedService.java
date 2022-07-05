@@ -8,6 +8,13 @@ import org.apache.commons.lang.StringUtils;
 public interface FeedService {
 
 	/**
+	 * 고양이 급여 정보 조회 - 통계
+	 * @param param
+	 * @return
+	 */
+	List<Map<String, Object>> selectFeedMapList(Map<String, Object> param);
+
+	/**
 	 * 고양이 급여 정보 조회
 	 * @param param
 	 * @return

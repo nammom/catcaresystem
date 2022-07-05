@@ -23,9 +23,9 @@
 		    	</div>
 				<div class="form-group">
 			        <label class="form-label mt-4">급여일시</label>
-			        <input type="text" id="feed_dt" name="feed_dt" class="form-control datePicker-control startDate" required readonly <c:if test="${not empty feed_cd}">disabled</c:if>>
-			        <input type="number" id="feed_time1" name="feed_time1" class="form-control" min="1" max="24" required <c:if test="${not empty feed_cd}">disabled</c:if>>
-			        <input type="number" id="feed_time2" name="feed_time2" class="form-control" min="0" max="59" required <c:if test="${not empty feed_cd}">disabled</c:if>>
+			        <input type="text" id="feed_dt" name="feed_dt" class="form-control datePicker-control startDate" placeholder="년-월-일(YYYY-MM-DD)" required readonly <c:if test="${not empty feed_cd}">disabled</c:if>>
+			        <input type="number" id="feed_time1" name="feed_time1" class="form-control" placeholder="시(HH)" min="1" max="24" maxlength="2" required <c:if test="${not empty feed_cd}">disabled</c:if>>
+			        <input type="number" id="feed_time2" name="feed_time2" class="form-control" placeholder="분(mm)" min="0" max="59" required <c:if test="${not empty feed_cd}">disabled</c:if>>
 			    </div>
 			    <c:if test="${not empty feed_cd}">
 				    <div class="form-group">
@@ -39,40 +39,42 @@
 		        </c:if>
 		    </div>
 			</form>
-			<c:if test="${empty feed_cd}">
-				<div class="col-md-12 catList-btn-div">
-					<button class="btn btn-secondary btn-sm btn-row-add" type="button" data-table="catList">추가</button>
-					<button class="btn btn-secondary btn-sm btn-row-delete" type="button" data-table="catList">삭제</button>
+			<form id="feed-info-form">
+				<c:if test="${empty feed_cd}">
+					<div class="col-md-12 catList-btn-div">
+						<button class="btn btn-secondary btn-sm btn-row-add" type="button" data-table="catList">추가</button>
+						<button class="btn btn-secondary btn-sm btn-row-delete" type="button" data-table="catList">삭제</button>
+					</div>
+				    <div class="col-md-12">
+				    	<label class='title'>급여고양이</label>
+						<table id="catList"></table>
+					</div>
+				</c:if>	
+				<div class="col-md-12">
+					<button class="btn btn-secondary btn-sm btn-row-add" type="button" data-table="mainFeedList">추가</button>
+					<button class="btn btn-secondary btn-sm btn-row-delete" type="button" data-table="mainFeedList">삭제</button>
 				</div>
+				<div class="col-md-12">
+					<label class='title'>주식</label>
+					<table id="mainFeedList"></table>
+				</div>
+				<div class="col-md-12">
+					<button class="btn btn-secondary btn-sm btn-row-add" type="button" data-table="snackList">추가</button>
+					<button class="btn btn-secondary btn-sm btn-row-delete" type="button" data-table="snackList">삭제</button>
+				</div>		
 			    <div class="col-md-12">
-			    	<label class='title'>급여고양이</label>
-					<table id="catList"></table>
+			    	<label class='title'>간식</label>
+					<table id="snackList"></table>
 				</div>
-			</c:if>	
-			<div class="col-md-12">
-				<button class="btn btn-secondary btn-sm btn-row-add" type="button" data-table="mainFeedList">추가</button>
-				<button class="btn btn-secondary btn-sm btn-row-delete" type="button" data-table="mainFeedList">삭제</button>
-			</div>
-			<div class="col-md-12">
-				<label class='title'>주식</label>
-				<table id="mainFeedList"></table>
-			</div>
-			<div class="col-md-12">
-				<button class="btn btn-secondary btn-sm btn-row-add" type="button" data-table="snackList">추가</button>
-				<button class="btn btn-secondary btn-sm btn-row-delete" type="button" data-table="snackList">삭제</button>
-			</div>		
-		    <div class="col-md-12">
-		    	<label class='title'>간식</label>
-				<table id="snackList"></table>
-			</div>
-			<div class="col-md-12">
-				<button class="btn btn-secondary btn-sm btn-row-add" type="button" data-table="etcList">추가</button>
-				<button class="btn btn-secondary btn-sm btn-row-delete" type="button" data-table="etcList">삭제</button>
-			</div>	
-		    <div class="col-md-12">
-		    <label class='title'>기타</label>
-				<table id="etcList"></table>
-			</div>
+				<div class="col-md-12">
+					<button class="btn btn-secondary btn-sm btn-row-add" type="button" data-table="etcList">추가</button>
+					<button class="btn btn-secondary btn-sm btn-row-delete" type="button" data-table="etcList">삭제</button>
+				</div>	
+			    <div class="col-md-12">
+			    <label class='title'>기타</label>
+					<table id="etcList"></table>
+				</div>
+			</form>
 			<div class="form-group">
 				<div class="form-check">
       				<input type="checkbox" name="feed_cd1" value="400" class='form-check-input' <c:if test="${not empty feed_cd}">disabled</c:if>> 
@@ -147,6 +149,10 @@ function fn_page() {
 		FEED_CD = $("#feed_cd").val()? Number($("#feed_cd").val()) : "";
 		S_USER_CD = $("#s_user_cd").val();
 		
+		//급여일자를 오늘 일자로 설정
+		let feedDatepicker = $("#feed_dt").datepicker().data("datepicker");
+		feedDatepicker.selectDate(new Date());
+		
 		$this.formManager.getData();			
 	}
 	
@@ -197,7 +203,10 @@ function fn_page() {
 			}
 			if(!$("#feed-form").valid()){
 				 return false;
-			 }
+			}
+			if(!$("#feed-info-form").valid()){
+				return false;
+			}
 			return true;
 		},
 		save : function() {
@@ -252,11 +261,16 @@ function fn_page() {
 	
 	this.actionManager = {
 		list : function() {
+			let list_type = window['sessionStorage'].getItem("list_type");
 			let target_type = window['sessionStorage'].getItem("target_type");
 			let target_cd = window['sessionStorage'].getItem("target_cd");
-			if(target_type && target_cd){
-				location.href = "/care/feed/" + target_type + "/" + target_cd;		
-			}else{
+			if(list_type && target_type && target_cd) {
+				if(list_type == "list") {
+					location.href = "/care/feed/" + target_type + "/" + target_cd;		
+				} else {
+					location.href = "/care/feed/calendar/" + target_type + "/" + target_cd;		
+				}
+			} else {
 				alert("이전 목록이 없습니다. 홈 화면으로 돌아갑니다.");
 				location.href = "/home";	
 			}
@@ -424,7 +438,7 @@ function fn_page() {
 	        		 		, "data": "feed_nm"
 	        		 		, "name": "feed_nm"
 	       		 			, "render": function ( data, type, row, meta ) {
-	   	 						return '<input type="text" name="feed_nm" value=\"' + data + '\"/>';
+	   	 						return '<input type="text" name="feed_nm" caption="제품명" value=\"' +  (data||"") + '\" maxlength="60" required/>';
 	   		            	}
 	        		 	},
 				        {
@@ -432,7 +446,7 @@ function fn_page() {
 	        		 		, "data": "feed_amt"
 	        		 		, "name": "feed_amt"
 	       		 			, "render": function ( data, type, row, meta ) {
-	   	 						return '<input type="text" name="feed_amt" value=\"' + data + '\"/>';
+	   	 						return '<input type="text" name="feed_amt" caption="급여양" value=\"' +  (data||"") + '\" maxlength="60"/>';
 	   		            	}
 	        		 	},
 				        {
@@ -440,7 +454,7 @@ function fn_page() {
 	        		 		, "data": "comment"
 	        		 		, "name": "comment"
 	       		 			, "render": function ( data, type, row, meta ) {
-	   	 						return '<input type="text" name="comment" value=\"' + data + '\"/>';
+	   	 						return '<input type="text" name="comment" caption="내용" value=\"' + (data||"") + '\" maxlength="150" />';
 	   		            	}
 	        		 	}
 					];

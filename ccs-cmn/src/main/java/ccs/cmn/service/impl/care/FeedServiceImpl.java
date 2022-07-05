@@ -34,12 +34,12 @@ public class FeedServiceImpl implements FeedService {
 	private static String WATER_FEED_CD = "400";
 	
 	/**
-	 * 고양이 급여 정보 조회
+	 * 고양이 급여 정보 조회 - 통계
 	 * @param param
 	 * @return
 	 */
 	@Override
-	public List<Map<String, Object>> selectFeedList(Map<String, Object> param) {
+	public List<Map<String, Object>> selectFeedMapList(Map<String, Object> param) {
 		List<Map<String, Object>> result = new ArrayList<>();
 		
 		//급여정보 조회
@@ -65,6 +65,16 @@ public class FeedServiceImpl implements FeedService {
 					});
 		
 		return result;
+	}
+	
+	/**
+	 * 고양이 급여 정보 조회
+	 * @param param
+	 * @return
+	 */
+	@Override
+	public List<Map<String, Object>> selectFeedList(Map<String, Object> param) {
+		return feedMapper.selectFeedList(param);
 	}
 	
 	/**

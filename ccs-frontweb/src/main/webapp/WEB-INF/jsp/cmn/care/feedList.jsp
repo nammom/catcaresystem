@@ -3,12 +3,30 @@
 <%@ include file="/WEB-INF/jsp/layout/header.jsp"%>
 <body>
 <div class="container">
-<input type="hidden" id="target_cd" value="<c:out value="${target_cd}" />"/>
-<input type="hidden" id="target_type" value="<c:out value="${target_type}" />"/> 
 <div class="col-md-12">
 	<button type="button" id="btn-list" class="btn btn-warning">통계</button>
 	<button type="button" id="btn-calendar" class="btn btn-warning">달력</button>
 	<button type="button" id="btn-add" class="btn btn-warning">등록</button>
+</div>
+<div class="col-md-12">
+	<form id="search-form" class="form-group m-3">
+		<input type="hidden" id="target_cd" value="<c:out value="${target_cd}" />"/>
+		<input type="hidden" id="target_type" value="<c:out value="${target_type}" />"/> 
+		<div class="row">
+			<div class="form-group col-md-2">
+	         	<label for="name" class="form-label">급여월</label>
+        	</div>
+	        <div class="form-group col-md-4">
+	           	<input type="text"
+						id="feed_date" name="feed_date"
+						class="form-control datePicker-control startDate" 
+						data-min-view="months"
+					    data-view="months"
+					    data-date-format="yyyy MM"
+						required readonly> 
+	        </div>
+	    </div>
+	</form>	    
 </div>
 <div class="col-md-12 feedList-div">
 <!--template 영역  -->
@@ -71,7 +89,7 @@
 <script id="noInfoTmpl" type="text/x-jsrender">
 	<div class="col-md-12">
 		<div class="row">
-			<h3>존재하지 않는 정보입니다.</h3>
+			<h3>정보가 없습니다.</h3>
 		</div>
 	</div>
 </script>
@@ -97,6 +115,12 @@ function fn_page() {
 			let feed_cd = $(this).data("feedcd");
 			$this.locationManager.detail(feed_cd);
 		});
+
+		$("#feed_date").datepicker({
+		    onSelect: function(dateText) {
+		    	$this.dataManager.getData();
+		    }
+		});
 		
 		$("#btn-list").click(function(){
 			$this.locationManager.list();
@@ -109,6 +133,8 @@ function fn_page() {
 		$("#btn-add").click(function(){
 			$this.locationManager.form();
 		});
+		
+		
 	}
 	
 	this.initData = function() {
@@ -117,11 +143,23 @@ function fn_page() {
 		TARGET_CD = $("#target_cd").val() ? Number($("#target_cd").val()) : null;
 		TARGET_TYPE = $("#target_type").val();
 		
+		//급여일자를 오늘 날짜 or 이전 조회 날짜로 설정
+		let feedDt = window['sessionStorage'].getItem("feedDt");
+		let feedDatepicker = $("#feed_date").datepicker().data("datepicker");
+		if(feedDt) {
+			feedDatepicker.selectDate(new Date(feedDt));
+		} else {
+			feedDatepicker.selectDate(new Date());
+		}
+		
+		//데이터 조회
+		$this.dataManager.getData();
+		
+		//뒤로가기 시 데이터 유지용 아이템 셋팅
 		window['sessionStorage'].clear();
+		window['sessionStorage'].setItem("list_type", "list");
 		window['sessionStorage'].setItem("target_type", TARGET_TYPE);
 		window['sessionStorage'].setItem("target_cd", TARGET_CD);
-		
-		$this.dataManager.getData();
 	}
 	
 	this.dataManager = {
@@ -137,12 +175,16 @@ function fn_page() {
 		//getData의 ajax Data
 		getSelectData : function(){
 			let data;
+			
+			let date = this.getDate();
+			let feed_date = String(date['year']) + String(date['month'] < 10 ? "0" + date['month'] : date['month']);
+			
 			switch(TARGET_TYPE){
-				case "cat" : data = {"cat_cd" : TARGET_CD, "feed_date" : "202206"};
+				case "cat" : data = {"cat_cd" : TARGET_CD, "feed_date" : feed_date};
 					break;
-				case "grp" : data = {"cat_grp_cd" : TARGET_CD, "feed_date" : "202206"};
+				case "grp" : data = {"cat_grp_cd" : TARGET_CD, "feed_date" : feed_date};
 					break;
-				case "habitat" : data = {"habitat_cd" : TARGET_CD, "feed_date" : "202206"};
+				case "habitat" : data = {"habitat_cd" : TARGET_CD, "feed_date" : feed_date};
 					break;
 			}
 			return data;
@@ -156,65 +198,41 @@ function fn_page() {
 				.append(htmlOut);
 			}else{
 				htmlOut = $noInfoTmpl.render();
-				$(".container")
+				$(".feedList-div")
 				.empty()
 				.append(htmlOut);
 			}
+		},
+		getDate : function() {
+			let result = {};
+			
+			let feedDatepicker = $("#feed_date").datepicker().data("datepicker");
+			let date = new Date(feedDatepicker.selectedDates);
+			result['date'] = date;
+			result['year'] = date.getFullYear();
+			result['month'] = date.getMonth() + 1;
+			result['day'] = date.getDate();
+			
+			return result;
 		}
 	}
 	
 	this.locationManager = {
 		detail : function(feed_cd){
+			let date = $this.dataManager.getDate();
+			//sessionStorage에 년월 저장(상세페이지에서 뒤로가기시 사용)
+			window['sessionStorage'].setItem("feedDt", date['date']);
 			location.href = PAGE_URL + "/detail/" + feed_cd;
 		},
-		form : function(feed_cd){
+		form : function(){
 			location.href = PAGE_URL + "/form/" + TARGET_CD;
 		},
-		list : function(feed_cd){
+		list : function(){
 			location.href = PAGE_URL + "/" + TARGET_TYPE + "/" + TARGET_CD;
 		},
-		calendar : function(feed_cd){
+		calendar : function(){
 			location.href = PAGE_URL + "/calendar/" + TARGET_TYPE + "/" + TARGET_CD;
 		},
-	}
-	
-	this.actionManager = {
-			care : function(){
-				$.ccs.ajax({
-					url : PAGE_URL + "/care"
-					, data : {"target_cd" : Number(CAT_CD)
-							, "target_type" : 1}
-					, success : function(data){
-						//$this.actionManager.careCallback(data);
-						$this.initData();
-					}
-				});
-			},
-			bookMark : function(){
-				$.ccs.ajax({
-					url : PAGE_URL + "/bookMark"
-					, data : {"target_cd" : Number(CAT_CD)
-							, "target_type" : 1}
-					, success : function(data){
-						//$this.actionManager.careCallback(data);
-						$this.initData();
-					}
-				});
-			},
-			careCallback : function(data){
-				if(data.status == "Y"){
-					$("btn-care").html("♥");
-				}else{
-					$("btn-care").html("♡");
-				}
-			},
-			bookmarkCallback : function(data){
-				if(data.status == "Y"){
-					$("btn-care").html("★");
-				}else{
-					$("btn-care").html("☆");
-				}
-			}
 	}
 	
 }

@@ -12,8 +12,8 @@
 					, F.USER_CD
 					, U.NICKNAME
 					, TO_CHAR(F.FEED_DT, 'YYYY-MM-DD')	AS FEED_DT
-					, F.FEED_TIME1
-					, F.FEED_TIME2
+					, right( '0' || F.FEED_TIME1, 2) 		AS FEED_TIME1
+					, right( '0' || F.FEED_TIME2, 2)		AS FEED_TIME2
 					, N.CAT_NAME
 					, T.FILE_PATH
 				FROM TB_CAT C
@@ -75,7 +75,10 @@
 			</choose>
 				AND TO_CHAR(F.FEED_DT, 'YYYYMM') = #{feed_date}
 		</where>
-		ORDER BY F.FEED_DT DESC, F.CAT_CD
+		ORDER BY F.FEED_DT DESC
+				, length(F.FEED_TIME1)
+				, length(F.FEED_TIME2)
+				, F.CAT_CD
 	</select>
 
 	<!-- 고양이 급여 갯수 조회 -->
