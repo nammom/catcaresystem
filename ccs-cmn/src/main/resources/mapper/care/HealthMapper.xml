@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ccs.cmn.mapper.care.HealthMapper">
+
+<!-- ** 고양이 건강 관리 ** -->
+
+	<!-- 고양이 건강 정보 목록 조회 -->
+	<select id="selectHealthList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT H.HEALTH_CD 
+				, H.CAT_CD
+				, H.FILE_GRP_ID
+				, FN_GET_CODE_NAME('C0001', H.DISEASE_CD) AS DISEASE_NM
+				, FN_GET_CODE_NAME('C0001', H.DISEASE_CD2) AS DISEASE_NM2
+				, FN_GET_CODE_NAME('C0001', H.DISEASE_CD3) AS DISEASE_NM3
+				, H.DISEASE_DETAIL 
+				, TO_CHAR(H.REG_DT, 'YYYY-MM-DD') AS REG_DT  
+				, N.CAT_NAME
+				, U.USER_CD 
+				, U.NICKNAME
+				, PT.FILE_PATH
+			FROM TB_CAT C
+				JOIN TB_CAT_HEALTHY H
+					ON C.CAT_CD = H.CAT_CD
+				JOIN TB_USER U
+					ON H.USER_CD = U.USER_CD
+		<choose>
+			<when test="cat_cd != null and !cat_cd.equals('')">
+					LEFT JOIN TB_CAT_PROFILE P
+						ON C.CAT_CD = P.CAT_CD
+					LEFT JOIN TB_FILE PT
+						ON P.FILE_GRP_ID = PT.FILE_GRP_ID
+					LEFT JOIN TB_CAT_NAME N
+						ON C.CAT_CD = N.CAT_CD
+							AND N.USER_CD = #{_SESSION_USER_CD_}
+			</when>		
+			<when test="cat_grp_cd != null and !cat_grp_cd.equals('')">
+					LEFT JOIN TB_CAT_GRP_INFO G
+						ON C.CAT_CD = G.CAT_CD
+					LEFT JOIN TB_CAT_PROFILE CP
+						ON C.CAT_CD = CP.CAT_CD
+					LEFT JOIN TB_CAT_PROFILE GP
+						ON C.CAT_CD = GP.CAT_CD
+					LEFT JOIN TB_FILE PT
+						ON CP.FILE_GRP_ID = PT.FILE_GRP_ID
+							OR GP.FILE_GRP_ID = PT.FILE_GRP_ID
+					LEFT JOIN TB_CAT_NAME N
+						ON C.CAT_CD = N.CAT_CD
+							AND N.USER_CD = #{_SESSION_USER_CD_}
+			</when>
+			<when test="habitat_cd != null and !habitat_cd.equals('')">
+					JOIN TB_HABITAT_INFO B
+						ON C.CAT_CD = B.CAT_CD
+					LEFT JOIN TB_CAT_PROFILE CP
+						ON C.CAT_CD = CP.CAT_CD
+					LEFT JOIN TB_CAT_PROFILE GP
+						ON C.CAT_CD = GP.CAT_CD
+					LEFT JOIN TB_FILE PT
+						ON CP.FILE_GRP_ID = PT.FILE_GRP_ID
+							OR GP.FILE_GRP_ID = PT.FILE_GRP_ID
+					LEFT JOIN TB_CAT_NAME N
+							ON C.CAT_CD = N.CAT_CD
+								AND N.USER_CD = #{_SESSION_USER_CD_}
+			</when>
+		</choose>
+		<where>
+			<choose>
+				<when test="cat_cd != null and !cat_cd.equals('')">
+					C.CAT_CD = #{cat_cd}
+				</when>		
+				<when test="cat_grp_cd != null and !cat_grp_cd.equals('')">
+					C.CAT_CD = #{cat_grp_cd}
+					OR G.CAT_GRP_CD = #{cat_grp_cd}
+				</when>
+				<when test="habitat_cd != null and !habitat_cd.equals('')">
+					B.HABITAT_CD = #{habitat_cd}
+				</when>
+			</choose>
+		</where>
+		ORDER BY H.HEALTH_CD DESC
+	</select>
+
+	<!-- 고양이 건강 정보 조회 - 단건 -->
+	<select id="selectHealthByCd" parameterType="java.util.Map" resultType="java.util.Map">
+			SELECT H.HEALTH_CD 
+					, H.CAT_CD
+					, H.FILE_GRP_ID
+					, H.DISEASE_CD
+					, H.DISEASE_CD2
+					, H.DISEASE_CD3
+					, H.DISEASE_DETAIL
+					, TO_CHAR(H.REG_DT, 'YYYY-MM-DD') AS REG_DT  
+					, N.CAT_NAME
+					, U.USER_CD 
+					, U.NICKNAME
+			FROM TB_CAT C
+				JOIN TB_CAT_HEALTHY H
+					ON C.CAT_CD = H.CAT_CD
+				JOIN TB_USER U
+						ON H.USER_CD = U.USER_CD
+				LEFT JOIN TB_CAT_NAME N
+						ON C.CAT_CD = N.CAT_CD
+							AND N.USER_CD = #{_SESSION_USER_CD_}
+			WHERE H.HEALTH_CD = #{health_cd}
+	</select>
+	
+	<!-- 건강 정보 저장 -->
+	<insert id="insertHealth" parameterType="java.util.Map" useGeneratedKeys="true" keyColumn="health_cd" keyProperty="health_cd">
+	    	INSERT INTO TB_CAT_HEALTHY
+			(
+				CAT_CD
+				, USER_CD
+				<if test="file_grp_id != null">
+				, FILE_GRP_ID
+				</if>
+				, DISEASE_CD
+				, DISEASE_CD2
+				, DISEASE_CD3
+				, DISEASE_DETAIL
+				, REG_ID
+				, REG_DT
+				, UPDT_ID
+				, UPDT_DT
+			)
+			VALUES
+			(
+				#{cat_cd}
+				, #{_SESSION_USER_CD_}
+				<if test="file_grp_id != null">
+				, #{file_grp_id}
+				</if>
+				, #{disease_cd}
+				, #{disease_cd2}
+				, #{disease_cd3}
+				, #{disease_detail}
+				, #{_SESSION_USER_CD_} -- 입력사용자
+				, NOW() -- 입력일자
+				, #{_SESSION_USER_CD_} -- 변경사용자
+				, NOW() -- 변경일자
+			)
+	</insert>
+	
+	<!-- 건강 정보 수정 -->	
+	<update id="updateHealth" parameterType="java.util.Map">
+	    	UPDATE TB_CAT_HEALTHY
+			SET DISEASE_CD = #{disease_cd}
+				, DISEASE_CD2 = #{disease_cd2}
+				, DISEASE_CD3 = #{disease_cd3}
+				, DISEASE_DETAIL = #{disease_detail}
+				<if test="file_grp_id != null">
+				, FILE_GRP_ID = #{file_grp_id}
+				</if>
+				, UPDT_ID = #{_SESSION_USER_CD_}
+				, UPDT_DT = NOW()
+			WHERE HEALTH_CD = #{health_cd}
+	</update>
+	
+	<!-- 건강 정보 삭제 -->
+	<delete id="deleteHealth" parameterType="java.util.Map">
+	    	DELETE FROM TB_CAT_HEALTHY
+			WHERE HEALTH_CD = #{health_cd}
+	</delete>
+	
+</mapper>

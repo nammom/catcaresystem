@@ -254,26 +254,32 @@
 				@param length : 컴포넌트그룹의 사이즈
 			 */
 			selectCodeList : function(url, className, idx, length) {
-				
 				let $selectedOption = $("." + className + ":eq(" + (idx) + ") option:selected");
 				let $targetSelect = $("." + className).eq(++idx);
 				let _code = $targetSelect.data("code");
 				let _prntCode = $selectedOption.val();
-				let _data = {
-								"code" : _code
-								, "prntCode" : _prntCode
-							};
-							
-				$.ccs.ajax({
-					url : url
-					, data : _data
-					, success : function(data){
-						$.ccs.cmnCodeOption.createOption($targetSelect, data["codeList"]);
-						if((length-1) > idx){
-							$.ccs.cmnCodeOption.selectCodeList(url, className, idx, length);
+				if(_prntCode) {
+					let _data = {
+									"code" : _code
+									, "prntCode" : _prntCode
+								};
+								
+					$.ccs.ajax({
+						url : url
+						, data : _data
+						, success : function(data){
+							$.ccs.cmnCodeOption.createOption($targetSelect, data["codeList"]);
+							if((length-1) > idx){
+								$.ccs.cmnCodeOption.selectCodeList(url, className, idx, length);
+							}
 						}
+					});
+				} else {
+					while(length > idx){
+						$targetSelect = $("." + className).eq(idx++);
+						$.ccs.cmnCodeOption.createOption($targetSelect, []);	
 					}
-				});
+				}
 			},
 			/**
 				옵션생성

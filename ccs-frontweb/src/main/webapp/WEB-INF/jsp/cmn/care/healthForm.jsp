@@ -5,9 +5,9 @@
 <div class="container">
 	<div class="col-md-12">
 		<div class="col-md-6">
-			<form class="form-group contents" id="character-form" method="post"
+			<form class="form-group contents" id="health-form" method="post"
 				enctype="multipart/form-data" accept-charset="UTF-8">
-				<input type="hidden" id="character_cd" name="character_cd" value="<c:out value="${character_cd}" />">
+				<input type="hidden" id="health_cd" name="health_cd" value="<c:out value="${health_cd}" />">
 				<input type="hidden" id="s_user_cd" name="s_user_cd" value="<c:out value="${_SESSION_USER_CD_}" />"/>
 				<input type="hidden" id="user_cd" name="user_cd" value="<c:out value="${user_cd}" />"/>
 				<input type="hidden" id="file_grp_id" name="file_grp_id" />
@@ -20,6 +20,13 @@
 			        	value="<c:out value="${_SESSION_USER_NM_}" />"
 			        	disabled/>
 		    	</div>
+		    	<div class="form-group">
+					<label for="reg_dt" class="form-label mt-4">등록일자</label> 
+					<input type="text" 
+						id="reg_dt" name="reg_dt"
+						class="form-control datePicker-control" 
+						required disabled>
+				</div>
 			    <div class="form-group">
 		        <label for="cat_cd" class="form-label mt-4">고양이 고유코드</label>
 			        <input type="text" 
@@ -28,45 +35,56 @@
 			        	class="form-control" 
 			        	disabled/>
 		    	</div>
+		    	<div class="row">
+					<div class="form-group col-md-1">
+						<label for="disease" class="form-label">질병</label>
+					</div>
+					<div class="form-group col-md-3">
+						<select id="disease_cd" name="disease_cd" data-code="C0001" 
+						class="form-control tree-select" 
+						<c:if test="${not empty health_cd}">disabled</c:if>>
+		                	<ccs:option type="option" code="C0001" prntCode="0" includeAll="없음" />
+		                </select>
+					</div>
+					<div class="form-group col-md-3">
+						<select id="disease_cd2" name="disease_cd2" data-code="C0001" 
+						class="form-control tree-select" 
+						<c:if test="${not empty health_cd}">disabled</c:if>>
+		                	<ccs:option type="option" code="C0001"  includeAll="전체" />
+		                </select>
+					</div>
+					<div class="form-group col-md-3">
+						<select id="disease_cd3" name="disease_cd3" data-code="C0001" 
+						class="form-control tree-select" 
+						<c:if test="${not empty health_cd}">disabled</c:if>>
+		                	<ccs:option type="option" code="C0001" includeAll="전체" /> 
+		                </select> 
+					</div>
+				</div>
 		    	<div class="form-group">
-		    		<label for="caution_yn" class="form-label mt-4">주의필요</label>
-			        <select id="caution_yn" name="caution_yn" class="form-control" <c:if test="${not empty character_cd}">disabled</c:if>>
-                		<option value="Y">예</option>
-                		<option value="N">아니오</option>
-                	</select> 
-		    		<p class="text-danger font-weight-bold">공격적이거나 예민한 성격을 가진 고양이의 경우 선택해주세요</p>
-		    	</div>
-		    	<div class="form-group">
-			        <label class="form-label mt-4" for="aggression">공격성</label>
-			        <input type="number" id="aggression" name="aggression" class="form-control" value="0" min="0" max="5" <c:if test="${not empty character_cd}">disabled</c:if>>
-			    </div>
-			    <div class="form-group">
-			        <label class="form-label mt-4" for="sensitivity">예민함</label>
-			        <input type="number" id="sensitivity" name="sensitivity" class="form-control" value="0" min="0" max="5" <c:if test="${not empty character_cd}">disabled</c:if>>
-			    </div>
-		    	<div class="form-group">
-					<label for="character_detail" class="form-label mt-4">상세설명</label>
-					<textarea id="character_detail" name="character_detail" class="form-control" maxlength="500" <c:if test="${not empty character_cd}">disabled</c:if>></textarea>
+					<label for="disease_detail" class="form-label mt-4">상세설명</label>
+					<textarea id="disease_detail" name="disease_detail" class="form-control" maxlength="500" 
+					<c:if test="${not empty health_cd}">disabled</c:if>></textarea>
 				</div>
 				<div class="form-group">
-					<div id="character-fileList" class="sta-multifile-upload-list"></div>
+					<div id="health-fileList" class="sta-multifile-upload-list"></div>
 				</div>
 				<div class="form-group">
-					<span id="character-addFileBtn"
+					<span id="health-addFileBtn"
 						class="sta-fileinput-btn sta-fileinput-multi-btn sta-fileinput-btn-add fileinput-button">
 						<span>파일선택</span> 
 						<input type="file" 
-							id="character-fileInput"
+							id="health-fileInput"
 							class="file-upload" />
 					</span>
 				</div>
 			</form>
 			<button type="button" id="btn-list" class="btn btn-warning">목록</button>
-			<c:if test="${not empty character_cd}">
+			<c:if test="${not empty health_cd}">
 		    	<button type="button" id="btn-save" class="btn btn-warning">수정</button>
 		    	<button type="button" id="btn-delete" class="btn btn-warning">삭제</button>
 		    </c:if>
-		    <c:if test="${empty character_cd}">
+		    <c:if test="${empty health_cd}">
 		    	<button type="button" id="btn-save" class="btn btn-warning">저장</button>
 		    </c:if>
 		</div>
@@ -83,8 +101,8 @@ $(document).ready(function() {
 
 function fn_page() {
 	let $this = this;
-	let PAGE_URL = "/care/character/form";
-	let CAT_CD, CHARACTER_CD, S_USER_CD, USER_CD;
+	let PAGE_URL = "/care/health/form";
+	let CAT_CD, HEALTH_CD, S_USER_CD, USER_CD;
 	
 	this.initialize = function() {
 		
@@ -106,12 +124,11 @@ function fn_page() {
 		});
 		
 		// 첨부파일 추가 이벤트
-		$("#character-fileInput").MultiFile({
+		$("#health-fileInput").MultiFile({
 			accept : "jpg|jpeg|gif|png",
 			max : 20,
-			list : "#character-fileList", // upload / or selected files
-			onFileSelect : function(element, value,
-					master_element) {
+			list : "#health-fileList", // upload / or selected files
+			onFileSelect : function(element, value, master_element) {
 				console.log(master_element);
 			}
 		});
@@ -119,11 +136,18 @@ function fn_page() {
 	
 	this.initData = function() {
 		CAT_CD = $("#cat_cd").val()? Number($("#cat_cd").val()) : "";
-		CHARACTER_CD = $("#character_cd").val()? Number($("#character_cd").val()) : "";
+		HEALTH_CD = $("#health_cd").val()? Number($("#health_cd").val()) : "";
 		S_USER_CD = $("#s_user_cd").val();
 		
-		if(CHARACTER_CD){
+		//급여일자를 오늘 일자로 설정
+		let regDatepicker = $("#reg_dt").datepicker().data("datepicker");
+		regDatepicker.selectDate(new Date());
+		
+		if(HEALTH_CD){
 			$this.formManager.getData();			
+		}else{
+			//트리계층 select option생성
+			$this.formManager.setSelect();
 		}
 	}
 	
@@ -131,9 +155,9 @@ function fn_page() {
 		getData : function(){
 			$.ccs.ajax({
 				url : PAGE_URL + "/selectData"
-				, data : CHARACTER_CD ? {"character_cd" : CHARACTER_CD} : {"cat_cd" : CAT_CD}
+				, data : HEALTH_CD ? {"health_cd" : HEALTH_CD} : {"cat_cd" : CAT_CD}
 				, success : function(data){
-					if(CHARACTER_CD){
+					if(HEALTH_CD){
 						$this.formManager.setData(data);
 					}
 				}
@@ -141,12 +165,14 @@ function fn_page() {
 		},
 		setData : function(data){
 			//form 초기화
-			$("#character-form")[0].reset();
+			$("#health-form")[0].reset();
 			//form 정보
-			$("#character-form").bindJson(data);
+			$("#health-form").bindJson(data);
+			//트리계층 select option생성
+			$this.formManager.setSelect();
 			// 첨부파일 정보
 			if (data['fileList']) {
-				$.ccs.bindFile("character", data['fileList']);
+				$.ccs.bindFile("health", data['fileList']);
 			}
 			//USER_CD set
 			USER_CD = $("#user_cd").val();
@@ -154,17 +180,21 @@ function fn_page() {
 			CAT_CD = $("#cat_cd").val()? Number($("#cat_cd").val()) : "";
 
 			if(S_USER_CD == USER_CD){
-				$("#caution_yn").attr("disabled", false);
-				$("#aggression").attr("disabled", false);
-				$("#sensitivity").attr("disabled", false);
-				$("#character_detail").attr("disabled", false);
+				$("#disease_cd").attr("disabled", false);
+				$("#disease_cd2").attr("disabled", false);
+				$("#disease_cd3").attr("disabled", false);
+				$("#disease_detail").attr("disabled", false);
 			}else{
 				$("#btn-save").hide();
 				$("#btn-delete").hide();
 			}
 		},
+		setSelect : function() {
+			//트리계층 select option생성
+			$.ccs.cmnCodeOption.getCmnCodeList("#disease_cd");
+		},
 		validate : function(data){
-			if(!$("#character-form").valid()){
+			if(!$("#health-form").valid()){
 				 return false;
 			}
 			return true;
@@ -174,7 +204,7 @@ function fn_page() {
 			if($this.formManager.validate(_data)){
 				$.ccs.ajax({
 					url : PAGE_URL + "/save"
-					, fileform : '#character-form'
+					, fileform : '#health-form'
 					, data : _data
 					, success : function(data){
 						alert("저장되었습니다.");
@@ -184,21 +214,19 @@ function fn_page() {
 			}
 		},
 		getSaveData : function() {
-			let jsonData = $("#character-form").serializeObject();
-			if(jsonData['character_cd']){
-				jsonData['character_cd'] = Number(jsonData['character_cd']);
+			let jsonData = $("#health-form").serializeObject();
+			if(jsonData['health_cd']){
+				jsonData['health_cd'] = Number(jsonData['health_cd']);
 			}
 			jsonData['cat_cd'] = Number(jsonData['cat_cd']);
-			jsonData['aggression'] = Number(jsonData['aggression']);
-			jsonData['sensitivity'] = Number(jsonData['sensitivity']);
 			// 기존에 있던 파일이 삭제 되었을 경우의 정보 담기.
-			jsonData['deleteFiles'] = $("#character-fileInput").MultiFile("toDeletedList");
+			jsonData['deleteFiles'] = $("#health-fileInput").MultiFile("toDeletedList");
 			return jsonData;
 		},
 		deleteData : function() {
 			$.ccs.ajax({
 				url : PAGE_URL + "/delete"
-				, data : {character_cd : CHARACTER_CD}
+				, data : {health_cd : HEALTH_CD}
 				, success : function(data){
 					alert("삭제되었습니다.");
 					$this.locationManager.list();			
@@ -212,14 +240,14 @@ function fn_page() {
 			let target_type = window['sessionStorage'].getItem("target_type");
 			let target_cd = window['sessionStorage'].getItem("target_cd");
 			if(target_type && target_cd) {
-				location.href = "/care/character/" + target_type + "/" + target_cd;		
+				location.href = "/care/health/" + target_type + "/" + target_cd;		
 			} else {
 				alert("이전 목록이 없습니다. 홈 화면으로 돌아갑니다.");
 				location.href = "/home";	
 			}
 		},
-		detail : function(_character_cd) {
-			location.href = "/cat/character/detail/" + _character_cd;				
+		detail : function(_health_cd) {
+			location.href = "/cat/health/detail/" + _health_cd;				
 		}
 	}
 }

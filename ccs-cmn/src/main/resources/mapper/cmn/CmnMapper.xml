@@ -12,9 +12,14 @@
 			<if test="code!=null and !code.equals('')">
 				C.CMMN_GRP_CD  = #{code}
 			</if>
-			<if test="prntCode!=null and !prntCode.equals('')">
-				AND C.PRNT_CD = #{prntCode}		
-			</if>
+			<choose>
+				<when test="prntCode!=null and prntCode == 0">
+					AND C.PRNT_CD IS NULL	
+				</when>
+				<when test="prntCode!=null and !prntCode.equals('')">
+					AND C.PRNT_CD = #{prntCode}		
+				</when>
+			</choose>
 			<if test="exceptCode!=null and !exceptCode.equals('')">
 				AND D.CMMN_CD != #{exceptCode}
 			</if>		

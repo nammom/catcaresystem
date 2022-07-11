@@ -12,7 +12,7 @@
 		<input type="hidden" id="target_type" value="<c:out value="${target_type}" />"/> 
 	</form>	    
 </div>
-<div class="col-md-12 characterList-div">
+<div class="col-md-12 healthList-div">
 <!--template 영역  -->
 </div>
 <div class="pagination"></div>
@@ -24,18 +24,17 @@
 				src="/images/{{if file_path}}{{>file_path}}{{else}}cmn/{{if group_yn == "N"}}basic_cat_profile.jpg{{else}}basic_cat_grp_profile.jpg{{/if}}{{/if}}"/>
 			고양이 코드 : {{>cat_cd}} {{if cat_name}}({{>cat_name}}){{/if}} 
 			작성자 : {{>nickname}}
+			작성일 : {{>reg_dt}}
 			{{if user_cd == _SESSION_USER_CD_}}
-				<button type="button" id="btn-edit" class="btn btn-warning" data-charactercd="{{>character_cd}}">수정</button>
+				<button type="button" id="btn-edit" class="btn btn-warning" data-healthcd="{{>health_cd}}">수정</button>
 			{{/if}}
 		</div>
     	<div class="card-body">
-    		{{if caution_yn == "Y"}}
-				<p class="text-danger font-weight-bold">주의가 필요한 고양이에요!</p>
-				공격성 : {{>aggression}} <br/>
-				예민함 : {{>sensitivity}}
-			{{/if}}
+    		{{if disease_nm}}{{>disease_nm}}{{/if}}
+			{{if disease_nm2}}> {{>disease_nm2}}{{/if}}
+			{{if disease_nm3}}> {{>disease_nm3}}{{/if}}
 			<div>
-				{{>character_detail}}
+				{{>disease_detail}}
 			</div>
 			{{if fileList}}
 			<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-touch="false" data-interval="false">
@@ -85,7 +84,7 @@ $(document).ready(function() {
 
 function fn_page() {
 	let $this = this;
-	let PAGE_URL = "/care/character";
+	let PAGE_URL = "/care/health";
 	let $template, $noInfoTmpl;
 	let TARGET_CD, TARGET_TYPE;
 	let start = 1;
@@ -100,8 +99,8 @@ function fn_page() {
 		});
 		
 		$(document).on("click", "#btn-edit", function(){
-			let characterCd = $(this).data("charactercd");
-			$this.locationManager.edit(characterCd);
+			let healthCd = $(this).data("healthcd");
+			$this.locationManager.edit(healthCd);
 		});
 	    
 	    window.onscroll = function(e) {
@@ -151,7 +150,7 @@ function fn_page() {
 				url : PAGE_URL + "/selectData"
 				, data : this.getSelectData()
 				, success : function(data){
-					$this.dataManager.setData(data['characterList']);
+					$this.dataManager.setData(data['healthList']);
 				}
 			});
 		},
@@ -173,11 +172,11 @@ function fn_page() {
 			
 			if(list && list.length){
 				htmlOut = $template.render(list);
-				$(".characterList-div").append(htmlOut);
+				$(".healthList-div").append(htmlOut);
 			}else{
 				htmlOut = $noInfoTmpl.render();
-				if($(".characterList-div").children().length == 0){
-					$(".characterList-div").append(htmlOut);
+				if($(".healthList-div").children().length == 0){
+					$(".healthList-div").append(htmlOut);
 				}else{
 					this.paging.endPage = true;
 				}
@@ -188,8 +187,8 @@ function fn_page() {
 	}
 	
 	this.locationManager = {
-		edit : function(character_cd){
-			location.href = PAGE_URL + "/detail/" + character_cd;
+		edit : function(health_cd){
+			location.href = PAGE_URL + "/detail/" + health_cd;
 		},
 		form : function(){
 			location.href = PAGE_URL + "/form/" + TARGET_CD;
