@@ -24,6 +24,15 @@ public class PagingUtility<E> {
 	
 	/**
 	 * paging
+	 * @param start
+	 * @param length
+	 */
+	public void startPaging(Map<String, Object> param) {
+		PageHelper.startPage((int)param.get("start"), (int)param.get("length"));
+	}
+	
+	/**
+	 * paging
 	 * @param <E>
 	 * @param param
 	 * @return

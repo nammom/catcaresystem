@@ -14,7 +14,7 @@
 		FROM TB_FILE_GRP B
 			INNER JOIn TB_FILE A
 				ON A.FILE_GRP_ID = B.FILE_GRP_ID
-		WHERE B.FILE_GRP_ID=#{fileGrpId} -- 파일_그룹
+		WHERE B.FILE_GRP_ID=#{file_grp_id} -- 파일_그룹
 		ORDER BY A.SORT_ORDR ASC
 	</select>
 	
@@ -32,7 +32,7 @@
 		ORDER BY SORT_ORDR ASC
 	</select>
 	
-	<insert id="insertFileGroup" parameterType="java.util.Map" useGeneratedKeys="true" keyColumn="file_grp_id" keyProperty="fileGrpId">
+	<insert id="insertFileGroup" parameterType="java.util.Map" useGeneratedKeys="true" keyColumn="file_grp_id" keyProperty="file_grp_id">
 	    	INSERT INTO TB_FILE_GRP 
 			(
 				REG_ID,
@@ -67,14 +67,14 @@
 			)
 			VALUES
 			(
-				#{fileGrpId}, -- 파일_그룹
+				#{file_grp_id}, -- 파일_그룹
 				#{fileNm}, -- 파일_명
 				#{orgnFileNm}, -- 원본 파일 명
 				#{fileExtsn}, -- 확장 자
 				#{fileMg}, -- 파일 사이즈
 				#{filePath},
 				#{useAt},
-				(SELECT COALESCE(MAX(SORT_ORDR), 0) + 1 FROM TB_FILE WHERE FILE_GRP_ID = #{fileGrpId}),
+				(SELECT COALESCE(MAX(SORT_ORDR), 0) + 1 FROM TB_FILE WHERE FILE_GRP_ID = #{file_grp_id}),
 				#{_SESSION_USER_CD_},
 				NOW(),
 				#{_SESSION_USER_CD_},

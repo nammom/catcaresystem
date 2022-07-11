@@ -59,8 +59,7 @@ public class UploadFileServiceImpl implements UploadFileService{
 		}
 		
 		//DB¿˙¿Â
-		fileService.save(FILE_GRUP, systemParameter, filesToInsert, filesToDelete);
-		return FILE_GRUP;
+		return fileService.save(FILE_GRUP, systemParameter, filesToInsert, filesToDelete);
 	}
 
 	@Override

@@ -71,12 +71,13 @@ public class FileServiceImpl implements FileService {
 			if(ObjectUtils.isEmpty(FILE_GRUP)) {
 				fileMapper.insertFileGroup(param);
 			}
-			final Long fileGrupId = ObjectUtils.isEmpty(FILE_GRUP)? (Long) param.get("fileGrpId") : FILE_GRUP;
+			final Long fileGrupId = ObjectUtils.isEmpty(FILE_GRUP)? Long.valueOf((String)param.get("file_grp_id")) : FILE_GRUP;
 			filesToInsert.stream().forEach(x->{
 												x.putAll(systemParameter);
-												x.put("fileGrpId", fileGrupId);
+												x.put("file_grp_id", fileGrupId);
 												fileMapper.insertFile(x);
 											});
+			return fileGrupId;
 		}
 		
 		//return File_group

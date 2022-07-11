@@ -192,16 +192,13 @@ function fn_page() {
 		setData : function(list){
 			let htmlOut;
 			if(list && list.length){
-				let htmlOut = $template.render(list);
-				$(".feedList-div")
-				.empty()
-				.append(htmlOut);
+				htmlOut = $template.render(list);
 			}else{
 				htmlOut = $noInfoTmpl.render();
-				$(".feedList-div")
-				.empty()
-				.append(htmlOut);
 			}
+			
+			$(".feedList-div").empty()
+							.append(htmlOut);
 		},
 		getDate : function() {
 			let result = {};
@@ -232,7 +229,7 @@ function fn_page() {
 		},
 		calendar : function(){
 			location.href = PAGE_URL + "/calendar/" + TARGET_TYPE + "/" + TARGET_CD;
-		},
+		}
 	}
 	
 }

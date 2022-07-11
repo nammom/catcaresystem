@@ -55,9 +55,9 @@ public class FileUploadController {
 			/*		
 			Map<String, Object> param = jsonParameter.getData();
 			Map<String, Object> form = service.selectForm(param.get("formId"));
-			String fileGrpId = (String) form.get("fileGrpId");
-			if(StringUtils.isNotEmpty(fileGrpId)) {
-				List<Map<String, Object>> files = fileService.selectFiles(fileGrpId);
+			String file_grp_id = (String) form.get("file_grp_id");
+			if(StringUtils.isNotEmpty(file_grp_id)) {
+				List<Map<String, Object>> files = fileService.selectFiles(file_grp_id);
 				model.addAttribute("files", files);
 			}
 			model.addAttribute("form", form);
@@ -71,14 +71,14 @@ public class FileUploadController {
 			Map<String, Object> form = HashMapUtility.<String,Object>create()
 					.add("title", "제목")
 					.add("contents", "내용")
-					.add("fileGrpId", 11L)
+					.add("file_grp_id", 11L)
 					.add("color", color)
 					.add("regDt", "2022-11-18")
 					.toMap();
 			
-			Long fileGrpId = (Long) form.get("fileGrpId");
-			if(fileGrpId != null) {
-				List<Map<String, Object>> files = fileService.selectFiles(fileGrpId);
+			Long file_grp_id = (Long) form.get("file_grp_id");
+			if(file_grp_id != null) {
+				List<Map<String, Object>> files = fileService.selectFiles(file_grp_id);
 				data.put("files", files);
 			}
 			data.put("form", form);
@@ -110,11 +110,11 @@ public class FileUploadController {
 			
 			// 기존에 파일 그룹정보가 있으면 업데이트를 위해서 파라미터로 정보 가지고 오기
 			Long FILE_GRP_ID = null;
-			if(StringUtils.isNotEmpty((String)parameter.get("fileGrpId"))) {
-				FILE_GRP_ID = Long.parseLong((String)parameter.get("fileGrpId"));
+			if(StringUtils.isNotEmpty((String)parameter.get("file_grp_id"))) {
+				FILE_GRP_ID = Long.parseLong((String)parameter.get("file_grp_id"));
 			}
 			FILE_GRP_ID = uploadFileService.uploadFiles(systemParameter.toMap(), FILE_GRP_ID, uploadedFiles, filesToDelete);
-			parameter.put("fileGrpId", FILE_GRP_ID);
+			parameter.put("file_grp_id", FILE_GRP_ID);
 			//----------------------------------------------------------- 파일 정보 업데이트 ---------------------------------------------
 
 			//폼정보 저장

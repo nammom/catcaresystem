@@ -6343,12 +6343,12 @@ a.close.disabled {
   z-index: 1;
   display: -ms-flexbox;
   display: flex;
+  border: 0;
   -ms-flex-align: center;
   align-items: center;
   -ms-flex-pack: center;
   justify-content: center;
   width: 15%;
-  color: #fff;
   text-align: center;
   opacity: 0.5;
   transition: opacity 0.15s ease;

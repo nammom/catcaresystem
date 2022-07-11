@@ -140,7 +140,7 @@ function fn_page() {
  		
 		//목록으로
 		$("#btn-list").click(function(){
-			$this.actionManager.list();
+			$this.locationManager.list();
 		});
 	}
 	
@@ -220,7 +220,7 @@ function fn_page() {
 						if(FEED_CD){
 							$this.formManager.getData(FEED_CD);	
 						}else{
-							$this.actionManager.list();
+							$this.locationManager.list();
 						}
 					}
 				});
@@ -253,13 +253,13 @@ function fn_page() {
 				, data : {feed_cd : FEED_CD}
 				, success : function(data){
 					alert("삭제되었습니다.");
-					$this.actionManager.list();			
+					$this.locationManager.list();			
 				}
 			});
 		}
 	}
 	
-	this.actionManager = {
+	this.locationManager = {
 		list : function() {
 			let list_type = window['sessionStorage'].getItem("list_type");
 			let target_type = window['sessionStorage'].getItem("target_type");

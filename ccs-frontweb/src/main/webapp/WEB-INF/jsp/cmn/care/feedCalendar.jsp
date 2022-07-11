@@ -180,7 +180,7 @@ function fn_page() {
 		},
 		calendar : function(){
 			location.href = PAGE_URL + "/calendar/" + TARGET_TYPE + "/" + TARGET_CD;
-		},
+		}
 	}
 	
 }

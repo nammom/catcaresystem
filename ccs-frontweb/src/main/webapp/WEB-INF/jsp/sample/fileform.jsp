@@ -9,7 +9,7 @@
 			<div class="col-md-6">
 				<form class="form-group contents" id="sample-fileForm" method="post"
 					enctype="multipart/form-data" accept-charset="UTF-8">
-					<input type="hidden" id="fileGrpId" name="fileGrpId" />
+					<input type="hidden" id="file_grp_id" name="file_grp_id" />
 					<div class="form-group">
 						<label for="regDt" class="form-label mt-4">등록일자</label> 
 						<input type="text" 
@@ -115,17 +115,15 @@
 				});
 
 				// 첨부파일 추가 이벤트
-				$("#sample-fileInput")
-						.MultiFile(
-								{
-									accept : "pdf|jpg|jpeg|gif|png|bmp|zip|txt|xlsx|hwp|doc|docx|csv|",
-									max : 20,
-									list : "#sample-fileList", // upload / or selected files
-									onFileSelect : function(element, value,
-											master_element) {
-										console.log(master_element);
-									}
-								});
+				$("#sample-fileInput").MultiFile({
+					accept : "pdf|jpg|jpeg|gif|png|bmp|zip|txt|xlsx|hwp|doc|docx|csv|",
+					max : 20,
+					list : "#sample-fileList", // upload / or selected files
+					onFileSelect : function(element, value,
+							master_element) {
+						console.log(master_element);
+					}
+				});
 
 			}
 
@@ -203,9 +201,8 @@
 				},
 				getSaveData : function() {
 					let jsonData = $("#sample-fileForm").serializeObject();
-					// 기존에 있던 파일이 삭제 되었을 겨웅의 정보 담기.
-					jsonData['deleteFiles'] = $("#sample-fileInput").MultiFile(
-							"toDeletedList");
+					// 기존에 있던 파일이 삭제 되었을 경우의 정보 담기.
+					jsonData['deleteFiles'] = $("#sample-fileInput").MultiFile("toDeletedList");
 					return jsonData;
 				}
 			}

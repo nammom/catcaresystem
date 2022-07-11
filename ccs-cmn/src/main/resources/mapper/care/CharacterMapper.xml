@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ccs.cmn.mapper.care.CharacterMapper">
+
+<!-- ** 고양이 특징 관리 ** -->
+
+	<!-- 고양이 특징 정보 목록 조회 -->
+	<select id="selectCharacterList" parameterType="java.util.Map" resultType="java.util.Map">
+			SELECT T.CHARACTER_CD
+					, T.CAT_CD
+					, T.FILE_GRP_ID
+					, T.CAUTION_YN
+					, T.AGGRESSION
+					, T.SENSITIVITY
+					, T.CHARACTER_DETAIL
+					, N.CAT_NAME
+					, U.USER_CD 
+					, U.NICKNAME
+					, PT.FILE_PATH
+			FROM TB_CAT C
+				JOIN TB_CAT_CHARACTERISTIC T
+					ON C.CAT_CD = T.CAT_CD
+				JOIN TB_USER U
+					ON T.USER_CD = U.USER_CD
+		<choose>
+			<when test="cat_cd != null and !cat_cd.equals('')">
+					LEFT JOIN TB_CAT_PROFILE P
+						ON C.CAT_CD = P.CAT_CD
+					LEFT JOIN TB_FILE PT
+						ON P.FILE_GRP_ID = PT.FILE_GRP_ID
+					LEFT JOIN TB_CAT_NAME N
+						ON C.CAT_CD = N.CAT_CD
+							AND N.USER_CD = #{_SESSION_USER_CD_}
+			</when>		
+			<when test="cat_grp_cd != null and !cat_grp_cd.equals('')">
+					LEFT JOIN TB_CAT_GRP_INFO G
+						ON C.CAT_CD = G.CAT_CD
+					LEFT JOIN TB_CAT_PROFILE CP
+						ON C.CAT_CD = CP.CAT_CD
+					LEFT JOIN TB_CAT_PROFILE GP
+						ON C.CAT_CD = GP.CAT_CD
+					LEFT JOIN TB_FILE PT
+						ON CP.FILE_GRP_ID = PT.FILE_GRP_ID
+							OR GP.FILE_GRP_ID = PT.FILE_GRP_ID
+					LEFT JOIN TB_CAT_NAME N
+						ON C.CAT_CD = N.CAT_CD
+							AND N.USER_CD = #{_SESSION_USER_CD_}
+			</when>
+			<when test="habitat_cd != null and !habitat_cd.equals('')">
+					JOIN TB_HABITAT_INFO H
+						ON C.CAT_CD = H.CAT_CD
+					LEFT JOIN TB_CAT_PROFILE CP
+						ON C.CAT_CD = CP.CAT_CD
+					LEFT JOIN TB_CAT_PROFILE GP
+						ON C.CAT_CD = GP.CAT_CD
+					LEFT JOIN TB_FILE PT
+						ON CP.FILE_GRP_ID = PT.FILE_GRP_ID
+							OR GP.FILE_GRP_ID = PT.FILE_GRP_ID
+					LEFT JOIN TB_CAT_NAME N
+							ON C.CAT_CD = N.CAT_CD
+								AND N.USER_CD = #{_SESSION_USER_CD_}
+			</when>
+		</choose>
+		<where>
+			<choose>
+				<when test="cat_cd != null and !cat_cd.equals('')">
+					C.CAT_CD = #{cat_cd}
+				</when>		
+				<when test="cat_grp_cd != null and !cat_grp_cd.equals('')">
+					C.CAT_CD = #{cat_grp_cd}
+					OR G.CAT_GRP_CD = #{cat_grp_cd}
+				</when>
+				<when test="habitat_cd != null and !habitat_cd.equals('')">
+					H.HABITAT_CD = #{habitat_cd}
+				</when>
+			</choose>
+		</where>
+		ORDER BY T.CHARACTER_CD DESC
+	</select>
+
+	<!-- 고양이 특징 정보 조회 - 단건 -->
+	<select id="selectCharacterByCd" parameterType="java.util.Map" resultType="java.util.Map">
+			SELECT T.CHARACTER_CD
+					, T.CAT_CD
+					, T.USER_CD
+					, T.FILE_GRP_ID
+					, T.CAUTION_YN
+					, T.AGGRESSION
+					, T.SENSITIVITY
+					, T.CHARACTER_DETAIL
+					, U.NICKNAME
+					, N.CAT_NAME
+			FROM TB_CAT C
+				JOIN TB_CAT_CHARACTERISTIC T
+					ON C.CAT_CD = T.CAT_CD
+				JOIN TB_USER U
+						ON T.USER_CD = U.USER_CD
+				LEFT JOIN TB_CAT_NAME N
+						ON C.CAT_CD = N.CAT_CD
+							AND N.USER_CD = #{_SESSION_USER_CD_}
+			WHERE T.CHARACTER_CD = #{character_cd}
+	</select>
+	
+	<!-- 특징 정보 저장 -->
+	<insert id="insertCharacter" parameterType="java.util.Map" useGeneratedKeys="true" keyColumn="character_cd" keyProperty="character_cd">
+	    	INSERT INTO TB_CAT_CHARACTERISTIC
+			(
+				CAT_CD
+				, USER_CD
+				<if test="file_grp_id != null">
+				, FILE_GRP_ID
+				</if>
+				, CAUTION_YN
+				, AGGRESSION
+				, SENSITIVITY
+				, CHARACTER_DETAIL
+				, REG_ID
+				, REG_DT
+				, UPDT_ID
+				, UPDT_DT
+			)
+			VALUES
+			(
+				#{cat_cd}
+				, #{_SESSION_USER_CD_}
+				<if test="file_grp_id != null">
+				, #{file_grp_id}
+				</if>
+				, #{caution_yn}
+				, #{aggression}
+				, #{sensitivity}
+				, #{character_detail}
+				, #{_SESSION_USER_CD_} -- 입력사용자
+				, NOW() -- 입력일자
+				, #{_SESSION_USER_CD_} -- 변경사용자
+				, NOW() -- 변경일자
+			)
+	</insert>
+	
+	<!-- 특징 정보 수정 -->	
+	<update id="updateCharacter" parameterType="java.util.Map">
+	    	UPDATE TB_CAT_CHARACTERISTIC
+			SET CAUTION_YN = #{caution_yn}
+				, AGGRESSION = #{aggression}
+				, SENSITIVITY = #{sensitivity}
+				, CHARACTER_DETAIL = #{character_detail}
+				<if test="file_grp_id != null">
+				, FILE_GRP_ID = #{file_grp_id}
+				</if>
+				, UPDT_ID = #{_SESSION_USER_CD_}
+				, UPDT_DT = NOW()
+			WHERE CHARACTER_CD = #{character_cd}
+	</update>
+	
+	<!-- 특징 정보 삭제 -->
+	<delete id="deleteCharacter" parameterType="java.util.Map">
+	    	DELETE FROM TB_CAT_CHARACTERISTIC
+			WHERE CHARACTER_CD = #{character_cd}
+	</delete>
+	
+</mapper>
