@@ -85,4 +85,25 @@ public class CmnServiceImpl implements CmnService {
 		return cmnMapper.selectSearchHabitatList(data);
 	}
 
+	/**
+	 * 네비게이션 메뉴 목록 조회
+	 * @return
+	 */
+	@Override
+	public List<Map<String, Object>> selectMenuList() {
+		// TODO Auto-generated method stub
+		return cmnMapper.selectMenuList();
+	}
+
+	/**
+	 * 네비게이션 모바일 etc 메뉴 목록 조회
+	 * @param data
+	 * @return
+	 */
+	@Override
+	public List<Map<String, Object>> selectEtcMenuList(Map<String, Object> data) {
+		// TODO Auto-generated method stub
+		return cmnMapper.selectEtcMenuList(data);
+	}
+
 }

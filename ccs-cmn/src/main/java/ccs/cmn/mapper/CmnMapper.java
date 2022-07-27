@@ -53,5 +53,19 @@ public interface CmnMapper {
 	 */
 	public List<Map<String, Object>> selectSearchHabitatList(Map<String, Object> data);
 
+	/**
+	 * 네비게이션 메뉴 목록 조회
+	 * @return
+	 */
+	public List<Map<String, Object>> selectMenuList();
+
+	/**
+	 * 네비게이션 모바일 etc 메뉴 목록 조회
+	 * @param data
+	 * @return
+	 */
+	public List<Map<String, Object>> selectEtcMenuList(Map<String, Object> data);
+
+
 
 }

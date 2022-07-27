@@ -411,8 +411,13 @@
 				};
 				return null;
 			}
+		},
+		/**
+			네비게이션 메뉴
+		 */
+		menu : {
+			menuCount : 3	
 		}
-		
 		
 		
 		

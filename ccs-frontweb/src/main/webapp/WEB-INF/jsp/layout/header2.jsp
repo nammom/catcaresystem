@@ -14,5 +14,4 @@
 
 </head>
 
-<body class="main"> 
-<%@ include file="/WEB-INF/jsp/layout/navbar.jsp"%>
+<body class="main">

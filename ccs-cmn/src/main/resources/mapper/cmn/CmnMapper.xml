@@ -27,7 +27,7 @@
 		ORDER BY C.CMMN_CD_SEQ ASC
 	</select>
 	
-		<!-- 지역 코드 조회 -->
+	<!-- 지역 코드 조회 -->
 	<select id="selectAreaCodeList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT C.AREA_CD as value
 			, C.AREA_NM as name
@@ -105,7 +105,7 @@
 		ORDER BY C.CAT_CD DESC
 	</select>
 	
-		<!-- 고양이 검색  -->
+	<!-- 고양이 검색  -->
 	<select id="selectSearchHabitatList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT H.HABITAT_CD 
 			, H.HABITAT_NM
@@ -135,6 +135,28 @@
 			</if>
 		</where>
 		ORDER BY H.HABITAT_CD DESC
+	</select>
+	
+	<!-- 네비게이션 메뉴 목록 조회  -->
+	<select id="selectMenuList" resultType="java.util.Map">
+		SELECT M.MENU_NM
+			, M.MENU_LINK
+			, M.MENU_DESKTOP 
+			, M.MENU_MOBILE
+		FROM TB_MENU M
+		ORDER BY M.MENU_ORDR
+	</select>
+	
+	<!-- 네비게이션 모바일 etc 메뉴 목록 조회  -->
+	<select id="selectEtcMenuList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT M.MENU_NM
+			, M.MENU_LINK
+			, M.MENU_DESKTOP 
+			, M.MENU_MOBILE
+		FROM TB_MENU M
+		WHERE M.MENU_MOBILE = 'Y'
+		ORDER BY M.MENU_ORDR
+		OFFSET #{menuCount}
 	</select>
 	
 </mapper>

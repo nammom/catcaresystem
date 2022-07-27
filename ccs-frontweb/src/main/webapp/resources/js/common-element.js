@@ -17,5 +17,16 @@
 			})
 		}
 	}
+	
+	if($("a.nav-link") && $("a.nav-link").length > 0){
+		let pagenm = $("#pagenm").val();
+		debugger;
+		$("a.nav-link[data-pagenm = '" + pagenm + "']").addClass("active");
+		
+		$("a.nav-link").click(function(){
+			$("a.nav-link.active").removeClass("active");
+			$(this).addClass("active");
+		})	
+	}
 })(jQuery);
 

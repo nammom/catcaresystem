@@ -4,3 +4,52 @@
 	width:50px;
 	height:50px;
 }
+
+.bg-warning {
+  background-color: #f6d861 !important;
+}
+
+.btn-warning {
+  color: #212529;
+  background-color: #f6d861;
+  border-color: #f6d861;
+}
+
+#navbar-toggler-checkbox {
+	display: none;
+}
+
+#navbar-toggler-checkbox:checked ~ .navbar-collapse {
+	display: block;
+	flex-basis: 100%;
+    flex-grow: 1;
+    align-items: center;
+}
+
+.icon-navbar-nav a{ 
+	display: inline-block;
+    background-size: 100% 100%;
+    width: 6em;
+    height: 6em;
+    vertical-align: middle;
+    content: "";
+    margin-left: 12%;
+    filter :brightness(0) invert(1);
+}
+.icon-navbar-nav .nav-link.active {
+	filter :invert(70%) grayscale(100%);
+}
+.icon-navbar-nav a:nth-child(1){ background-image: url("../image/habitat_icon.png"); }
+.icon-navbar-nav a:nth-child(2){ background-image: url("../image/house_home_icon.png"); }
+.icon-navbar-nav a:nth-child(3){ background-image: url("../image/cat_animal_icon.png"); }
+.icon-navbar-nav a:nth-child(4){ background-image: url("../image/menu_icon.png"); }
+
+/* 모바일 etc 메뉴 */
+
+.etc-nav.list-group-item {
+	text-align: center;
+	line-height: 120px;
+	height: 150px;
+	font-size : 60px;
+	margin-top: 40px;
+}
