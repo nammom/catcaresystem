@@ -191,7 +191,7 @@ public class CatProfileController {
 		DataTableInfoVO<Map<String, Object>> pageInfo = PagingUtility.<Map<String, Object>>create()
 																.startPage(param);
 		
-		List<Map<String, Object>> dataList =  catProfileService.selectCareList(data);
+		List<Map<String, Object>> dataList =  catProfileService.selectBookMarkList(data);
 		pageInfo.setPageInfo(dataList);
 		
 		return pageInfo;

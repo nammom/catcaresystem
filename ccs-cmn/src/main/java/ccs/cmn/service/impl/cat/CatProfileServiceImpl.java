@@ -20,10 +20,10 @@ import ccs.cmn.service.cat.CatProfileService;
 public class CatProfileServiceImpl implements CatProfileService {
 
 	@Resource(name="CatProfileMapper")
-	CatProfileMapper catProfileMapper;
+	private CatProfileMapper catProfileMapper;
 
 	@Resource(name="CmnMapper")
-	CmnMapper cmnMapper;
+	private CmnMapper cmnMapper;
 	
 	/**
 	 * 고양이 프로필 정보 조회

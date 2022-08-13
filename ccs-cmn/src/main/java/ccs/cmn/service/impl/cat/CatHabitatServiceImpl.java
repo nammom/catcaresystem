@@ -22,7 +22,7 @@ import ccs.cmn.service.cat.CatHabitatService;
 public class CatHabitatServiceImpl implements CatHabitatService {
 
 	@Resource(name="CatHabitatMapper")
-	CatHabitatMapper catHabitatMapper;
+	private CatHabitatMapper catHabitatMapper;
 
 	/**
 	 * 고양이 서식지 정보 조회 

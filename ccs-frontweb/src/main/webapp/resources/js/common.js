@@ -53,25 +53,12 @@
 	            }
 	        };
 	        parameterOptions['error'] = errorCallbackFunction;
-	
 
-			
-			function fn_getFileInputLength(){
-	            let $form;
-	            if(parameterOptions.fileform){
-	                $form = $(parameterOptions.fileform);
-	                
-	                return $("input[type='file']",$form).filter(function (){return this.value;}).length;
-	                
-	                let fileInputs = $('input[type=file]:enabled[value!=""]', $form);
-	                console.log('call fileInputs', fileInputs);
-	                return fileInputs.length;
-	            }
-	            return 0;
-	        };
-
-	 		let hasFileInputs = fn_getFileInputLength() > 0;
-	        
+			// 파일 여부 체크
+			let hasFileInputs = false;
+			if(parameterOptions.fileform){
+		 		hasFileInputs = $.ccs.file.getFileInputLength(parameterOptions.fileform) > 0;
+			}
 	        if(hasFileInputs){
 	        	let $form = $(parameterOptions.fileform);
 				let _data = new FormData($form[0]);
@@ -98,6 +85,40 @@
 			if(result){
 				callbackFunc();
 			}
+		},
+		file : {
+			/**
+				파일 갯수
+			 */
+			getFileInputLength : function fn_getFileInputLength(fileformId){
+				
+	            let $form;
+	            if(fileformId){
+	                $form = $(fileformId);
+	                return $("input[type='file']",$form).filter(function (){return this.value;}).length;
+	            }
+	            return 0;
+	        },
+			/**
+				파일 데이터 바인딩
+			 */
+			bindFile : function(selecterName, files){
+				$("#" + selecterName + "-fileList").empty();
+				$("#" + selecterName + "-fileInput").MultiFile('reset');
+		        $("#" + selecterName + "-fileInput").MultiFile('addList',files);
+			},
+			/**
+				파일 여부 체크
+				@param fileId
+				@param minCount
+			 */
+			validate : function(fileId, minCount){
+				if($("#" + fileId +"-fileList").children().length < minCount) {
+					return false
+				}
+				return true;
+			}
+			
 		},
 		modal : {
 			modalOption : {},
@@ -175,14 +196,6 @@
 				}
 				$(".close", $modal).click();
 			}
-		},
-		/**
-			파일 데이터 바인딩
-		 */
-		bindFile : function(selecterName, files){
-			$("#" + selecterName + "-fileList").empty();
-			$("#" + selecterName + "-fileInput").MultiFile('reset');
-	        $("#" + selecterName + "-fileInput").MultiFile('addList',files);
 		},
 		/**
 			listMap에서 key가 name인 map 반환
@@ -544,7 +557,7 @@
 
 			var label = b.labels[0] ? b.labels[0].innerHTML + "은(는) " 
 							: $(b).parent().children("label").length > 0 ? $(b).parent().children("label").html() + "은(는) " 
-							: $(b).attr("caption").length > 0 ? $(b).attr("caption") + "은(는) "
+							: $(b).attr("caption") && $(b).attr("caption").length > 0 ? $(b).attr("caption") + "은(는) "
 							: "";
             var d = this.findDefined(this.customMessage(b.name, c.method), this.customDataMessage(b, c.method), !this.settings.ignoreTitle && b.title || void 0, label + $.validator.messages[c.method], "<strong>Warning: No message defined for " + b.name + "</strong>")
               , e = /\$?\{(\d+)\}/g;

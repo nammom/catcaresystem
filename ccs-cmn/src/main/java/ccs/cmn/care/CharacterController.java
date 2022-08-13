@@ -74,7 +74,7 @@ public class CharacterController {
 								Model model) throws Exception{
 		
 		model.addAttribute("character_cd", character_cd);
-		model.addAllAttributes(systemParameter.toMap());
+		model.addAttribute("_SESSION_USER_CD_", systemParameter.toMap().get("_SESSION_USER_CD_"));
 		
 		return "cmn/care/characterForm";
 	}
@@ -92,7 +92,7 @@ public class CharacterController {
 							Model model) throws Exception{
 		
 		model.addAttribute("cat_cd", cat_cd);
-		model.addAllAttributes(systemParameter.toMap());
+		model.addAttribute("_SESSION_USER_CD_", systemParameter.toMap().get("_SESSION_USER_CD_"));
 		
 		return "cmn/care/characterForm";
 	}

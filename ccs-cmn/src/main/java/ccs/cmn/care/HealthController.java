@@ -68,7 +68,7 @@ public class HealthController {
 								Model model) throws Exception{
 		
 		model.addAttribute("health_cd", health_cd);
-		model.addAllAttributes(systemParameter.toMap());
+		model.addAttribute("_SESSION_USER_CD_", systemParameter.toMap().get("_SESSION_USER_CD_"));
 		
 		return "cmn/care/healthForm";
 	}
@@ -86,7 +86,7 @@ public class HealthController {
 							Model model) throws Exception{
 		
 		model.addAttribute("cat_cd", cat_cd);
-		model.addAllAttributes(systemParameter.toMap());
+		model.addAttribute("_SESSION_USER_CD_", systemParameter.toMap().get("_SESSION_USER_CD_"));
 		
 		return "cmn/care/healthForm";
 	}

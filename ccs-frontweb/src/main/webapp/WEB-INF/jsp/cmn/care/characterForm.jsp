@@ -108,7 +108,7 @@ function fn_page() {
 		// 첨부파일 추가 이벤트
 		$("#character-fileInput").MultiFile({
 			accept : "jpg|jpeg|gif|png",
-			max : 20,
+			max : 5,
 			list : "#character-fileList", // upload / or selected files
 			onFileSelect : function(element, value,
 					master_element) {
@@ -146,7 +146,7 @@ function fn_page() {
 			$("#character-form").bindJson(data);
 			// 첨부파일 정보
 			if (data['fileList']) {
-				$.ccs.bindFile("character", data['fileList']);
+				$.ccs.file.bindFile("character", data['fileList']);
 			}
 			//USER_CD set
 			USER_CD = $("#user_cd").val();

@@ -103,6 +103,7 @@ public class FileUploadController {
 					.add(systemParameter.toMap())
 					.toMap();
 			//----------------------------------------------------------- 파일 정보 업데이트 ---------------------------------------------
+			
 			// 업로드한 파일정보
 			List<FileInfoVO> uploadedFiles = fileParameter.getFiles();
 			// 기존에 있었지만 삭제된 파일 정보 목록
@@ -115,6 +116,7 @@ public class FileUploadController {
 			}
 			FILE_GRP_ID = uploadFileService.uploadFiles(systemParameter.toMap(), FILE_GRP_ID, uploadedFiles, filesToDelete);
 			parameter.put("file_grp_id", FILE_GRP_ID);
+			
 			//----------------------------------------------------------- 파일 정보 업데이트 ---------------------------------------------
 
 			//폼정보 저장

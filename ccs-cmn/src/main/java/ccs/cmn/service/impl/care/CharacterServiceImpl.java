@@ -96,20 +96,20 @@ public class CharacterServiceImpl implements CharacterService {
 	@Override
 	public void insertCharacter(Map<String, Object> param, FileParameter fileParameter) throws Exception{
 		//----------------------------------------------------------- 파일 정보 업데이트 ---------------------------------------------
-		if(fileParameter != null) {
-			// 업로드한 파일정보 
-			List<FileInfoVO> uploadedFiles = fileParameter.getFiles();
-			// 기존에 있었지만 삭제된 파일 정보 목록
-			List<Map<String,Object>> filesToDelete = (List<Map<String,Object>>)param.get("deleteFiles");
-			
-			// 기존에 파일 그룹정보가 있으면 업데이트를 위해서 파라미터로 정보 가지고 오기
-			Long FILE_GRP_ID = null;
-			if(StringUtils.isNotEmpty((String)param.get("file_grp_id"))) {
-				FILE_GRP_ID = Long.parseLong((String)param.get("file_grp_id"));
-			}
-			FILE_GRP_ID = uploadFileService.uploadFiles(param, FILE_GRP_ID, uploadedFiles, filesToDelete);
-			param.put("file_grp_id", FILE_GRP_ID);
+		
+		// 업로드한 파일정보 
+		List<FileInfoVO> uploadedFiles = fileParameter.getFiles();
+		// 기존에 있었지만 삭제된 파일 정보 목록
+		List<Map<String,Object>> filesToDelete = (List<Map<String,Object>>)param.get("deleteFiles");
+		
+		// 기존에 파일 그룹정보가 있으면 업데이트를 위해서 파라미터로 정보 가지고 오기
+		Long FILE_GRP_ID = null;
+		if(StringUtils.isNotEmpty((String)param.get("file_grp_id"))) {
+			FILE_GRP_ID = Long.parseLong((String)param.get("file_grp_id"));
 		}
+		FILE_GRP_ID = uploadFileService.uploadFiles(param, FILE_GRP_ID, uploadedFiles, filesToDelete);
+		param.put("file_grp_id", FILE_GRP_ID);
+	
 		//----------------------------------------------------------- 파일 정보 업데이트 ---------------------------------------------
 
 		if(ObjectUtils.isEmpty(param.get("character_cd"))){

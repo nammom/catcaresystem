@@ -117,7 +117,7 @@
 				// 첨부파일 추가 이벤트
 				$("#sample-fileInput").MultiFile({
 					accept : "pdf|jpg|jpeg|gif|png|bmp|zip|txt|xlsx|hwp|doc|docx|csv|",
-					max : 20,
+					max : 5,
 					list : "#sample-fileList", // upload / or selected files
 					onFileSelect : function(element, value,
 							master_element) {
@@ -153,7 +153,7 @@
 					$("#sample-fileForm").bindJson(data['form']);
 					// 첨부파일 정보
 					if (data['files']) {
-						$.ccs.bindFile("sample", data['files']);
+						$.ccs.file.bindFile("sample", data['files']);
 					}
 				},
 				validate : function() {

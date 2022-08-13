@@ -45,8 +45,8 @@ public class HealthServiceImpl implements HealthService {
 	 */
 	@Override
 	public List<Map<String, Object>> selectHealthList(Map<String, Object> param) throws Exception {
-		List<Map<String, Object>> HealthList = healthMapper.selectHealthList(param);
-		for(Map<String, Object> e : HealthList) {
+		List<Map<String, Object>> healthList = healthMapper.selectHealthList(param);
+		for(Map<String, Object> e : healthList) {
 			//첨부파일 셋팅
 			if(e.get("file_grp_id") != null) {
 				Long file_grp_id = (Long)e.get("file_grp_id");
@@ -57,7 +57,7 @@ public class HealthServiceImpl implements HealthService {
 			}
 			e.put("_SESSION_USER_CD_", param.get("_SESSION_USER_CD_"));
 		}
-		return HealthList;
+		return healthList;
 	}
 	
 	/**
@@ -70,9 +70,9 @@ public class HealthServiceImpl implements HealthService {
 	public Map<String, Object> selectHealthDetail(Map<String, Object> param) throws Exception {
 		
 		//급여정보 조회
-		List<Map<String, Object>> HealthList = healthMapper.selectHealthByCd(param);
-		if(!CollectionUtils.isEmpty(HealthList)) {
-			Map<String, Object> detail = HealthList.get(0);
+		List<Map<String, Object>> healthList = healthMapper.selectHealthByCd(param);
+		if(!CollectionUtils.isEmpty(healthList)) {
+			Map<String, Object> detail = healthList.get(0);
 			//첨부파일 셋팅
 			if(detail.get("file_grp_id") != null) {
 				Long file_grp_id = (Long)detail.get("file_grp_id");
@@ -96,20 +96,20 @@ public class HealthServiceImpl implements HealthService {
 	@Override
 	public void insertHealth(Map<String, Object> param, FileParameter fileParameter) throws Exception{
 		//----------------------------------------------------------- 파일 정보 업데이트 ---------------------------------------------
-		if(fileParameter != null) {
-			// 업로드한 파일정보 
-			List<FileInfoVO> uploadedFiles = fileParameter.getFiles();
-			// 기존에 있었지만 삭제된 파일 정보 목록
-			List<Map<String,Object>> filesToDelete = (List<Map<String,Object>>)param.get("deleteFiles");
-			
-			// 기존에 파일 그룹정보가 있으면 업데이트를 위해서 파라미터로 정보 가지고 오기
-			Long FILE_GRP_ID = null;
-			if(StringUtils.isNotEmpty((String)param.get("file_grp_id"))) {
-				FILE_GRP_ID = Long.parseLong((String)param.get("file_grp_id"));
-			}
-			FILE_GRP_ID = uploadFileService.uploadFiles(param, FILE_GRP_ID, uploadedFiles, filesToDelete);
-			param.put("file_grp_id", FILE_GRP_ID);
+
+		// 업로드한 파일정보 
+		List<FileInfoVO> uploadedFiles = fileParameter.getFiles();
+		// 기존에 있었지만 삭제된 파일 정보 목록
+		List<Map<String,Object>> filesToDelete = (List<Map<String,Object>>)param.get("deleteFiles");
+		
+		// 기존에 파일 그룹정보가 있으면 업데이트를 위해서 파라미터로 정보 가지고 오기
+		Long FILE_GRP_ID = null;
+		if(StringUtils.isNotEmpty((String)param.get("file_grp_id"))) {
+			FILE_GRP_ID = Long.parseLong((String)param.get("file_grp_id"));
 		}
+		FILE_GRP_ID = uploadFileService.uploadFiles(param, FILE_GRP_ID, uploadedFiles, filesToDelete);
+		param.put("file_grp_id", FILE_GRP_ID);
+		
 		//----------------------------------------------------------- 파일 정보 업데이트 ---------------------------------------------
 
 		if(ObjectUtils.isEmpty(param.get("health_cd"))){
@@ -129,7 +129,7 @@ public class HealthServiceImpl implements HealthService {
 	 * @return
 	 */
 	@Override
-	public void deleteHealth(Map<String, Object> param)  throws Exception{
+	public void deleteHealth(Map<String, Object> param) throws Exception{
 		if(this.checkUserCd(param)) {
 			healthMapper.deleteHealth(param);
 		}else {

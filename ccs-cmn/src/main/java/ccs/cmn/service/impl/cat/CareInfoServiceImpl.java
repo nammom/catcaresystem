@@ -24,7 +24,7 @@ import ccs.cmn.service.cat.CareInfoService;
 public class CareInfoServiceImpl implements CareInfoService {
 
 	@Resource(name="CareInfoMapper")
-	CareInfoMapper careInfoMapper;
+	private CareInfoMapper careInfoMapper;
 
 	/**
 	 * 고양이 돌봄 정보 목록 조회

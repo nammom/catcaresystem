@@ -3,7 +3,12 @@
 <%@ include file="/WEB-INF/jsp/layout/header.jsp"%>
 
 <div class="container">
-	<!--template 영역  -->
+	<form>
+		<input type="hidden" id="cat_cd" name="cat_cd" value="<c:out value="${cat_cd}" />"/>
+	</form>
+	<div class="profile">
+		<!--template 영역  -->
+	</div>
 </div>
 
 
@@ -71,14 +76,7 @@
 				<th>중성화 여부</th>
 				<td colspan="2">{{>neutering_yn}}</td>
 			</tr>
-			{{/if}}
-			<tr class="table-light">
-				<th>특징</th>
-				<td></td>
-				<td>
-				    <button type="button" id="btn-character-detail" class="btn btn-primary btn-sm">상세보기</button>
-				</td>
-			</tr>			
+			{{/if}}		
 			<tr class="table-light">
 				<th>돌봄</th>
 				<td colspan="2">
@@ -93,6 +91,13 @@
 			    	<button type="button" id="btn-bookmark-list" class="btn btn-warning">목록</button>
 				</td>
 			</tr>
+			<tr class="table-light">
+				<th>특징</th>
+				<td></td>
+				<td>
+				    <button type="button" id="btn-character-detail" class="btn btn-primary btn-sm">상세보기</button>
+				</td>
+			</tr>	
 			{{if caution_yn == "Y"}}
 			<tr class="table-light">
 				<td colspan="3">
@@ -102,9 +107,7 @@
 			<tr class="table-light">
 				<th>공격성</th>
 				<td>{{>aggression}}</td>
-				<td>
-					<button type="button" id="btn-aggression-detail" class="btn btn-primary btn-sm">상세보기</button>
-				</td>					
+				<td></td>					
 			</tr>
 			<tr class="table-light">
 				<th>예민함</th>
@@ -132,7 +135,7 @@
 				  	</details>
 				</td>
 				<td>
-					<button type="button" id="btn-disease-detail" class="btn btn-primary btn-sm">상세보기</button>
+					<button type="button" id="btn-health-detail" class="btn btn-primary btn-sm">상세보기</button>
 				</td>				
 			</tr>
 			{{/if}}												
@@ -158,25 +161,22 @@ function fn_page() {
 	let $this = this;
 	let PAGE_URL = "/cat/catProfile";
 	let $template, $noInfoTmpl;
-	let cat_cd;
+	let CAT_CD;
 	
 	this.initialize = function() {
 		$template = $("#tmpl");
 		$noInfoTmpl = $("#noInfoTmpl");
-		cat_cd="<c:out value="${cat_cd}" />";
+		CAT_CD = Number($("#cat_cd").val());
 		$this.initData();
 		
 		$(document).on("click", "#btn-care-detail", function(){
-			
+			$this.locationManager.careInfo();
 		});
 		$(document).on("click", "#btn-character-detail", function(){
-			
+			$this.locationManager.character();
 		});
-		$(document).on("click", "#btn-aggression-detail", function(){
-			
-		});
-		$(document).on("click", "#btn-disease-detail", function(){
-			
+		$(document).on("click", "#btn-health-detail", function(){
+			$this.locationManager.health();
 		});
 		$(document).on("click", "#btn-care", function(){
 			//돌봄
@@ -202,7 +202,7 @@ function fn_page() {
 		getData : function(){
 			$.ccs.ajax({
 				url : PAGE_URL + "/selectData"
-				, data : {"cat_cd" : Number(cat_cd)}
+				, data : {"cat_cd" : CAT_CD}
 				, success : function(data){
 					$this.dataManager.setData(data);
 				}
@@ -215,21 +215,27 @@ function fn_page() {
 			}else{
 				htmlOut = $noInfoTmpl.render();
 			}
-			$(".container")
+			$(".profile")
 				.empty()
 				.append(htmlOut);
 		}
 	}
 	
 	this.locationManager = {
-			careList : function(page){
-				$this.locationManager.location("/careList");
+			careList : function(){
+				location.href = PAGE_URL + "/careList/" + CAT_CD;
 			},
-			bookMarkList : function(page){
-				$this.locationManager.location("/bookMarkList");
+			bookMarkList : function(){
+				location.href = PAGE_URL + "/bookMarkList/" + CAT_CD;
 			},
-			location : function(page){
-				location.href = PAGE_URL + page + "/" + cat_cd;
+			careInfo : function(page){
+				location.href = "/cat/careInfo" + "/" + CAT_CD;
+			},
+			character : function(page){
+				location.href = "/care/character/cat/" + CAT_CD;
+			},
+			health : function(page){
+				location.href = "/care/health/cat/" + CAT_CD;
 			}
 			
 	}
@@ -238,7 +244,7 @@ function fn_page() {
 			care : function(){
 				$.ccs.ajax({
 					url : PAGE_URL + "/care"
-					, data : {"target_cd" : Number(cat_cd)
+					, data : {"target_cd" : CAT_CD
 							, "target_type" : 1}
 					, success : function(data){
 						//$this.actionManager.careCallback(data);
@@ -249,7 +255,7 @@ function fn_page() {
 			bookMark : function(){
 				$.ccs.ajax({
 					url : PAGE_URL + "/bookMark"
-					, data : {"target_cd" : Number(cat_cd)
+					, data : {"target_cd" : CAT_CD
 							, "target_type" : 1}
 					, success : function(data){
 						//$this.actionManager.careCallback(data);

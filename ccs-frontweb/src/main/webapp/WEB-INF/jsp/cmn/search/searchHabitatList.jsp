@@ -146,7 +146,12 @@ function fn_modal() {
 		        		 		"title": "고유코드"
 		        		 		, "data": "habitat_cd"
 		        		 		, "name": "habitat_cd"
-		        		 	}, 
+		        		 	},
+		        		 	{
+			    		 		"title": "서식지명"
+			    		 		, "data": "habitat_nm"
+			    		 		, "name": "habitat_nm"
+			    		 	},
 					        {
 		        		 		"title": "주소"
 		        		 		, "data": "area_nm"

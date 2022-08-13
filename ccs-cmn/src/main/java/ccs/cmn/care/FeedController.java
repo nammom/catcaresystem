@@ -97,7 +97,7 @@ public class FeedController {
 								Model model) throws Exception{
 		
 		model.addAttribute("feed_cd", feed_cd);
-		model.addAllAttributes(systemParameter.toMap());
+		model.addAttribute("_SESSION_USER_CD_", systemParameter.toMap().get("_SESSION_USER_CD_"));
 		
 		return "cmn/care/feedForm";
 	}
@@ -115,7 +115,7 @@ public class FeedController {
 							Model model) throws Exception{
 		
 		model.addAttribute("cat_cd", cat_cd);
-		model.addAllAttributes(systemParameter.toMap());
+		model.addAttribute("_SESSION_USER_CD_", systemParameter.toMap().get("_SESSION_USER_CD_"));
 		
 		return "cmn/care/feedForm";
 	}

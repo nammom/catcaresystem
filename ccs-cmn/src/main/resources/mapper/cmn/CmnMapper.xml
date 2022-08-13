@@ -105,7 +105,7 @@
 		ORDER BY C.CAT_CD DESC
 	</select>
 	
-	<!-- 고양이 검색  -->
+	<!-- 서식지 검색  -->
 	<select id="selectSearchHabitatList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT H.HABITAT_CD 
 			, H.HABITAT_NM

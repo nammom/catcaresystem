@@ -20,7 +20,7 @@ import ccs.cmn.service.cat.CatGroupService;
 public class CatGroupServiceImpl implements CatGroupService {
 
 	@Resource(name="CatGroupMapper")
-	CatGroupMapper catGroupMapper;
+	private CatGroupMapper catGroupMapper;
 
 	/**
 	 * 고양이 그룹 정보 조회
