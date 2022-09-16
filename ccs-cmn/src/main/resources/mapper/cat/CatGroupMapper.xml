@@ -8,10 +8,10 @@
 	<select id="selectCatGroupMemberList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT G.CAT_CD
 				, G.REG_DT
-				, FN_GET_AREA_NAME(C.SIDO_CD) || ' ' ||
-					FN_GET_AREA_NAME(C.SIGUNGU_CD) || ' ' || 
-					FN_GET_AREA_NAME(C.DONG_CD)                     AS AREA_NM
-				, FN_GET_CODE_NAME('C0003', P.CATKIND_CD) 			AS CAT_KIND_NM
+				, COALESCE(FN_GET_AREA_NAME(C.SIDO_CD), '') 		|| ' ' ||
+					COALESCE(FN_GET_AREA_NAME(C.SIGUNGU_CD), '') 	|| ' ' || 
+					COALESCE(FN_GET_AREA_NAME(C.DONG_CD), '')                   AS AREA_NM
+				, FN_GET_CODE_NAME('C0003', P.CATKIND_CD) 						AS CAT_KIND_NM
 				, F.FILE_PATH
 				, N.CAT_NAME
 		FROM TB_CAT_GRP_INFO G
@@ -32,9 +32,9 @@
 	<select id="selectCatGroupList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT G.CAT_GRP_CD										AS CAT_CD
 				, G.REG_DT
-				, FN_GET_AREA_NAME(C.SIDO_CD) || ' ' ||
-					FN_GET_AREA_NAME(C.SIGUNGU_CD) || ' ' || 
-					FN_GET_AREA_NAME(C.DONG_CD)                     AS AREA_NM
+				, COALESCE(FN_GET_AREA_NAME(C.SIDO_CD), '') 		|| ' ' ||
+					COALESCE(FN_GET_AREA_NAME(C.SIGUNGU_CD), '') 	|| ' ' || 
+					COALESCE(FN_GET_AREA_NAME(C.DONG_CD), '')                     AS AREA_NM
 				, F.FILE_PATH
 				, N.CAT_NAME
 		FROM TB_CAT_GRP_INFO G
