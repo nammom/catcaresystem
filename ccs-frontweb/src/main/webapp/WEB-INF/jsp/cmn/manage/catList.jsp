@@ -30,33 +30,43 @@
 		</div>
 		<div class="row">
 			<div class="form-group col-md-2">
-	         	<label for="habitat_nm" class="form-label">서식지명</label>
+	         	<label for="cat_name" class="form-label">고양이애칭</label>
         	</div>
 	        <div class="form-group col-md-3">
-	           	<input class="form-control" id="habitat_nm" name="habitat_nm" type="text">
+	           	<input class="form-control" id="cat_name" name="cat_name" type="text">
 	        </div>
 	        <div class="form-group col-md-3">
-	         	<label for="habitat_cd" class="form-label">고유코드</label>
-        	</div>
-	        <div class="form-group col-md-3">
-	           	<input class="form-control" id="habitat_cd" name="habitat_cd" type="text">
-	        </div>
-	    </div>
-	    <div class="row">
-	    	<div class="form-group col-md-2">
-	         	<label for="cat_cd" class="form-label">서식고양이코드</label>
+	         	<label for="cat_cd" class="form-label">고유코드</label>
         	</div>
 	        <div class="form-group col-md-3">
 	           	<input class="form-control" id="cat_cd" name="cat_cd" type="text">
 	        </div>
-	        <div class="form-group col-md-6">
+	    </div>
+	    <div class="row">
+	    	<div class="form-group col-md-2">
+	         	<label for="group_yn" class="form-label">무리 여부</label>
+        	</div>
+	    	<div class="form-group col-md-3">
+				<select id="group_yn" name="group_yn" class="form-control">
+                	<option value="" >전체</option>
+                	<option value="N" >개별</option>
+                	<option value="Y" >무리</option>
+                </select> 
+			</div>
+	    	<div class="form-group col-md-3">
+	         	<label for="habitat_cd" class="form-label">고양이 서식지 코드</label>
+        	</div>
+	        <div class="form-group col-md-3">
+	           	<input class="form-control" id="habitat_cd" name="habitat_cd" type="text">
+	        </div>
+	        <div class="form-group col-md-1">
 	         	<button class="btn btn-secondary my-2 my-sm-0 float-right" type="button" id="btn-search">검색</button>
 	        </div>
 	    </div>
 	</form>	    
 </div>
 	<div class="col-md-12">
-		<table id="habitatList"></table>
+		<table id="catList"></table>
 	</div>
 </div>
 
@@ -70,7 +80,7 @@ $(document).ready(function() {
 
 function fn_page() {
 	let $this = this;
-	let PAGE_URL = "/manage/habitat";
+	let PAGE_URL = "/manage/cat";
 	
 	this.$table;
 	this.initialize = function() {
@@ -104,38 +114,43 @@ function fn_page() {
 						 			, "orderable": false
 				    		 		, "searchable": false
 				    		 		, "render": function ( data, type, row, meta ) {
+				    		 			
 				    		 						if(data){
 							        		 	      	return '<img class="img-profile-s" src="/images/' + data + '"/>';
 				    		 						}else{
-				    		 							return '<img class="img-profile-s" src="/images/cmn/basic_habitat_profile.jpg"/>';
+				    		 							if(row['group_yn'] == 'Y') {
+				    		 								return '<img class="img-profile-s" src="/images/cmn/basic_cat_grp_profile.jpg"/>';
+				    		 							} else {
+					    		 							return '<img class="img-profile-s" src="/images/cmn/basic_cat_profile.jpg"/>';
+				    		 							}
 				    		 						}
 								            	}
 				    		 	},
 						        {
 				    		 		"title": "고유코드"
-				    		 		, "data": "habitat_cd"
-				    		 		, "name": "habitat_cd"
+				    		 		, "data": "cat_cd"
+				    		 		, "name": "cat_cd"
 				    		 	},
 				    		 	{
-				    		 		"title": "서식지명"
-				    		 		, "data": "habitat_nm"
-				    		 		, "name": "habitat_nm"
+				    		 		"title": "애칭"
+				    		 		, "data": "cat_name"
+				    		 		, "name": "cat_name"
+				    		 	},
+						        {
+				    		 		"title": "품종"
+				    		 		, "data": "cat_kind_nm"
+				    		 		, "name": "cat_kind_nm"
 				    		 	},
 						        {
 				    		 		"title": "주소"
 				    		 		, "data": "area_nm"
 				    		 		, "name": "area_nm"
-				    		 	},
-						        {
-				    		 		"title": "상세주소"
-				    		 		, "data": "address"
-				    		 		, "name": "address"
 				    		 	}
 				    		 ];
 				        	
-        	let colIdx = $.ccs.findIndexByKey(columnArr, "name", "habitat_cd"); 
+        	let colIdx = $.ccs.findIndexByKey(columnArr, "name", "cat_cd"); 
         		 	
-			$this.$table = $('#habitatList').DataTable({
+			$this.$table = $('#catList').DataTable({
 				order : [[colIdx, 'desc']],// 최초 로딩시 정렬 컬럼 설정
 				destroy : true,//테이블 파괴가능
 			    processing : true,
@@ -176,8 +191,8 @@ function fn_page() {
 			$this.$table.on( 'select', function ( e, dt, type, indexes ) {
 			    if ( type === 'row' ) {
 			        let row = $.ccs.table.getSelectedRows($this.$table);
-			        if(row[0]['habitat_cd']){
-						$this.locationManager.detail(row[0]['habitat_cd']);
+			        if(row[0]['cat_cd']){
+						$this.locationManager.detail(row[0]['cat_cd']);
 			        }
 			    }
 			} );
@@ -189,8 +204,8 @@ function fn_page() {
 	}
 	
 	this.locationManager = {
-		detail : function(_habitat_cd) {
-			location.href = PAGE_URL + "/profile/" + _habitat_cd;				
+		detail : function(_cat_cd) {
+			location.href = "/cat/catProfile/" + _cat_cd;				
 		},
 		form : function(){
 			location.href = PAGE_URL + "/form";

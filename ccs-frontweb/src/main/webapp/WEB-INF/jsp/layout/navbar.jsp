@@ -12,13 +12,13 @@
       <div class="navbar-nav">
         <a class="nav-link" data-pagenm="myzone" aria-current="page" href="#">나의 돌봄존</a>
         <a class="nav-link" data-pagenm="habitat" href="/manage/habitat?pagenm=habitat">서식지 관리</a>
-        <a class="nav-link" data-pagenm="cat" href="#">고양이 관리</a>
+        <a class="nav-link" data-pagenm="cat" href="/manage/cat?pagenm=cat">고양이 관리</a>
         <a class="nav-link" data-pagenm="map-search" href="#">지도검색</a>
         <a class="nav-link" data-pagenm="service-center" href="#">고객센터</a>
       </div>
       <div class="icon-navbar-nav">
         <a class="nav-link" data-pagenm="habitat" href="/manage/habitat?pagenm=habitat"></a>
-        <a class="nav-link" data-pagenm="myzone" aria-current="page" href="#"></a>
+        <a class="nav-link" data-pagenm="myzone" aria-current="page" href="/manage/cat?pagenm=cat"></a>
         <a class="nav-link" data-pagenm="cat" href="#"></a>
         <a class="nav-link" data-pagenm="etc" href="/menu/etc?pagenm=etc"></a>
       </div>

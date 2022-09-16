@@ -1,53 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="ccs.cmn.mapper.manage.HabitatMapper">
+<mapper namespace="ccs.cmn.mapper.manage.CatMapper">
 <!-- 서식지 관리 페이지 -->
 
 	<!-- 서식지 목록 조회 -->
-	<select id="selectHabitatList" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT H.HABITAT_CD 
-				, H.HABITAT_NM
-				, COALESCE(FN_GET_AREA_NAME(H.SIDO_CD), '') 		|| ' ' ||
-					COALESCE(FN_GET_AREA_NAME(H.SIGUNGU_CD), '') 	|| ' ' || 
-					COALESCE(FN_GET_AREA_NAME(H.DONG_CD), '')        AS AREA_NM
-				, H.ADDRESS
-				, H.SIDO_CD
-				, H.SIGUNGU_CD
-				, H.DONG_CD
-				, H.ADDRESS
-				, H.HABITAT_NM
-				, H.LAT
-				, H.LNG
-				, H.USER_CD
-				, F.FILE_PATH 
-		FROM TB_HABITAT H 
+	<select id="selectCatList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT C.CAT_CD  
+			, C.GROUP_YN
+			, N.CAT_NAME
+			, COALESCE(FN_GET_CODE_NAME('C0003', P.CATKIND_CD), '무리')		AS CAT_KIND_NM
+			, COALESCE(FN_GET_AREA_NAME(C.SIDO_CD), '') 		|| ' ' ||
+				COALESCE(FN_GET_AREA_NAME(C.SIGUNGU_CD), '') 	|| ' ' || 
+				COALESCE(FN_GET_AREA_NAME(C.DONG_CD), '')        			AS AREA_NM
+			, F.FILE_PATH 
+		FROM TB_CAT C
+			LEFT JOIN TB_CAT_PROFILE P
+				ON C.CAT_CD = P.CAT_CD
+			LEFT JOIN TB_CAT_GRP_PROFILE G
+				ON C.CAT_CD = G.CAT_CD 
 			LEFT JOIN TB_FILE F 
-				ON H.FILE_GRP_ID = F.FILE_GRP_ID
+				ON (P.FILE_GRP_ID = F.FILE_GRP_ID OR G.FILE_GRP_ID = F.FILE_GRP_ID )
+			LEFT JOIN TB_CAT_NAME N
+				ON (C.CAT_CD = N.CAT_CD AND N.USER_CD = 1)
 		<where>
 			<if test="sido_cd != null and !sido_cd.equals('')">
-				H.SIDO_CD = #{sido_cd}
+				C.SIDO_CD = #{sido_cd}
 			</if>
 			<if test="sigungu_cd != null and !sigungu_cd.equals('')">
-				AND H.SIGUNGU_CD = #{sigungu_cd}
+				AND C.SIGUNGU_CD = #{sigungu_cd}
 			</if>
 			<if test="dong_cd != null and !dong_cd.equals('')">
-				AND H.DONG_CD = #{dong_cd}
-			</if>
-			<if test="habitat_cd != null and !habitat_cd.equals('')">
-				AND H.HABITAT_CD = #{habitat_cd}
-			</if>
-			<if test="habitat_nm != null and !habitat_nm.equals('')">
-				AND H.HABITAT_NM like '%'|| #{habitat_nm} ||'%'
+				AND C.DONG_CD = #{dong_cd}
 			</if>
 			<if test="cat_cd != null and !cat_cd.equals('')">
+				AND C.CAT_CD = #{cat_cd}
+			</if>
+			<if test="group_yn != null and !group_yn.equals('')">
+				AND C.GROUP_YN = #{group_yn}
+			</if>
+			<if test="cat_name != null and !cat_name.equals('')">
+				AND N.CAT_NAME  like '%'|| #{cat_name} ||'%'
+			</if>
+			<if test="habitat_cd != null and !habitat_cd.equals('')">
 				AND (	SELECT COUNT(*) 
 						FROM TB_HABITAT_INFO I 
-						WHERE I.HABITAT_CD = H.HABITAT_CD 
-						AND I.CAT_CD = #{cat_cd}
+						WHERE I.HABITAT_CD = #{habitat_cd} 
+						AND I.CAT_CD = C.CAT_CD
 					) > 0
 			</if>
 		</where>
-		ORDER BY H.HABITAT_CD DESC
+		ORDER BY C.CAT_CD DESC
 	</select>
 
 	<select id="selectHabitatByCd" parameterType="java.util.Map" resultType="java.util.Map">
