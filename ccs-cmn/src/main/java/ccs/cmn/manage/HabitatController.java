@@ -63,7 +63,6 @@ public class HabitatController {
 							Model model) throws Exception{
 		
 		model.addAttribute("habitat_cd", habitat_cd);
-		model.addAttribute("_SESSION_USER_CD_", systemParameter.toMap().get("_SESSION_USER_CD_"));
 		
 		return "cmn/manage/habitatProfile";
 	}
@@ -80,7 +79,6 @@ public class HabitatController {
 							Model model) throws Exception{
 		
 		model.addAttribute("habitat_cd", habitat_cd);
-		model.addAttribute("_SESSION_USER_CD_", systemParameter.toMap().get("_SESSION_USER_CD_"));
 		
 		return "cmn/manage/habitatForm";
 	}
@@ -93,8 +91,6 @@ public class HabitatController {
 	 */
 	@RequestMapping("/form")
 	public String form(SystemParameter systemParameter, Model model) throws Exception{
-		
-		model.addAttribute("_SESSION_USER_CD_", systemParameter.toMap().get("_SESSION_USER_CD_"));
 		
 		return "cmn/manage/habitatForm";
 	}

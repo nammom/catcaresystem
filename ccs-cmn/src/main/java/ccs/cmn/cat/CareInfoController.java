@@ -59,7 +59,7 @@ public class CareInfoController {
 								SystemParameter systemParameter,
 								Model model) throws Exception{
 		model.addAttribute("catcare_cd", catcare_cd);
-		model.addAttribute("_SESSION_USER_CD_", systemParameter.toMap().get("_SESSION_USER_CD_"));
+		
 		return "cmn/cat/careInfoForm";
 	}
 	
@@ -69,7 +69,6 @@ public class CareInfoController {
 								Model model) throws Exception{
 		
 		model.addAttribute("cat_cd", cat_cd);
-		model.addAttribute("_SESSION_USER_CD_", systemParameter.toMap().get("_SESSION_USER_CD_"));
 		
 		return "cmn/cat/careInfoForm";
 	}
