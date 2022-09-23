@@ -7,22 +7,29 @@
 	<!-- 고양이 프로필 정보 조회 -->
 	<select id="selectCatProfile" parameterType="java.util.Map" resultType="java.util.Map">
 	SELECT C.CAT_CD 
-			, MAX(C.GROUP_YN) 													AS GROUP_YN
-			, MAX(CASE WHEN TCC2.CARE_TYPE = 'E' THEN '종료' ELSE '재개' END) 		AS CARE_TYPE_NM
-			, MAX(fn_get_code_name('C0002', TCC2.REASON_CD)) 					AS CARE_REASON_NM	
-			, MAX(fn_get_area_name(C.SIDO_CD))									AS SIDO_NM
-			, MAX(fn_get_area_name(C.SIGUNGU_CD))                               AS SIGUNGU_NM
-			, MAX(fn_get_area_name(C.DONG_CD))                                  AS DONG_NM
-			, MAX(fn_get_code_name('C0003', TCP.CATKIND_CD)) 					AS CAT_KIND_NM
-			, MAX(TCP.INTRODUCTION)                                             AS INTRODUCTION
-			, MAX(TCP.FILE_GRP_ID)                                              AS FILE_GRP_ID
-			, MAX(TF.FILE_PATH)                                                 AS FILE_PATH
-			, MAX(CASE WHEN TCC.CAUTION_YN = 'Y' THEN 'Y' ELSE null END)        AS CAUTION_YN
-			, AVG(TCC.AGGRESSION)                                               AS AGGRESSION
-			, AVG(TCC.SENSITIVITY)                                              AS SENSITIVITY
-			, MAX(TCN.CAT_NAME)													AS CAT_NAME
-			, COUNT(TCR.TARGET_CD)												AS CARE_YN
-			, COUNT(TBM.TARGET_CD)												AS BOOKMARK_YN		
+			, MAX(C.GROUP_YN) 														AS GROUP_YN
+			, MAX(CASE WHEN TCC2.CARE_TYPE = 'E' THEN '종료' ELSE '재개' END) 			AS CARE_TYPE_NM
+			, MAX(fn_get_code_name('C0002', TCC2.REASON_CD)) 						AS CARE_REASON_NM	
+			, MAX(fn_get_area_name(C.SIDO_CD))										AS SIDO_NM
+			, MAX(fn_get_area_name(C.SIGUNGU_CD))                               	AS SIGUNGU_NM
+			, MAX(fn_get_area_name(C.DONG_CD))                                  	AS DONG_NM
+			, MAX(COALESCE(fn_get_code_name('C0003', TCP.CATKIND_CD), '알수없음')) 	AS CAT_KIND_NM
+			, MAX(TCP.AGE)															AS AGE
+			, MAX(CASE WHEN TCP.GENDER = 'F' THEN '암컷'
+					WHEN TCP.GENDER = 'M' THEN '수컷'
+					ELSE '알수없음' END)												AS GENDER
+			, MAX(CASE WHEN TCP.NEUTERING_YN = 'Y' THEN '예'
+					WHEN TCP.NEUTERING_YN = 'N' THEN '아니오'
+					ELSE '알수없음' END)												AS NEUTERING_YN
+			, MAX(TCP.INTRODUCTION)                                             	AS INTRODUCTION
+			, MAX(TCP.FILE_GRP_ID)                                              	AS FILE_GRP_ID
+			, MAX(TF.FILE_PATH)                                                 	AS FILE_PATH
+			, MAX(CASE WHEN TCC.CAUTION_YN = 'Y' THEN 'Y' ELSE null END)        	AS CAUTION_YN
+			, AVG(TCC.AGGRESSION)                                               	AS AGGRESSION
+			, AVG(TCC.SENSITIVITY)                                              	AS SENSITIVITY
+			, MAX(TCN.CAT_NAME)														AS CAT_NAME
+			, COUNT(TCR.TARGET_CD)													AS CARE_YN
+			, COUNT(TBM.TARGET_CD)													AS BOOKMARK_YN		
 		FROM TB_CAT C
 			LEFT JOIN TB_CAT_PROFILE TCP
 				ON C.CAT_CD = TCP.CAT_CD
@@ -103,7 +110,39 @@
 		WHERE H.CAT_CD = #{cat_cd}
 	</select>
 	
+	<!-- ** 고양이 애칭 등록 ** -->	
+	<select id="selectCatName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT N.CAT_CD
+			, N.CAT_NAME
+		FROM TB_CAT_NAME N
+		WHERE N.USER_CD = #{_SESSION_USER_CD_}
+			AND N.CAT_CD = #{target_cd}
+	</select>
 	
+	<delete id="deleteCatName" parameterType="java.util.Map">
+		DELETE FROM TB_CAT_NAME N
+		WHERE N.USER_CD = #{_SESSION_USER_CD_}
+			AND N.CAT_CD = #{target_cd}
+	</delete>
+	
+	<select id="insertCatName" parameterType="java.util.Map" resultType="java.lang.Integer">
+		INSERT INTO TB_CAT_NAME 
+				(USER_CD
+				, CAT_CD
+				, CAT_NAME
+				, REG_ID
+				, REG_DT
+				, UPDT_ID
+				, UPDT_DT) 
+		VALUES (#{_SESSION_USER_CD_}
+					, #{target_cd}
+					, #{cat_name}
+					, #{_SESSION_USER_CD_} -- 입력사용자
+					, NOW() -- 입력일자
+					, #{_SESSION_USER_CD_} -- 변경사용자
+					, NOW() -- 변경일자
+		) 
+	</select>
 	
 <!-- ** 돌봄 등록 or 해제 ** -->
 

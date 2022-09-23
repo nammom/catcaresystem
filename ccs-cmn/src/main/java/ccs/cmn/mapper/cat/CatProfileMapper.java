@@ -82,4 +82,24 @@ public interface CatProfileMapper {
 	 */
 	public List<Map<String, Object>> selectBookMarkList(Map<String, Object> param);
 
+	/**
+	 * 고양이 애칭 조회
+	 * @param param
+	 * @return
+	 */
+	public List<Map<String, Object>> selectCatName(Map<String, Object> param);
+
+	/**
+	 * 고양이 애칭 삭제
+	 * @param param
+	 */
+	public Integer deleteCatName(Map<String, Object> param);
+
+	/**
+	 * 고양이 애칭 저장
+	 * @param param
+	 * @return
+	 */
+	public Integer insertCatName(Map<String, Object> param);
+
 }

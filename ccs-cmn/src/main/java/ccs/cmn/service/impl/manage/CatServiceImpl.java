@@ -48,18 +48,18 @@ public class CatServiceImpl implements CatService {
 	}
 
 	/**
-	 * 서식지 상세 조회
+	 * 고양이 상세 조회
 	 * @param data
 	 * @return
 	 * @throws Exception 
 	 */
 	@Override
-	public Map<String, Object> selectHabitatDetail(Map<String, Object> data) throws Exception {
+	public Map<String, Object> selectCatDetail(Map<String, Object> data) throws Exception {
 		
 		//서식지 정보 조회
-		List<Map<String, Object>> habitatList = catMapper.selectHabitatByCd(data);
-		if(!CollectionUtils.isEmpty(habitatList)) {
-			Map<String, Object> detail = habitatList.get(0);
+		List<Map<String, Object>> catList = catMapper.selectCatByCd(data);
+		if(!CollectionUtils.isEmpty(catList)) {
+			Map<String, Object> detail = catList.get(0);
 			//첨부파일 셋팅
 			if(detail.get("file_grp_id") != null) {
 				Long file_grp_id = (Long)detail.get("file_grp_id");
@@ -73,33 +73,16 @@ public class CatServiceImpl implements CatService {
 			return null;
 		}
 	}
-
-	/**
-	 * 서식지 프로필 조회
-	 * @param data
-	 * @return
-	 * @throws Exception 
-	 */
-	@Override
-	public Map<String, Object> selectHabitatProfile(Map<String, Object> data) {
-		//서식지 정보 조회
-		List<Map<String, Object>> habitatList = catMapper.selectHabitatByCd(data);
-		if(!CollectionUtils.isEmpty(habitatList)) {
-			return habitatList.get(0);
-		}else {
-			return null;
-		}
-	}
 	
 	/**
-	 * 서식지 저장(수정)
+	 * 고양이 저장(수정)
 	 * @param param
 	 * @param fileParameter
 	 * @throws Exception 
 	 */
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public Map<String, Object> insertHabitat(Map<String, Object> param, FileParameter fileParameter) throws Exception {
+	public Map<String, Object> insertCat(Map<String, Object> param, FileParameter fileParameter) throws Exception {
 		//----------------------------------------------------------- 파일 정보 업데이트 ---------------------------------------------
 
 		// 업로드한 파일정보 
@@ -117,11 +100,24 @@ public class CatServiceImpl implements CatService {
 
 		//----------------------------------------------------------- 파일 정보 업데이트 ---------------------------------------------
 
-		if(ObjectUtils.isEmpty(param.get("habitat_cd"))){
-			catMapper.insertHabitat(param);
+		if(ObjectUtils.isEmpty(param.get("cat_cd"))){
+			catMapper.insertCat(param);
+			param.put("cat_cd", Long.parseLong((String)param.get("cat_cd")));
+			
+			if(this.isGroup(param)) {
+				catMapper.insertCatGrpProfile(param);
+			} else {
+				catMapper.insertCatProfile(param);
+			}
 		}else {
 			if(this.checkUserCd(param)) {
-				catMapper.updateHabitat(param);
+				catMapper.updateCat(param);
+				
+				if(this.isGroup(param)) {
+					catMapper.updateCatGrpProfile(param);
+				} else {
+					catMapper.updateCatProfile(param);
+				}
 			}else {
 				throw new Exception();
 			}
@@ -131,16 +127,54 @@ public class CatServiceImpl implements CatService {
 	}
 
 	/**
-	 * 서식지 삭제
+	 * 고양이 삭제
 	 * @param param
 	 */
 	@Override
-	public void deleteHabitat(Map<String, Object> param) throws Exception{
+	public void deleteCat(Map<String, Object> param) throws Exception{
 		if(this.checkUserCd(param)) {
-			catMapper.deleteHabitat(param);
+			catMapper.deleteCat(param);
+			
+			if(this.isGroup(param)) {
+				catMapper.deleteCatGrpProfile(param);
+			} else {
+				catMapper.deleteCatProfile(param);
+			}
 		}else {
 			throw new Exception();
 		}
+	}
+	
+	public boolean isGroup(Map<String, Object> param) throws Exception{
+		String group_yn = (String)param.get("group_yn");
+		if(StringUtils.isNotEmpty(group_yn)) {
+			if(StringUtils.equals(group_yn, "Y")) {
+				return true;
+			}
+			return false;
+		} else {
+			List<Map<String, Object>> result = catMapper.selectCatByCd(param);
+			if(CollectionUtils.isEmpty(result)) {
+				throw new Exception();
+			}
+			if(StringUtils.equals((String) result.get(0).get("group_yn"), "Y") ) {
+				return true;
+			} 
+			return false;
+		}
+	}
+	
+	/**
+	 * 고양이 그룹에 소속된 고양이 수 체크
+	 * @param param
+	 * @return
+	 */
+	public boolean checkCatMemberCount(Map<String, Object> param) {
+		Integer count = catMapper.selectCatGrpMemberCount(param);
+		if(count > 0) {
+			return false;
+		}
+		return true;
 	}
 	
 	/**
@@ -148,10 +182,10 @@ public class CatServiceImpl implements CatService {
 	 * @param param
 	 * @return
 	 */
-	private boolean checkUserCd(Map<String, Object> param) {
-		List<Map<String, Object>> result = catMapper.selectHabitatByCd(param);
+	private boolean checkUserCd(Map<String, Object> param) throws Exception{
+		List<Map<String, Object>> result = catMapper.selectCatByCd(param);
 		if(CollectionUtils.isEmpty(result)) {
-			return false;
+			throw new Exception();
 		}
 		UserDetailsDto userInfo = (UserDetailsDto)SessionUtility.getUserDetails();
 		if(Long.compare((long) result.get(0).get("user_cd"), userInfo.getUserCd()) != 0 ) {

@@ -75,10 +75,10 @@ public class CareInfoServiceImpl implements CareInfoService {
 	 * @param param
 	 * @return
 	 */
-	private boolean checkUserCd(Map<String, Object> param) {
+	private boolean checkUserCd(Map<String, Object> param) throws Exception{
 		List<Map<String, Object>> result = careInfoMapper.selectCareInfoList(param);
 		if(CollectionUtils.isEmpty(result)) {
-			return false;
+			throw new Exception();
 		}
 		UserDetailsDto userInfo = (UserDetailsDto)SessionUtility.getUserDetails();
 		if(Long.compare((long) result.get(0).get("user_cd"), userInfo.getUserCd()) != 0 ) {

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -112,6 +113,31 @@ public class CatProfileServiceImpl implements CatProfileService {
 	public List<Map<String, Object>> selectBookMarkList(Map<String, Object> param) {
 		return catProfileMapper.selectBookMarkList(param);
 	}
+
+	/**
+	 * 고양이 애칭 조회
+	 */
+	@Override
+	public Map<String, Object> selectCatName(Map<String, Object> param) {
+		List<Map<String, Object>> list = catProfileMapper.selectCatName(param);
+		if(!CollectionUtils.isEmpty(list)) {
+			return list.get(0);
+		}
+		return null;
+	}
+	
+	/**
+	 * 고양이 애칭 저장
+	 * @param param
+	 * @return
+	 */
+	@Override
+	public Integer saveCatName(Map<String, Object> param) {
+		catProfileMapper.deleteCatName(param);
+		return catProfileMapper.insertCatName(param);
+	}
+
+
 
 
 

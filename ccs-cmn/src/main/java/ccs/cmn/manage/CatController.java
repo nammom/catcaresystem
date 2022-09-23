@@ -37,7 +37,7 @@ public class CatController {
 	private CatService catService;
 	
 	/**
-	 * 서식지 목록 페이지
+	 * 고양이 목록 페이지
 	 * @param
 	 * @return
 	 * @throws Exception
@@ -51,24 +51,22 @@ public class CatController {
 	}
 	
 	/**
-	 * 서식지 수정 페이지
+	 * 고양이 수정 페이지
 	 * @param
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/form/{habitat_cd}")
-	public String edit(@PathVariable("habitat_cd") Long habitat_cd, 
-							SystemParameter systemParameter,
+	@RequestMapping("/form/{cat_cd}")
+	public String edit(@PathVariable("cat_cd") Long cat_cd, 
 							Model model) throws Exception{
 		
-		model.addAttribute("habitat_cd", habitat_cd);
-		model.addAttribute("_SESSION_USER_CD_", systemParameter.toMap().get("_SESSION_USER_CD_"));
+		model.addAttribute("cat_cd", cat_cd);
 		
-		return "cmn/manage/habitatForm";
+		return "cmn/manage/catForm";
 	}
 	
 	/**
-	 * 서식지 등록 페이지
+	 * 고양이 등록 페이지
 	 * @param
 	 * @return
 	 * @throws Exception
@@ -76,9 +74,7 @@ public class CatController {
 	@RequestMapping("/form")
 	public String form(SystemParameter systemParameter, Model model) throws Exception{
 		
-		model.addAttribute("_SESSION_USER_CD_", systemParameter.toMap().get("_SESSION_USER_CD_"));
-		
-		return "cmn/manage/habitatForm";
+		return "cmn/manage/catForm";
 	}
 	
 	/**
@@ -87,7 +83,7 @@ public class CatController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/selectData")
+	@RequestMapping("/selectData")
 	public DataTableInfoVO selectHabitatList(@RequestBody Map<String, Object> param, SystemParameter systemParameter){
 		Map<String,Object> data = HashMapUtility.<String,Object>create()
 				.add(systemParameter.toMap())
@@ -103,50 +99,21 @@ public class CatController {
 		return pageInfo;
 	}
 	
-	/**
-	 * 서식지 프로필 정보 조회
-	 * @param jsonParameter
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/profile/selectData")
-	public AjaxResult selectHabitatProfile(JsonParameter jsonParameter, SystemParameter systemParameter) {
-		try {
-			Map<String,Object> data = HashMapUtility.<String,Object>create()
-					.add(systemParameter.toMap())
-					.add(jsonParameter.getData())
-					.toMap();
-			
-			Map<String, Object> habitatDetail = catService.selectHabitatProfile(data);
-			habitatDetail.put("_SESSION_USER_CD_", systemParameter.toMap().get("_SESSION_USER_CD_"));
-			return new AjaxResult(AjaxResult.STATUS.SUCCESS, habitatDetail);
-
-		}catch(Exception e) {
-			LOGGER.debug("selectProfileData error", e);
-			e.printStackTrace();
-			return new AjaxResult(AjaxResult.STATUS.ERROR, "실패하였습니다.");
-		}
-	}
 	
-	/**
-	 * 서식지 상세 정보 조회
-	 * @param jsonParameter
-	 * @return
-	 */
 	@ResponseBody
-	@RequestMapping(value = "/form/selectData")
-	public AjaxResult selectData(JsonParameter jsonParameter, SystemParameter systemParameter) {
+	@RequestMapping("/form/selectData")
+	public AjaxResult selectCatDetail(JsonParameter jsonParameter){
 		try {
-			Map<String,Object> data = HashMapUtility.<String,Object>create()
-					.add(systemParameter.toMap())
-					.add(jsonParameter.getData())
-					.toMap();
+			/*
+			 * Map<String,Object> data = HashMapUtility.<String,Object>create()
+			 * .add(jsonParameter.getData()) .toMap();
+			 */
+		
+			Map<String, Object> detail = catService.selectCatDetail(jsonParameter.getData());
 			
-			Map<String, Object> habitatDetail = catService.selectHabitatDetail(data);
+			return new AjaxResult(AjaxResult.STATUS.SUCCESS, detail);
 			
-			return new AjaxResult(AjaxResult.STATUS.SUCCESS, habitatDetail);
-
-		}catch(Exception e) {
+		} catch (Exception e) {
 			LOGGER.debug("selectData error", e);
 			e.printStackTrace();
 			return new AjaxResult(AjaxResult.STATUS.ERROR, "실패하였습니다.");
@@ -154,7 +121,7 @@ public class CatController {
 	}
 	
 	/**
-	 * 서식지 정보 저장(수정)
+	 * 고양이 정보 저장(수정)
 	 * @param jsonParameter
 	 * @param systemParameter
 	 * @param fileParameter
@@ -169,7 +136,7 @@ public class CatController {
 													 .add(systemParameter.toMap())
 													 .toMap();
 			
-			Map<String,Object> result = catService.insertHabitat(param, fileParameter);
+			Map<String,Object> result = catService.insertCat(param, fileParameter);
 			
 			return new AjaxResult(AjaxResult.STATUS.SUCCESS, result);
 			
@@ -181,7 +148,7 @@ public class CatController {
 	}
 	
 	/**
-	 * 서식지 정보 삭제
+	 * 고양이 정보 삭제
 	 * @param jsonParameter
 	 * @param systemParameter
 	 * @return
@@ -194,7 +161,7 @@ public class CatController {
 					.add(jsonParameter.getData())
 					.add(systemParameter.toMap())
 					.toMap();	
-			catService.deleteHabitat(param);
+			catService.deleteCat(param);
 			
 			return new AjaxResult(AjaxResult.STATUS.SUCCESS, param);
 			

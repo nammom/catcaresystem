@@ -49,7 +49,20 @@ public class CatProfileController {
 	@RequestMapping("/{catcd}")
 	public String catProfile(@PathVariable("catcd") Long catcd , Model model) throws Exception{
 		model.addAttribute("cat_cd", catcd);
-		return "cmn/cat/catProfile";
+		return "cmn/manage/catProfile";
+	}
+	
+	/**
+	 * 애칭 설정 모달 페이지
+	 * @param target_cd
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/catName/form/{target_cd}")
+	public String catName(@PathVariable("target_cd") Long target_cd , Model model) throws Exception{
+		model.addAttribute("target_cd", target_cd);
+		return "cmn/cat/catNameForm";
 	}
 	
 	/**
@@ -100,6 +113,56 @@ public class CatProfileController {
 			
 		}catch(Exception e) {
 			LOGGER.debug("selectData error", e);
+			e.printStackTrace();
+			return new AjaxResult(AjaxResult.STATUS.ERROR, "실패하였습니다.");
+		}
+	}
+	
+	/**
+	 * 고양이 애칭 조회
+	 * @param jsonParameter
+	 * @param systemParameter
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/catName/form/selectData")
+	public AjaxResult selectCatName(JsonParameter jsonParameter, SystemParameter systemParameter) {
+		try {
+			Map<String,Object> param = HashMapUtility.<String,Object>create()
+										.add(jsonParameter.getData())
+										.add(systemParameter.toMap())
+										.toMap();	
+			Map<String, Object> data = catProfileService.selectCatName(param);
+			
+			return new AjaxResult(AjaxResult.STATUS.SUCCESS, data);
+			
+		}catch(Exception e) {
+			LOGGER.debug("selectCatName error", e);
+			e.printStackTrace();
+			return new AjaxResult(AjaxResult.STATUS.ERROR, "실패하였습니다.");
+		}
+	}
+	
+	/**
+	 *  고양이 애칭 등록
+	 * @param jsonParameter
+	 * @param systemParameter
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/catName/form/save")
+	public AjaxResult saveCatName(JsonParameter jsonParameter, SystemParameter systemParameter) {
+		try {
+			Map<String,Object> param = HashMapUtility.<String,Object>create()
+										.add(jsonParameter.getData())
+										.add(systemParameter.toMap())
+										.toMap();	
+			catProfileService.saveCatName(param);
+			
+			return new AjaxResult(AjaxResult.STATUS.SUCCESS);
+			
+		}catch(Exception e) {
+			LOGGER.debug("saveCatName error", e);
 			e.printStackTrace();
 			return new AjaxResult(AjaxResult.STATUS.ERROR, "실패하였습니다.");
 		}

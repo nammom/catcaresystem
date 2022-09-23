@@ -15,30 +15,23 @@ public interface CatService {
 	public List<Map<String, Object>> selectCatList(Map<String, Object> data);
 
 	/**
-	 * 서식지 상세 조회
+	 * 고양이 상세 조회
 	 * @param data
 	 * @return
 	 */
-	public Map<String, Object> selectHabitatDetail(Map<String, Object> data) throws Exception;
+	public Map<String, Object> selectCatDetail(Map<String, Object> data) throws Exception;
 
 	/**
-	 * 서식지 프로필 조회
-	 * @param data
-	 * @return
-	 */
-	public Map<String, Object> selectHabitatProfile(Map<String, Object> data);
-
-	/**
-	 * 서식지 저장(수정)
+	 * 고양이 저장(수정)
 	 * @param param
 	 * @param fileParameter
 	 */
-	public Map<String, Object> insertHabitat(Map<String, Object> param, FileParameter fileParameter) throws Exception;
+	public Map<String, Object> insertCat(Map<String, Object> param, FileParameter fileParameter) throws Exception;
 
 	/**
-	 * 서식지 삭제
+	 * 고양이 삭제
 	 * @param param
 	 */
-	public void deleteHabitat(Map<String, Object> param) throws Exception;
+	public void deleteCat(Map<String, Object> param) throws Exception;
 
 }

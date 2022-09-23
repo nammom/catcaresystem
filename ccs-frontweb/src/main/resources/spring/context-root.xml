@@ -17,4 +17,9 @@
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/> 
 		<context:exclude-filter expression="org.springframework.stereotype.Controller" 
 		type="annotation"/> </context:component-scan> -->
+	    
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
 </beans>	

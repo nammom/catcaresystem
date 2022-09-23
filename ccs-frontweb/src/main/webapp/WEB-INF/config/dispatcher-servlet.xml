@@ -28,6 +28,7 @@
 	     </mvc:argument-resolvers>
 	</mvc:annotation-driven>
 	
+	<tx:annotation-driven/>
 	
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 	

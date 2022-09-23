@@ -28,14 +28,21 @@
 			</colgroup>
 			<tr class="table-light">
 				<th>고양이 코드</th>
-				<td colspan="2">{{>cat_cd}}</td>
+				<td>{{>cat_cd}}</td>
+				<td>
+					{{if _SESSION_USER_CD_ == user_cd}}
+						<button type="button" id="btn-edit" class="btn btn-primary btn-sm">수정</button>
+					{{/if}}
+				</td>
 			</tr>
-			{{if cat_name}}
+			
 			<tr class="table-light">
 				<th>나의 애칭</th>
-				<td colspan="2">{{>cat_name}}</td>
+				<td>{{if cat_name}}{{>cat_name}}{{/if}}</td>
+				<td>
+					<button type="button" id="btn-catname" class="btn btn-primary btn-sm">애칭 설정</button>
+				</td>
 			</tr>
-			{{/if}}
 			<tr class="table-light">
 				<td colspan="3">{{>sido_nm}} {{>sigungu_nm}} {{>dong_nm}}</td>
 			</tr>
@@ -168,7 +175,12 @@ function fn_page() {
 		$noInfoTmpl = $("#noInfoTmpl");
 		CAT_CD = Number($("#cat_cd").val());
 		$this.initData();
-		
+		$(document).on("click", "#btn-edit", function(){
+			$this.locationManager.edit();
+		});
+		$(document).on("click", "#btn-catname", function(){
+			$this.modalManager.openCatNameModal();
+		});
 		$(document).on("click", "#btn-care-detail", function(){
 			$this.locationManager.careInfo();
 		});
@@ -222,6 +234,9 @@ function fn_page() {
 	}
 	
 	this.locationManager = {
+			edit : function(){
+				location.href = "/manage/cat/form/" + CAT_CD;
+			},
 			careList : function(){
 				location.href = PAGE_URL + "/careList/" + CAT_CD;
 			},
@@ -279,6 +294,25 @@ function fn_page() {
 			}
 	}
 	
+	this.modalManager = {
+			openCatNameModal : function(){
+				let url = PAGE_URL + "/catName/form/" + CAT_CD;
+				let option = {
+						id : "catNameModal",
+						title : "애칭 등록",
+						button : [{"title" : "저장", id : "btn-save", "click" : this.save}],
+						closeFunction : this.close
+					};
+				$.ccs.modal.create(url, option);
+			},
+			save : function(){	//저장
+				_modal.formManager.save($this.modalManager.saveCallback);
+			},
+			saveCallback : function() {	//닫기
+				$this.dataManager.getData();
+				$.ccs.modal.close("catNameModal");
+			}
+		}
 }
 
 </script>

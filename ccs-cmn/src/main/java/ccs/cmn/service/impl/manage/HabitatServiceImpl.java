@@ -97,7 +97,7 @@ public class HabitatServiceImpl implements HabitatService {
 	 * @param fileParameter
 	 * @throws Exception 
 	 */
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Map<String, Object> insertHabitat(Map<String, Object> param, FileParameter fileParameter) throws Exception {
 		//----------------------------------------------------------- 파일 정보 업데이트 ---------------------------------------------
@@ -136,29 +136,11 @@ public class HabitatServiceImpl implements HabitatService {
 	 */
 	@Override
 	public void deleteHabitat(Map<String, Object> param) throws Exception{
-		if(this.checkUserCd(param)) {
+		if(this.checkUserCd(param) && this.checkHabitatMemberCount(param)) {
 			habitatMapper.deleteHabitat(param);
 		}else {
 			throw new Exception();
 		}
-	}
-	
-	/**
-	 * 게시글  작성자 여부 확인
-	 * @param param
-	 * @return
-	 */
-	private boolean checkUserCd(Map<String, Object> param) {
-		List<Map<String, Object>> result = habitatMapper.selectHabitatByCd(param);
-		if(CollectionUtils.isEmpty(result)) {
-			return false;
-		}
-		UserDetailsDto userInfo = (UserDetailsDto)SessionUtility.getUserDetails();
-		if(Long.compare((long) result.get(0).get("user_cd"), userInfo.getUserCd()) != 0 ) {
-			return false;
-		}
-		
-		return true;
 	}
 
 	private void setFiles(Map<String, Object> detail) {
@@ -171,5 +153,35 @@ public class HabitatServiceImpl implements HabitatService {
 		}
 	}
 
+	/**
+	 * 서식지에 소속된 고양이 수 체크
+	 * @param param
+	 * @return
+	 */
+	public boolean checkHabitatMemberCount(Map<String, Object> param) {
+		Integer count = habitatMapper.selectHabitatMemberCount(param);
+		if(count > 0) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 게시글  작성자 여부 확인
+	 * @param param
+	 * @return
+	 */
+	private boolean checkUserCd(Map<String, Object> param) throws Exception{
+		List<Map<String, Object>> result = habitatMapper.selectHabitatByCd(param);
+		if(CollectionUtils.isEmpty(result)) {
+			throw new Exception();
+		}
+		UserDetailsDto userInfo = (UserDetailsDto)SessionUtility.getUserDetails();
+		if(Long.compare((long) result.get(0).get("user_cd"), userInfo.getUserCd()) != 0 ) {
+			return false;
+		}
+		
+		return true;
+	}
 	
 }

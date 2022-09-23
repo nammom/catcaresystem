@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/jsp/layout/header.jsp"%>
+<%@ include file="/WEB-INF/jsp/layout/header2.jsp"%>
 <body>
 <div class="container">
 <div class="col-md-12">

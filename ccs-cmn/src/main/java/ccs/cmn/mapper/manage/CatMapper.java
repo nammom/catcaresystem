@@ -16,28 +16,71 @@ public interface CatMapper {
 	public List<Map<String, Object>> selectCatList(Map<String, Object> data);
 
 	/**
-	 * 서식지 상세 조회
+	 * 고양이 상세 조회
 	 * @param data
 	 * @return
 	 */
-	public List<Map<String, Object>> selectHabitatByCd(Map<String, Object> data);
+	public List<Map<String, Object>> selectCatByCd(Map<String, Object> data);
 
 	/**
-	 * 서식지 저장
-	 * @param param
+	 * 무리 고양이에 소속된 고양이 수
+	 * @param data
+	 * @return
 	 */
-	public void insertHabitat(Map<String, Object> param);
+	public Integer selectCatGrpMemberCount(Map<String, Object> data);
 
 	/**
-	 * 서식지 수정
+	 * 고양이 저장
 	 * @param param
 	 */
-	public void updateHabitat(Map<String, Object> param);
+	public void insertCat(Map<String, Object> param);
 
 	/**
-	 * 서식지 삭제
+	 * 고양이 프로필 저장
 	 * @param param
 	 */
-	public void deleteHabitat(Map<String, Object> param);
+	public void insertCatProfile(Map<String, Object> param);
+
+	/**
+	 * 고양이 그룹 프로필 저장
+	 * @param param
+	 */
+	public void insertCatGrpProfile(Map<String, Object> param);
+
+	/**
+	 * 고양이 수정
+	 * @param param
+	 */
+	public void updateCat(Map<String, Object> param);
+
+	/**
+	 * 고양이 프로필 수정
+	 * @param param
+	 */
+	public void updateCatProfile(Map<String, Object> param);
+
+	/**
+	 * 고양이 그룹 프로필 수정
+	 * @param param
+	 */
+	public void updateCatGrpProfile(Map<String, Object> param);
+
+	/**
+	 * 고양이 삭제
+	 * @param param
+	 */
+	public void deleteCat(Map<String, Object> param);
+
+	/**
+	 * 고양이 프로필 삭제
+	 * @param param
+	 */
+	public void deleteCatProfile(Map<String, Object> param);
+
+	/**
+	 * 고양이 그룹 프로필 삭제
+	 * @param param
+	 */
+	public void deleteCatGrpProfile(Map<String, Object> param);
 
 }

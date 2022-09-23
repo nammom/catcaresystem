@@ -23,6 +23,13 @@ public interface HabitatMapper {
 	public List<Map<String, Object>> selectHabitatByCd(Map<String, Object> data);
 
 	/**
+	 *  서식지에 소속된 고양이 수 
+	 * @param data
+	 * @return
+	 */
+	public Integer selectHabitatMemberCount(Map<String, Object> data);
+
+	/**
 	 * 서식지 저장
 	 * @param param
 	 */

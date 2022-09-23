@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="ccs.cmn.mapper.manage.CatMapper">
-<!-- 서식지 관리 페이지 -->
+<!-- 고양이 관리 페이지 -->
 
-	<!-- 서식지 목록 조회 -->
+	<!-- 고양이 목록 조회 -->
 	<select id="selectCatList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT C.CAT_CD  
 			, C.GROUP_YN
 			, N.CAT_NAME
-			, COALESCE(FN_GET_CODE_NAME('C0003', P.CATKIND_CD), '무리')		AS CAT_KIND_NM
+			, CASE WHEN C.GROUP_YN = 'N' 
+				THEN COALESCE(FN_GET_CODE_NAME('C0003', P.CATKIND_CD), '알수없음')
+				ELSE '무리' END												AS CAT_KIND_NM
 			, COALESCE(FN_GET_AREA_NAME(C.SIDO_CD), '') 		|| ' ' ||
 				COALESCE(FN_GET_AREA_NAME(C.SIGUNGU_CD), '') 	|| ' ' || 
 				COALESCE(FN_GET_AREA_NAME(C.DONG_CD), '')        			AS AREA_NM
@@ -52,42 +54,45 @@
 		ORDER BY C.CAT_CD DESC
 	</select>
 
-	<select id="selectHabitatByCd" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT H.HABITAT_CD 
-				, H.HABITAT_NM
-				, H.ADDRESS
-				, H.SIDO_CD
-				, H.SIGUNGU_CD
-				, H.DONG_CD
-				, FN_GET_AREA_NAME(H.SIDO_CD) || ' ' ||
-					FN_GET_AREA_NAME(H.SIGUNGU_CD) || ' ' || 
-					FN_GET_AREA_NAME(H.DONG_CD)                     AS AREA_NM
-				, H.ADDRESS
-				, H.LAT
-				, H.LNG
-				, H.FILE_GRP_ID
-				, H.USER_CD
-				, H.REG_DT
-				, F.FILE_PATH 
-		FROM TB_HABITAT H
+	<select id="selectCatByCd" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT C.CAT_CD  
+			, C.GROUP_YN
+			, C.sido_cd
+			, C.sigungu_cd
+			, C.dong_cd 
+			, C.user_cd
+			, C.reg_dt 
+			, P.CATKIND_CD
+			, P.introduction
+			, P.age
+			, P.gender
+			, P.neutering_yn
+			, F.FILE_GRP_ID
+		FROM TB_CAT C
+			LEFT JOIN TB_CAT_PROFILE P
+				ON C.CAT_CD = P.CAT_CD
+			LEFT JOIN TB_CAT_GRP_PROFILE G
+				ON C.CAT_CD = G.CAT_CD 
 			LEFT JOIN TB_FILE F 
-				ON H.FILE_GRP_ID = F.FILE_GRP_ID
-		WHERE H.HABITAT_CD = #{habitat_cd}
+				ON (P.FILE_GRP_ID = F.FILE_GRP_ID OR G.FILE_GRP_ID = F.FILE_GRP_ID )
+		WHERE C.CAT_CD = #{cat_cd}
 	</select>
 	
-	<insert id="insertHabitat" parameterType="java.util.Map" useGeneratedKeys="true" keyColumn="habitat_cd" keyProperty="habitat_cd">
-	    	INSERT INTO TB_HABITAT
+	<!-- 무리 고양이에 소속된 고양이 수 -->
+	<select id="selectCatGrpMemberCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT COUNT(*) 
+		FROM TB_CAT_GRP_INFO G
+		WHERE G.CAT_GRP_CD = #{cat_cd}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insertCat" parameterType="java.util.Map" useGeneratedKeys="true" keyColumn="cat_cd" keyProperty="cat_cd">
+	    	INSERT INTO TB_CAT
 			(
-				SIDO_CD
+				GROUP_YN
+				, SIDO_CD
 				, SIGUNGU_CD
 				, DONG_CD
-				, ADDRESS
-				, HABITAT_NM
-				, LAT
-				, LNG
-				<if test="file_grp_id != null and !file_grp_id.equals('')">
-				, FILE_GRP_ID
-				</if>
 				, USER_CD
 				, REG_ID
 				, REG_DT
@@ -96,16 +101,10 @@
 			)
 			VALUES
 			(
-				#{sido_cd}
+				#{group_yn}
+				, #{sido_cd}
 				, #{sigungu_cd}
 				, #{dong_cd}
-				, #{address}
-				, #{habitat_nm}
-				, #{lat}
-				, #{lng}
-				<if test="file_grp_id != null and !file_grp_id.equals('')">
-				, #{file_grp_id}
-				</if>
 				, #{_SESSION_USER_CD_} -- 입력사용자
 				, #{_SESSION_USER_CD_} -- 입력사용자
 				, NOW() -- 입력일자
@@ -114,22 +113,114 @@
 			)
 	</insert>
 	
-	<update id="updateHabitat" parameterType="java.util.Map">
-	    	UPDATE TB_HABITAT
-			SET SIDO_CD = #{sido_cd}
-				, SIGUNGU_CD = #{sigungu_cd}
-				, DONG_CD = #{dong_cd}
-				, ADDRESS = #{address}
-				, HABITAT_NM = #{habitat_nm}
-				, LAT = #{lat}
-				, LNG = #{lng}
-				, UPDT_ID = #{_SESSION_USER_CD_}
-				, UPDT_DT = NOW()
-			WHERE HABITAT_CD = #{habitat_cd}
+	<insert id="insertCatProfile" parameterType="java.util.Map">
+	    	INSERT INTO TB_CAT_PROFILE
+			(
+				CAT_CD
+				, INTRODUCTION
+				, CATKIND_CD
+				, AGE
+				, GENDER
+				, NEUTERING_YN
+				<if test="file_grp_id != null and !file_grp_id.equals('')">
+				, FILE_GRP_ID
+				</if>
+				, REG_ID
+				, REG_DT
+				, UPDT_ID
+				, UPDT_DT
+			)
+			VALUES
+			(
+				#{cat_cd}
+				, #{introduction}
+				, #{catkind_cd}
+				, #{age}
+				, #{gender}
+				, #{neutering_yn}
+				<if test="file_grp_id != null and !file_grp_id.equals('')">
+				, #{file_grp_id}
+				</if>
+				, #{_SESSION_USER_CD_} -- 입력사용자
+				, NOW() -- 입력일자
+				, #{_SESSION_USER_CD_} -- 변경사용자
+				, NOW() -- 변경일자
+			)
+	</insert>
+	
+	<insert id="insertCatGrpProfile" parameterType="java.util.Map">
+	    	INSERT INTO TB_CAT_GRP_PROFILE
+			(
+				CAT_CD
+				, INTRODUCTION
+				<if test="file_grp_id != null and !file_grp_id.equals('')">
+				, FILE_GRP_ID
+				</if>
+				, REG_ID
+				, REG_DT
+				, UPDT_ID
+				, UPDT_DT
+			)
+			VALUES
+			(
+				#{cat_cd}
+				, #{introduction}
+				<if test="file_grp_id != null and !file_grp_id.equals('')">
+				, #{file_grp_id}
+				</if>
+				, #{_SESSION_USER_CD_} -- 입력사용자
+				, NOW() -- 입력일자
+				, #{_SESSION_USER_CD_} -- 변경사용자
+				, NOW() -- 변경일자
+			)
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="updateCat" parameterType="java.util.Map">
+	    	UPDATE TB_CAT
+			SET SIDO_CD 		= #{sido_cd}
+				, SIGUNGU_CD 	= #{sigungu_cd}
+				, DONG_CD 		= #{dong_cd}
+				, UPDT_ID 		= #{_SESSION_USER_CD_}
+				, UPDT_DT 		= NOW()
+			WHERE CAT_CD = #{cat_cd}
 	</update>
 	
-	<delete id="deleteHabitat" parameterType="java.util.Map">
-	    	DELETE FROM TB_HABITAT
-			WHERE HABITAT_CD = #{habitat_cd}
+	<update id="updateCatProfile" parameterType="java.util.Map">
+	    	UPDATE TB_CAT_PROFILE
+			SET INTRODUCTION 	= #{introduction}
+				, CATKIND_CD 	= #{catkind_cd}
+				, AGE 			= #{age}
+				, GENDER 		= #{gender}
+				, NEUTERING_YN 	= #{neutering_yn}
+				, FILE_GRP_ID 	= #{file_grp_id}
+				, UPDT_ID 		= #{_SESSION_USER_CD_}
+				, UPDT_DT 		= NOW()
+			WHERE CAT_CD = #{cat_cd}
+	</update>
+	
+	<update id="updateCatGrpProfile" parameterType="java.util.Map">
+	    	UPDATE TB_CAT_GRP_PROFILE
+			SET INTRODUCTION 	= #{introduction}
+				, FILE_GRP_ID 	= #{file_grp_id}
+				, UPDT_ID 		= #{_SESSION_USER_CD_}
+				, UPDT_DT 		= NOW()
+			WHERE CAT_CD = #{cat_cd}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="deleteCat" parameterType="java.util.Map">
+	    	DELETE FROM TB_CAT
+			WHERE CAT_CD = #{cat_cd}
+	</delete>
+	
+	<delete id="deleteCatProfile" parameterType="java.util.Map">
+	    	DELETE FROM TB_CAT_PROFILE
+			WHERE CAT_CD = #{cat_cd}
+	</delete>
+	
+	<delete id="deleteCatGrpProfile" parameterType="java.util.Map">
+	    	DELETE FROM TB_CAT_GRP_PROFILE
+			WHERE CAT_CD = #{cat_cd}
 	</delete>
 </mapper>

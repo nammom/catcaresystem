@@ -47,4 +47,18 @@ public interface CatProfileService {
 	 */
 	public List<Map<String, Object>> selectBookMarkList(Map<String, Object> param);
 
+	/**
+	 * 고양이 애칭 조회
+	 * @param param
+	 * @return
+	 */
+	public Map<String, Object> selectCatName(Map<String, Object> param);
+
+	/**
+	 * 고양이 애칭 저장(수정)
+	 * @param param
+	 * @return
+	 */
+	public Integer saveCatName(Map<String, Object> param);
+
 }

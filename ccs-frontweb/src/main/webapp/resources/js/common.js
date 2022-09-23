@@ -171,7 +171,7 @@
 								$("#" + $.ccs.modal.modalOption.id).off("click", el);
 							});
 						}
-						if($.ccs.modal.modalOption.closeFunction) this.modalOption.closeFunction();
+						if($.ccs.modal.modalOption.closeFunction) $.ccs.modal.modalOption.closeFunction();
 					});
 	
 					//모달 숨겨진 뒤 이벤트

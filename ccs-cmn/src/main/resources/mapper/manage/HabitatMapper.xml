@@ -73,6 +73,13 @@
 		WHERE H.HABITAT_CD = #{habitat_cd}
 	</select>
 	
+	<!-- 서식지에 소속된 고양이 수 -->
+	<select id="selectHabitatMemberCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT COUNT(*) 
+		FROM TB_HABITAT_INFO G
+		WHERE G.HABITAT_CD = #{habitat_cd}
+	</select>
+	
 	<insert id="insertHabitat" parameterType="java.util.Map" useGeneratedKeys="true" keyColumn="habitat_cd" keyProperty="habitat_cd">
 	    	INSERT INTO TB_HABITAT
 			(

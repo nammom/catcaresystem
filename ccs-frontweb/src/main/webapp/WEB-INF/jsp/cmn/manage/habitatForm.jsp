@@ -165,11 +165,9 @@ function fn_page() {
 		getData : function(){
 			$.ccs.ajax({
 				url : PAGE_URL + "/selectData"
-				, data : HABITAT_CD ? {"habitat_cd" : HABITAT_CD} : null
+				, data : {"habitat_cd" : HABITAT_CD}
 				, success : function(data){
-					if(HABITAT_CD){
-						$this.formManager.setData(data);
-					}
+					$this.formManager.setData(data);
 				}
 			});
 		},
@@ -236,7 +234,6 @@ function fn_page() {
 					, data : _data
 					, success : function(data){
 						alert("저장되었습니다.");
-						let habitat_cd = data['habitat_cd'];
 						$this.locationManager.list();	
 					}
 				});
