@@ -18,8 +18,8 @@
       </div>
       <div class="icon-navbar-nav">
         <a class="nav-link" data-pagenm="habitat" href="/manage/habitat?pagenm=habitat"></a>
-        <a class="nav-link" data-pagenm="myzone" aria-current="page" href="/manage/cat?pagenm=cat"></a>
-        <a class="nav-link" data-pagenm="cat" href="#"></a>
+        <a class="nav-link" data-pagenm="myzone" aria-current="page" href="#"></a>
+        <a class="nav-link" data-pagenm="cat" href="/manage/cat?pagenm=cat"></a>
         <a class="nav-link" data-pagenm="etc" href="/menu/etc?pagenm=etc"></a>
       </div>
     </div>

@@ -53,3 +53,61 @@
 	font-size : 60px;
 	margin-top: 40px;
 }
+
+/* 서식지 관리, 고양이 관리 - 사이드바 메뉴 */
+
+.manage-sidenav {
+	height:100%;
+	width: 200px;
+	position: fixed;
+	z-index: 2000;
+	top: 0;
+	background-color: #e2e2e2;
+	overflow-x: hidden;
+	transition:0.5s ease-in-out;
+	padding-top: 60px;
+    left: -150px;
+}
+.manage-sidenav a {
+	padding: 8px 8px 8px 32px;
+	text-decoration: none;
+	font-size: 25px;
+	color: #fff;
+	display: block;
+	transition: 0.2s ease-in-out;
+}
+#manage-navbar-toggler-checkbox {
+	/* display: none; */
+} 
+.manage-navbar-toggler {
+	    padding: 0.25rem 0.75rem;
+	    font-size: 1.25rem;
+	    line-height: 1;
+	    background-color: transparent;
+	    border: 1px solid transparent;
+	    border-radius: 0.25rem;
+	    width: 50px;
+    	height: 50px;
+    	float: right;
+	}
+.manage-navbar-toggler-icon {
+	background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+#manage-navbar-toggler-checkbox:checked ~ .manage-sidenav {
+	left: 0px !important;
+}
+.manage-navbar-nav {	
+    padding-top: 50px;
+}
+/* 미디어쿼리 적용 */
+@media screen and (max-height:450px) {
+	.manage-sidenav {
+		padding-top:15px;
+	}
+	.manage-sidenav a {
+		font-size: 18px;
+	}
+	#manage-navbar-toggler-checkbox:checked ~ .manage-sidenav {
+		left: 0px !important;
+	}
+}

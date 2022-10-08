@@ -587,6 +587,8 @@ pre code {
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
+  position: relative;
+  z-index: 1900;
 }
 
 @media (min-width: 576px) {
@@ -4185,7 +4187,8 @@ input[type="button"].btn-block {
 		right: 0;
 		bottom: 0;
 		left: 0;
-		z-index: 1030;
+		width : 100%;
+		z-index: 2100;
 		display: -ms-flexbox;
 		display: flex;
 		-ms-flex-wrap: wrap;
@@ -4224,6 +4227,8 @@ input[type="button"].btn-block {
 
 	.navbar {
 	  position: relative;
+	  z-index: 2100;
+	  width : 100%;
 	  display: -ms-flexbox;
 	  display: flex;
 	  -ms-flex-wrap: wrap;
