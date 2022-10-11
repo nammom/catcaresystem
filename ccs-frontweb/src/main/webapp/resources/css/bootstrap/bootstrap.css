@@ -583,6 +583,7 @@ pre code {
 
 .container {
   width: 100%;
+  padding-top: 70px;
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
@@ -4226,7 +4227,7 @@ input[type="button"].btn-block {
 @media all and (min-device-width:576px) {
 
 	.navbar {
-	  position: relative;
+	  position: fixed;
 	  z-index: 2100;
 	  width : 100%;
 	  display: -ms-flexbox;

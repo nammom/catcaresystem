@@ -55,7 +55,6 @@
 }
 
 /* 서식지 관리, 고양이 관리 - 사이드바 메뉴 */
-
 .manage-sidenav {
 	height:100%;
 	width: 200px;
@@ -63,8 +62,8 @@
 	z-index: 2000;
 	top: 0;
 	background-color: #e2e2e2;
-	overflow-x: hidden;
-	transition:0.5s ease-in-out;
+	overflow: hidden;
+	transition:0.2s ease-in-out;
 	padding-top: 60px;
     left: -150px;
 }
@@ -76,38 +75,61 @@
 	display: block;
 	transition: 0.2s ease-in-out;
 }
-#manage-navbar-toggler-checkbox {
-	/* display: none; */
-} 
 .manage-navbar-toggler {
-	    padding: 0.25rem 0.75rem;
-	    font-size: 1.25rem;
-	    line-height: 1;
-	    background-color: transparent;
-	    border: 1px solid transparent;
-	    border-radius: 0.25rem;
-	    width: 50px;
-    	height: 50px;
-    	float: right;
-	}
+    padding: 0.25rem 0.25rem;
+    font-size: 1.25rem;
+    line-height: 1;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+   	float: right;
+}
 .manage-navbar-toggler-icon {
+	display: inline-block;
+	width: 2em;
+	height: 2em;
+	vertical-align: middle;
+	content: "";
+	background: no-repeat center center;
+	background-size: 100% 100%;
 	background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
-#manage-navbar-toggler-checkbox:checked ~ .manage-sidenav {
-	left: 0px !important;
-}
 .manage-navbar-nav {	
-    padding-top: 50px;
+    overflow-y: auto;
+    height: inherit;
+    width: inherit;
 }
+.manage-navbar-nav{
+   -ms-overflow-style: none;
+}
+.manage-navbar-nav::-webkit-scrollbar{
+  display:none;
+}
+@media all and (min-device-width:576px) {
+	#manage-navbar-toggler-checkbox:checked + .manage-sidenav {
+	    left: 0px;
+	}
+}
+
 /* 미디어쿼리 적용 */
-@media screen and (max-height:450px) {
+@media all and (max-device-width:575.99px) {
 	.manage-sidenav {
-		padding-top:15px;
+		left: -79%;
+		width: 90%;
+		padding-top: 10px;
+	}
+	.manage-navbar-toggler-icon {
+		width: 5em;
+		height: 5em;
 	}
 	.manage-sidenav a {
-		font-size: 18px;
+		font-size: 60px;
+		padding: 35px 32px 35px 32px;
 	}
-	#manage-navbar-toggler-checkbox:checked ~ .manage-sidenav {
-		left: 0px !important;
+	#manage-navbar-toggler-checkbox:checked + .manage-sidenav {
+	    left: 0px;
+	}
+	#manage-navbar-toggler-checkbox:checked + .manage-sidenav>manage-navbar-nav {
+	    display: none;
 	}
 }

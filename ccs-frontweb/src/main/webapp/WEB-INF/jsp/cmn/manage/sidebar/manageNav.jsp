@@ -1,7 +1,9 @@
-<div id="catsidenav" class="manage-sidenav">
+<input type="checkbox" id="manage-navbar-toggler-checkbox"/>
+<div id="manage-sidenav" class="manage-sidenav">
 	<div>
-		<label class="manage-navbar-toggler manage-navbar-toggler-icon" for="manage-navbar-toggler-checkbox"></label>
-		<input type="checkbox" id="manage-navbar-toggler-checkbox" />
+		<label class="manage-navbar-toggler" for="manage-navbar-toggler-checkbox">
+			<span class="manage-navbar-toggler-icon"></span>
+		</label>		
 	</div>
 	<div class="manage-navbar-nav">
 		<a class="nav-link" href="#">About</a>
