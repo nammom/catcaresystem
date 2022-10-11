@@ -300,7 +300,7 @@ function fn_page() {
 	
 	this.locationManager = {
 		list : function() {
-			location.href = "/manage/habitat?pagenm=habitat";		
+			location.href = "/manage/habitat";		
 			
 		}
 	}

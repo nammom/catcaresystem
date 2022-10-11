@@ -32,7 +32,8 @@ import ccs.framework.util.PagingUtility;
 public class CatController {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(CatController.class.getName());
-
+	private static String PAGE_NAME = "cat";
+	
 	@Resource(name="CatService")
 	private CatService catService;
 	
@@ -43,9 +44,9 @@ public class CatController {
 	 * @throws Exception
 	 */
 	@RequestMapping()
-	public String catList(@RequestParam("pagenm") String pagenm, Model model){
+	public String catList(Model model){
 		
-		model.addAttribute("pagenm", pagenm);
+		model.addAttribute("pagenm", PAGE_NAME);
 		
 		return "cmn/manage/catList";
 	}

@@ -37,13 +37,16 @@ import org.slf4j.LoggerFactory;
 public class MenuController {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(MenuController.class.getName());
+	private static String ETC_PAGE_NAME = "etc";
 	
 	@Resource(name="CmnService")
 	private CmnService cmnService;
 	
 	@RequestMapping(value = "/etc")
-	public String etc(@RequestParam("pagenm") String pagenm, Model model){
-		model.addAttribute("pagenm", pagenm);
+	public String etc(Model model){
+		
+		model.addAttribute("pagenm", ETC_PAGE_NAME);
+		
 		return "cmn/menu/etc";
 	}
 	

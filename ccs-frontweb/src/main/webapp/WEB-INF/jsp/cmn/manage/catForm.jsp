@@ -275,7 +275,7 @@ function fn_page() {
 	
 	this.locationManager = {
 		list : function() {
-			location.href = "/manage/cat?pagenm=cat";		
+			location.href = "/manage/cat";		
 			
 		}
 	}

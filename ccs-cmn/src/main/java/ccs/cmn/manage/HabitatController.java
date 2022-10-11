@@ -33,7 +33,8 @@ import ccs.framework.util.PagingUtility;
 public class HabitatController {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(HabitatController.class.getName());
-
+	private static String PAGE_NAME = "habitat";
+	
 	@Resource(name="HabitatService")
 	private HabitatService habitatService;
 	
@@ -44,9 +45,9 @@ public class HabitatController {
 	 * @throws Exception
 	 */
 	@RequestMapping()
-	public String habitatList(@RequestParam("pagenm") String pagenm, Model model){
+	public String habitatList(Model model){
 		
-		model.addAttribute("pagenm", pagenm);
+		model.addAttribute("pagenm", PAGE_NAME);
 		
 		return "cmn/manage/habitatList";
 	}
