@@ -66,31 +66,6 @@ public class CatProfileController {
 	}
 	
 	/**
-	 * 고양이 돌봄 목록 페이지
-	 * @param target_cd
-	 * @param model
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping("/careList/{target_cd}")
-	public String careList(@PathVariable("target_cd") Long target_cd , Model model) throws Exception{
-		model.addAttribute("target_cd", target_cd);
-		return "cmn/cat/careList";
-	}
-	
-	/**
-	 * 고양이 즐겨찾기 목록 페이지
-	 * @param target_cd
-	 * @param model
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping("/bookMarkList/{target_cd}")
-	public String bookMarkList(@PathVariable("target_cd") Long target_cd , Model model) throws Exception{
-		model.addAttribute("target_cd", target_cd);
-		return "cmn/cat/bookMarkList";
-	}
-	/**
 	 * 고양이 프로필 조회
 	 * @param jsonParameter
 	 * @param systemParameter
@@ -166,98 +141,6 @@ public class CatProfileController {
 			e.printStackTrace();
 			return new AjaxResult(AjaxResult.STATUS.ERROR, "실패하였습니다.");
 		}
-	}
-	
-	/**
-	 *  돌봄 등록 or 해제
-	 * @param jsonParameter
-	 * @param systemParameter
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/care")
-	public AjaxResult care(JsonParameter jsonParameter, SystemParameter systemParameter) {
-		try {
-			Map<String,Object> param = HashMapUtility.<String,Object>create()
-										.add(jsonParameter.getData())
-										.add(systemParameter.toMap())
-										.toMap();	
-			Map<String, Object> data = catProfileService.saveCare(param);
-			
-			return new AjaxResult(AjaxResult.STATUS.SUCCESS, data);
-			
-		}catch(Exception e) {
-			LOGGER.debug("care error", e);
-			e.printStackTrace();
-			return new AjaxResult(AjaxResult.STATUS.ERROR, "실패하였습니다.");
-		}
-	}
-	
-	/**
-	 * 북마크 등록 or 해제
-	 * @param jsonParameter
-	 * @param systemParameter
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/bookMark")
-	public AjaxResult bookMark(JsonParameter jsonParameter, SystemParameter systemParameter) {
-		try {
-			Map<String,Object> param = HashMapUtility.<String,Object>create()
-					.add(jsonParameter.getData())
-					.add(systemParameter.toMap())
-					.toMap();	
-			Map<String, Object> data = catProfileService.saveBookMark(param);
-			
-			return new AjaxResult(AjaxResult.STATUS.SUCCESS, data);
-			
-		}catch(Exception e) {
-			LOGGER.debug("bookmark error", e);
-			e.printStackTrace();
-			return new AjaxResult(AjaxResult.STATUS.ERROR, "실패하였습니다.");
-		}
-	}
-	
-	/**
-	 * 돌봄 목록  조회
-	 * @param param
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/careList/selectData")
-	public DataTableInfoVO careList(@RequestBody Map<String, Object> param, SystemParameter systemParameter){
-		Map<String,Object> data = HashMapUtility.<String,Object>create()
-				.add(systemParameter.toMap())
-				.add((Map<String,Object>)param.get("data"))
-				.toMap();	
-		DataTableInfoVO<Map<String, Object>> pageInfo = PagingUtility.<Map<String, Object>>create()
-																.startPage(param);
-		
-		List<Map<String, Object>> dataList =  catProfileService.selectCareList(data);
-		pageInfo.setPageInfo(dataList);
-		
-		return pageInfo;
-	}
-	
-	/**
-	 * 돌봄 목록  조회
-	 * @param param
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/bookMarkList/selectData")
-	public DataTableInfoVO bookMarkList(@RequestBody Map<String, Object> param, SystemParameter systemParameter){
-		Map<String,Object> data = HashMapUtility.<String,Object>create()
-				.add(systemParameter.toMap())
-				.add((Map<String,Object>)param.get("data"))
-				.toMap();	
-		DataTableInfoVO<Map<String, Object>> pageInfo = PagingUtility.<Map<String, Object>>create()
-																.startPage(param);
-		
-		List<Map<String, Object>> dataList =  catProfileService.selectBookMarkList(data);
-		pageInfo.setPageInfo(dataList);
-		
-		return pageInfo;
 	}
 	
 }

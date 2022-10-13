@@ -1,10 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/jsp/layout/header.jsp"%>
+<%@ include file="/WEB-INF/jsp/cmn/menu/manageNav.jsp"%>
 <body>
 <div class="container">
 <div class="col-md-12">
 	<form id="search-form" class="form-group m-3">
 		<input type="hidden" id="target_cd" name="target_cd" value="<c:out value="${target_cd}" />">
+		<input type="hidden" id="target_type" name="target_type" value="<c:out value="${target_type}" />"/> 
 		<div class="row">
 			<div class="form-group col-md-1">
 	         	<label for="nickname" class="form-label">닉네임</label>
@@ -39,7 +41,7 @@ $(document).ready(function() {
 
 function fn_page() {
 	let $this = this;
-	let PAGE_URL = "/cat/catProfile/bookMarkList";
+	let PAGE_URL = "/care/bookMark";
 	this.$table;
 	this.initialize = function() {
 		$this.tableManager.createTable();

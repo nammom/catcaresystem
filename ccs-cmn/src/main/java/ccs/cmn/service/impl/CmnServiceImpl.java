@@ -106,4 +106,37 @@ public class CmnServiceImpl implements CmnService {
 		return cmnMapper.selectEtcMenuList(data);
 	}
 
+	/**
+	 * 서식지, 고양이 관리 사이드 네비게이션 메뉴 목록 조회
+	 * @param data
+	 * @return
+	 */
+	@Override
+	public List<Map<String, Object>> selectManageMenuList(Map<String, Object> data) throws Exception{
+		List<Map<String, Object>> targetInfoList = cmnMapper.selectTargetInfoList(data);
+		if( CollectionUtils.isEmpty(targetInfoList) ) {
+			return null;
+		}
+		List<Map<String, Object>> menuList = cmnMapper.selectManageMenuList(data);
+		Map<String, Object> targetInfoMap = targetInfoList.get(0);
+		return this.createManageMenuList(targetInfoMap, menuList);
+	}
+
+	/**
+	 * menu url 정보 셋팅
+	 * @param infoMap
+	 * @param menuList
+	 * @return
+	 * @throws Exception
+	 */
+	private List<Map<String, Object>> createManageMenuList(Map<String, Object> infoMap, List<Map<String, Object>> menuList) throws Exception{
+		for( Map<String, Object> menu : menuList ) {
+			String url = (String)menu.get("url");
+			for( String key : infoMap.keySet() ) {
+				url.replaceAll("{" + key + "}", (String)infoMap.get(key));
+			}
+			menu.replace("url", url);
+		}
+		return menuList;
+	}
 }

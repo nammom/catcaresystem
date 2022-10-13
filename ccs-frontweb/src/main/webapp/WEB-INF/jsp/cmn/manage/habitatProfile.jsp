@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/jsp/layout/header.jsp"%>
+<%@ include file="/WEB-INF/jsp/cmn/menu/manageNav.jsp"%>
 <div class="container">
 	<form>
 		<input type="hidden" id="habitat_cd" name="habitat_cd" value="<c:out value="${habitat_cd}" />"/>
@@ -41,6 +42,20 @@
 			<tr class="table-light">
 				<td colspan="3">{{>area_nm}} {{>address}}</td>
 			</tr>
+			<tr class="table-light">
+				<th>돌봄</th>
+				<td colspan="2">
+					<button type="button" id="btn-care" class="btn btn-warning">{{if care_yn == 0}}♡{{else}}♥{{/if}}</button>				
+			    	<button type="button" id="btn-care-list" class="btn btn-warning">목록</button>
+				</td>
+			</tr>
+			<tr class="table-light">
+				<th>즐겨찾기</th>
+				<td colspan="2">
+					<button type="button" id="btn-bookmark" class="btn btn-warning">{{if bookmark_yn == 0}}☆{{else}}★{{/if}}</button>				
+			    	<button type="button" id="btn-bookmark-list" class="btn btn-warning">목록</button>
+				</td>
+			</tr>
 		</table>
 	</div>
 </script>
@@ -75,6 +90,20 @@ function fn_page() {
 		$(document).on("click", "#btn-edit", function(){
 			$this.locationManager.edit();
 		});
+		$(document).on("click", "#btn-care", function(){
+			//돌봄
+			$this.actionManager.care();
+		});
+		$(document).on("click", "#btn-care-list", function(){
+			$this.locationManager.careList();
+		});
+		$(document).on("click", "#btn-bookmark", function(){
+			//즐겨찾기
+			$this.actionManager.bookMark();			
+		});
+		$(document).on("click", "#btn-bookmark-list", function(){
+			$this.locationManager.bookMarkList();
+		});
 	}
 	
 	this.initData = function() {
@@ -104,10 +133,56 @@ function fn_page() {
 		}
 	}
 
+	this.actionManager = {
+			care : function(){
+				$.ccs.ajax({
+					url : "/care/care/save"
+					, data : $this.actionManager.getSaveData()
+					, success : function(data){
+						//$this.actionManager.careCallback(data);
+						$this.initData();
+					}
+				});
+			},
+			bookMark : function(){
+				$.ccs.ajax({
+					url : "/care/bookMark/save"
+					, data : $this.actionManager.getSaveData()
+					, success : function(data){
+						//$this.actionManager.careCallback(data);
+						$this.initData();
+					}
+				});
+			},
+			careCallback : function(data){
+				if(data.status == "Y"){
+					$("btn-care").html("♥");
+				}else{
+					$("btn-care").html("♡");
+				}
+			},
+			bookmarkCallback : function(data){
+				if(data.status == "Y"){
+					$("btn-care").html("★");
+				}else{
+					$("btn-care").html("☆");
+				}
+			},
+			getSaveData : function(){
+				return {"target_cd" : HABITAT_CD, "target_type" : "habitat"};
+				
+			}
+	}
 	
 	this.locationManager = {
 		edit : function() {
 			location.href = "/manage/habitat/form/" + HABITAT_CD;				
+		},
+		careList : function(){
+			location.href = "/care/care/habitat/" + HABITAT_CD;
+		},
+		bookMarkList : function(){
+			location.href = "/care/bookMark/habitat/" + HABITAT_CD;
 		}
 	}
 	

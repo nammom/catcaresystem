@@ -48,10 +48,12 @@
 				ON C.CAT_CD = TCN.CAT_CD 
 				AND TCN.USER_CD = #{_SESSION_USER_CD_}
 			LEFT JOIN TB_CARE TCR 
-				ON C.CAT_CD = TCR.TARGET_CD 
+				ON C.CAT_CD = TCR.TARGET_CD
+				AND TCR.TARGET_TYPE = 'cat' 
 				AND TCR.USER_CD = #{_SESSION_USER_CD_}
 			LEFT JOIN TB_BOOKMARK TBM 
-				ON C.CAT_CD = TBM.TARGET_CD 
+				ON C.CAT_CD = TBM.TARGET_CD
+				AND TBM.TARGET_TYPE = 'cat' 
 				AND TBM.USER_CD = #{_SESSION_USER_CD_}
 		WHERE TCP.CAT_CD = #{cat_cd}
 		GROUP BY C.CAT_CD
@@ -93,10 +95,12 @@
 				ON C.CAT_CD = TCN.CAT_CD 
 				AND TCN.USER_CD = #{_SESSION_USER_CD_}
 			LEFT JOIN TB_CARE TCR 
-				ON C.CAT_CD = TCR.TARGET_CD 
+				ON C.CAT_CD = TCR.TARGET_CD
+				AND TCR.TARGET_TYPE = 'grp' 
 				AND TCR.USER_CD = #{_SESSION_USER_CD_}
 			LEFT JOIN TB_BOOKMARK TBM 
-				ON C.CAT_CD = TBM.TARGET_CD 
+				ON C.CAT_CD = TBM.TARGET_CD
+				AND TBM.TARGET_TYPE = 'grp' 
 				AND TBM.USER_CD = #{_SESSION_USER_CD_}
 		WHERE TCP.CAT_CD = #{cat_cd}
 		GROUP BY C.CAT_CD
@@ -147,133 +151,5 @@
 					, NOW() -- 변경일자
 		) 
 	</select>
-	
-<!-- ** 돌봄 등록 or 해제 ** -->
-
-	<!-- 돌봄 갯수(여부) 조회 -->
-	<select id="selectCareCount" parameterType="java.util.Map" resultType="java.lang.Integer">
-		SELECT COUNT(1)
-		FROM TB_CARE C
-		WHERE C.TARGET_CD = #{target_cd}
-			AND C.USER_CD = #{_SESSION_USER_CD_}
-	</select>
-
-	<!-- 돌봄 삭제 -->
-	<delete id="deleteCare" parameterType="java.util.Map">
-		DELETE FROM TB_CARE C
-		WHERE C.TARGET_CD = #{target_cd}
-			AND C.USER_CD = #{_SESSION_USER_CD_}
-	</delete>
-
-	<!-- 돌봄 등록 -->		
-	<insert id="insertCare" parameterType="java.util.Map" >
-		INSERT INTO TB_CARE (USER_CD
-							, TARGET_TYPE
-							, TARGET_CD
-							, REG_ID
-							, REG_DT
-							, UPDT_ID
-							, UPDT_DT) 
-		VALUES (#{_SESSION_USER_CD_}
-					, #{target_type}
-					, #{target_cd}
-					, #{_SESSION_USER_CD_} -- 입력사용자
-					, NOW() -- 입력일자
-					, #{_SESSION_USER_CD_} -- 변경사용자
-					, NOW() -- 변경일자
-		) 
-	</insert>
-
-
-
-<!-- ** 돌봄 목록  ** -->
-
-	<!-- 돌봄 목록 조회 -->
-	<select id="selectCareList" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT C.USER_CD
-				, C.REG_DT
-				, U.USERID 
-				, U.NICKNAME
-				, F.FILE_PATH
-		FROM TB_CARE C
-			JOIN TB_USER U
-				ON C.USER_CD = U.USER_CD 
-			LEFT JOIN TB_USERPROFILE P
-				ON P.USER_CD = U.USER_CD
-			LEFT JOIN TB_FILE F
-				ON F.FILE_GRP_ID = P.FILE_GRP_ID
-		<where>
-			C.TARGET_CD = #{target_cd}
-			<if test="nickname != null and !nickname.equals('')">
-				AND U.NICKNAME like '%'|| #{nickname} ||'%'
-			</if>
-			<if test="userid != null and !userid.equals('')">
-				AND U.USERID like '%'|| #{userid} ||'%'
-			</if>
-		</where>
-	</select>
-
-<!-- ** 즐겨찾기 등록 or 해제 ** -->
-
-	<!-- 즐겨찾기 갯수(여부) 조회 -->
-	<select id="selectBookMarkCount" parameterType="java.util.Map" resultType="java.lang.Integer">
-		SELECT COUNT(1)
-		FROM TB_BOOKMARK C
-		WHERE C.TARGET_CD = #{target_cd}
-			AND C.USER_CD = #{_SESSION_USER_CD_}
-	</select>
-	
-	<!-- 즐겨찾기 삭제 -->
-	<delete id="deleteBookMark" parameterType="java.util.Map">
-		DELETE FROM TB_BOOKMARK C
-		WHERE C.TARGET_CD = #{target_cd}
-			AND C.USER_CD = #{_SESSION_USER_CD_}
-	</delete>
-	
-	<!-- 즐겨찾기 등록 -->
-	<insert id="insertBookMark" parameterType="java.util.Map" >
-		INSERT INTO TB_BOOKMARK (USER_CD
-								, TARGET_TYPE
-								, TARGET_CD
-								, REG_ID
-								, REG_DT
-								, UPDT_ID
-								, UPDT_DT) 
-		VALUES (#{_SESSION_USER_CD_}
-				, #{target_type}
-				, #{target_cd}
-				, #{_SESSION_USER_CD_} -- 입력사용자
-				, NOW() -- 입력일자
-				, #{_SESSION_USER_CD_} -- 변경사용자
-				, NOW() -- 변경일자
-		) 
-	</insert>
-
-<!-- ** 즐겨찾기 목록  ** -->
-
-	<!-- 즐겨찾기 목록 조회 -->
-	<select id="selectBookMarkList" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT C.USER_CD
-				, C.REG_DT
-				, U.USERID 
-				, U.NICKNAME
-				, F.FILE_PATH
-		FROM TB_BOOKMARK C
-			JOIN TB_USER U
-				ON C.USER_CD = U.USER_CD 
-			LEFT JOIN TB_USERPROFILE P
-				ON P.USER_CD = U.USER_CD
-			LEFT JOIN TB_FILE F
-				ON F.FILE_GRP_ID = P.FILE_GRP_ID
-		<where>
-			C.TARGET_CD = #{target_cd}
-			<if test="nickname != null and !nickname.equals('')">
-				AND U.NICKNAME like '%'|| #{nickname} ||'%'
-			</if>
-			<if test="userid != null and !userid.equals('')">
-				AND U.USERID like '%'|| #{userid} ||'%'
-			</if>
-		</where>
-	</select>	
 
 </mapper>

@@ -589,7 +589,6 @@ pre code {
   margin-right: auto;
   margin-left: auto;
   position: relative;
-  z-index: 1900;
 }
 
 @media (min-width: 576px) {

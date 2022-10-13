@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/jsp/layout/header.jsp"%>
+<%@ include file="/WEB-INF/jsp/cmn/menu/manageNav.jsp"%>
 <body>
 <div class="container">
 	<form id="search-form" class="form-group m-3">

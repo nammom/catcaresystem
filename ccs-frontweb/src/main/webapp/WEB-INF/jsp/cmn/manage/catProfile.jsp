@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/jsp/layout/header.jsp"%>
-<%@ include file="/WEB-INF/jsp/cmn/manage/sidebar/manageNav.jsp"%>
+<%@ include file="/WEB-INF/jsp/cmn/menu/manageNav.jsp"%>
+
 <div class="container">
 	<form>
 		<input type="hidden" id="cat_cd" name="cat_cd" value="<c:out value="${cat_cd}" />"/>
@@ -10,10 +11,9 @@
 		<!--template 영역  -->
 	</div>
 </div>
-
-
 <script id="tmpl" type="text/x-jsrender">
 <div class="col-md-12">
+		<input type="hidden" id="group_yn" name="group_yn" value="{{>group_yn}}"/>
 		<div class="row">
 			<div id="image">
 				<img class="img-fluid" 
@@ -238,19 +238,27 @@ function fn_page() {
 				location.href = "/manage/cat/form/" + CAT_CD;
 			},
 			careList : function(){
-				location.href = PAGE_URL + "/careList/" + CAT_CD;
+				location.href = this.createUrl("/care/care");
 			},
 			bookMarkList : function(){
-				location.href = PAGE_URL + "/bookMarkList/" + CAT_CD;
+				location.href = this.createUrl("/care/bookMark");
 			},
 			careInfo : function(page){
 				location.href = "/cat/careInfo" + "/" + CAT_CD;
 			},
-			character : function(page){
-				location.href = "/care/character/cat/" + CAT_CD;
+			character : function(){
+				location.href = this.createUrl("/care/character");
 			},
-			health : function(page){
-				location.href = "/care/health/cat/" + CAT_CD;
+			health : function(){
+				location.href = this.createUrl("/care/health");
+			},
+			createUrl : function(url){
+				let group_yn = $("#group_yn").val();
+				if( group_yn != "Y" ){
+					return url + "/cat/" + CAT_CD;
+				}else{
+					return url + "/grp/" + CAT_CD;
+				}
 			}
 			
 	}
@@ -258,9 +266,8 @@ function fn_page() {
 	this.actionManager = {
 			care : function(){
 				$.ccs.ajax({
-					url : PAGE_URL + "/care"
-					, data : {"target_cd" : CAT_CD
-							, "target_type" : 1}
+					url : "/care/care/save"
+					, data : $this.actionManager.getSaveData()
 					, success : function(data){
 						//$this.actionManager.careCallback(data);
 						$this.initData();
@@ -269,9 +276,8 @@ function fn_page() {
 			},
 			bookMark : function(){
 				$.ccs.ajax({
-					url : PAGE_URL + "/bookMark"
-					, data : {"target_cd" : CAT_CD
-							, "target_type" : 1}
+					url : "/care/bookMark/save"
+					, data : $this.actionManager.getSaveData()
 					, success : function(data){
 						//$this.actionManager.careCallback(data);
 						$this.initData();
@@ -290,6 +296,14 @@ function fn_page() {
 					$("btn-care").html("★");
 				}else{
 					$("btn-care").html("☆");
+				}
+			},
+			getSaveData : function(){
+				let group_yn = $("#group_yn").val();
+				if( group_yn != "Y" ){
+					return {"target_cd" : CAT_CD, "target_type" : "cat"};
+				}else{
+					return {"target_cd" : CAT_CD, "target_type" : "grp"};
 				}
 			}
 	}

@@ -22,14 +22,12 @@ $(document).ready(function() {
 function fn_page() {
 	let $this = this;
 	let PAGE_URL = "/menu/etc";
-	let $template
+	let $template;
 	let cat_cd;
 	
 	this.initialize = function() {
 		$template = $("#tmpl");
-		
 		$this.initData();
-
 	}
 	
 	this.initData = function() {

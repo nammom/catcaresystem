@@ -83,6 +83,31 @@ public class MenuController {
 		
 		return new AjaxResult(AjaxResult.STATUS.SUCCESS, result);
 	}
+	
+	/**
+	 * 메뉴 목록 조회
+	 * @param param
+	 * @return
+	 * @throws Exception 
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/manageNav/selectData")
+	public AjaxResult selectManageMenuList(JsonParameter jsonParameter){
+		
+		List<Map<String, Object>> manageMenuList;
+		try {
+			manageMenuList = cmnService.selectManageMenuList(jsonParameter.getData());
+			Map<String,Object> result = new HashedMap();
+			result.put("manageMenuList", manageMenuList);
+			return new AjaxResult(AjaxResult.STATUS.SUCCESS, result);			
+			
+		} catch (Exception e) {
+			LOGGER.debug("selectManageMenuList error", e);
+			e.printStackTrace();
+			return new AjaxResult(AjaxResult.STATUS.SUCCESS);
+		}
+			
+	}
 		
 		
 }

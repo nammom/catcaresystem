@@ -52,25 +52,36 @@
 
 	<select id="selectHabitatByCd" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT H.HABITAT_CD 
-				, H.HABITAT_NM
-				, H.ADDRESS
-				, H.SIDO_CD
-				, H.SIGUNGU_CD
-				, H.DONG_CD
-				, FN_GET_AREA_NAME(H.SIDO_CD) || ' ' ||
-					FN_GET_AREA_NAME(H.SIGUNGU_CD) || ' ' || 
-					FN_GET_AREA_NAME(H.DONG_CD)                     AS AREA_NM
-				, H.ADDRESS
-				, H.LAT
-				, H.LNG
-				, H.FILE_GRP_ID
-				, H.USER_CD
-				, H.REG_DT
-				, F.FILE_PATH 
+				, MAX(H.HABITAT_NM)									AS HABITAT_NM
+				, MAX(H.ADDRESS)                                    AS ADDRESS
+				, MAX(H.SIDO_CD)                                    AS SIDO_CD
+				, MAX(H.SIGUNGU_CD)                                 AS SIGUNGU_CD
+				, MAX(H.DONG_CD)                                    AS DONG_CD
+				, MAX(FN_GET_AREA_NAME(H.SIDO_CD) || ' ' ||         
+					FN_GET_AREA_NAME(H.SIGUNGU_CD) || ' ' ||        
+					FN_GET_AREA_NAME(H.DONG_CD))                    AS AREA_NM
+				, MAX(H.ADDRESS)                                    AS ADDRESS
+				, MAX(H.LAT)                                        AS LAT
+				, MAX(H.LNG)                                        AS LNG
+				, MAX(H.FILE_GRP_ID)                                AS FILE_GRP_ID
+				, MAX(H.USER_CD)                                    AS USER_CD
+				, MAX(H.REG_DT)                                     AS REG_DT
+				, MAX(F.FILE_PATH)                                  AS FILE_PATH
+				, COUNT(TCR.TARGET_CD)								AS CARE_YN
+				, COUNT(TBM.TARGET_CD)								AS BOOKMARK_YN	
 		FROM TB_HABITAT H
 			LEFT JOIN TB_FILE F 
 				ON H.FILE_GRP_ID = F.FILE_GRP_ID
+			LEFT JOIN TB_CARE TCR 
+				ON H.HABITAT_CD = TCR.TARGET_CD
+				AND TCR.TARGET_TYPE = 'habitat' 
+				AND TCR.USER_CD = #{_SESSION_USER_CD_}
+			LEFT JOIN TB_BOOKMARK TBM 
+				ON H.HABITAT_CD = TBM.TARGET_CD
+				AND TBM.TARGET_TYPE = 'habitat' 
+				AND TBM.USER_CD = #{_SESSION_USER_CD_}
 		WHERE H.HABITAT_CD = #{habitat_cd}
+		GROUP BY H.HABITAT_CD
 	</select>
 	
 	<!-- 서식지에 소속된 고양이 수 -->
