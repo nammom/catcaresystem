@@ -5,6 +5,7 @@
 
 <div class="container">
 	<form>
+		<input type="hidden" id="target_type" name="target_type" value="<c:out value="${target_type}" />"/> 
 		<input type="hidden" id="cat_cd" name="cat_cd" value="<c:out value="${cat_cd}" />"/>
 	</form>
 	<div class="profile">
@@ -253,12 +254,8 @@ function fn_page() {
 				location.href = this.createUrl("/care/health");
 			},
 			createUrl : function(url){
-				let group_yn = $("#group_yn").val();
-				if( group_yn != "Y" ){
-					return url + "/cat/" + CAT_CD;
-				}else{
-					return url + "/grp/" + CAT_CD;
-				}
+				let target_type = $("#target_type").val();
+				return url + "/" + target_type + "/" + CAT_CD;
 			}
 			
 	}
@@ -299,12 +296,8 @@ function fn_page() {
 				}
 			},
 			getSaveData : function(){
-				let group_yn = $("#group_yn").val();
-				if( group_yn != "Y" ){
-					return {"target_cd" : CAT_CD, "target_type" : "cat"};
-				}else{
-					return {"target_cd" : CAT_CD, "target_type" : "grp"};
-				}
+				let target_type = $("#target_type").val();
+				return {"target_cd" : CAT_CD, "target_type" : target_type};
 			}
 	}
 	

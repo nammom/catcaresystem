@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/jsp/layout/header.jsp"%>
-<%@ include file="/WEB-INF/jsp/cmn/menu/manageNav.jsp"%>
 <body>
 <div class="container">
 	<div class="col-md-12">

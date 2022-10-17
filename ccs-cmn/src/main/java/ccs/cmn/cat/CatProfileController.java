@@ -46,8 +46,11 @@ public class CatProfileController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/{catcd}")
-	public String catProfile(@PathVariable("catcd") Long catcd , Model model) throws Exception{
+	@RequestMapping("{target_type}/{catcd}")
+	public String catProfile(@PathVariable("target_type") String target_type,
+								@PathVariable("catcd") Long catcd,
+								Model model) throws Exception{
+		model.addAttribute("target_type", target_type);
 		model.addAttribute("cat_cd", catcd);
 		return "cmn/manage/catProfile";
 	}

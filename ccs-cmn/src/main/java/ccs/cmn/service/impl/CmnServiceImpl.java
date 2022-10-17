@@ -1,5 +1,6 @@
 package ccs.cmn.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 
 import ccs.cmn.mapper.CmnMapper;
 import ccs.cmn.service.CmnService;
@@ -113,13 +115,20 @@ public class CmnServiceImpl implements CmnService {
 	 */
 	@Override
 	public List<Map<String, Object>> selectManageMenuList(Map<String, Object> data) throws Exception{
-		List<Map<String, Object>> targetInfoList = cmnMapper.selectTargetInfoList(data);
-		if( CollectionUtils.isEmpty(targetInfoList) ) {
+		List<Map<String, Object>> targetInfoList;
+		if (StringUtils.isEmpty((String)data.get("target_type")) || StringUtils.equals((String)data.get("target_type"), "cat")) {
+			targetInfoList = cmnMapper.selectCatMenuInfoList(data);
+		} else {
+			targetInfoList = cmnMapper.selectTargetMenuInfoList(data);
+		}
+		
+		if ( CollectionUtils.isEmpty(targetInfoList) ) {
 			return null;
 		}
-		List<Map<String, Object>> menuList = cmnMapper.selectManageMenuList(data);
 		Map<String, Object> targetInfoMap = targetInfoList.get(0);
+		List<Map<String, Object>> menuList = cmnMapper.selectManageMenuList(targetInfoMap);
 		return this.createManageMenuList(targetInfoMap, menuList);
+
 	}
 
 	/**
@@ -131,11 +140,15 @@ public class CmnServiceImpl implements CmnService {
 	 */
 	private List<Map<String, Object>> createManageMenuList(Map<String, Object> infoMap, List<Map<String, Object>> menuList) throws Exception{
 		for( Map<String, Object> menu : menuList ) {
-			String url = (String)menu.get("url");
+			String url = (String)menu.get("menu_link");
 			for( String key : infoMap.keySet() ) {
-				url.replaceAll("{" + key + "}", (String)infoMap.get(key));
+				if(StringUtils.isNotBlank(url)) {
+					if(url.contains("{" + key + "}")) {
+						url = url.replace("{" + key + "}", String.valueOf(infoMap.get(key)));
+					}
+				}
 			}
-			menu.replace("url", url);
+			menu.replace("menu_link", url);
 		}
 		return menuList;
 	}

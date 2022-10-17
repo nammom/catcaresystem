@@ -64,6 +64,7 @@ public class HabitatController {
 							Model model) throws Exception{
 		
 		model.addAttribute("habitat_cd", habitat_cd);
+		model.addAttribute("target_type", "habitat");
 		
 		return "cmn/manage/habitatProfile";
 	}

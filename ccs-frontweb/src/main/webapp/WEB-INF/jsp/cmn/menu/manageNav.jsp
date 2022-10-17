@@ -1,3 +1,4 @@
+<input type="hidden" id="target_type" name="target_type" value="<c:out value="${target_type}" />"/>
 <input type="checkbox" id="manage-navbar-toggler-checkbox"/>
 <div id="manage-sidenav" class="manage-sidenav">
 	<div>
@@ -6,11 +7,6 @@
 		</label>		
 	</div>
 	<div class="manage-navbar-nav">
-		<a class="nav-link" href="#">About</a>
-		<a class="nav-link" href="#">Services</a>
-		<a class="nav-link" href="#">Clients</a>
-		<a class="nav-link" href="#">Contact</a>
-		<a class="nav-link" href="#">Portfolio</a>
 	</div>
 </div>
 
@@ -37,7 +33,7 @@ function fn_manageNav() {
 	}
 	
 	this.initData = function() {
-		//$this.dataManager.getData();
+		$this.dataManager.getData();
 	}
 	
 	this.dataManager = {
@@ -52,9 +48,11 @@ function fn_manageNav() {
 		},
 		getTargetData : function() {
 			let data = {};
-			data["target_cd"] = $("#target_cd").length > 0 ? $("#target_cd").val()
+			let target_cd= $("#target_cd").length > 0 ? $("#target_cd").val()
 								: $("#cat_cd").length > 0 ? $("#cat_cd").val()
 								: "";
+			data["target_cd"] = Number(target_cd);
+			data["target_type"] = $("#target_type").val();
 			return data;
 
 		},

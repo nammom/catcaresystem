@@ -203,4 +203,4 @@ function fn_page() {
 
 </script>
 
-<%-- <%@ include file="/WEB-INF/jsp/layout/footer.jsp"%> --%>
+<%@ include file="/WEB-INF/jsp/layout/footer.jsp"%>

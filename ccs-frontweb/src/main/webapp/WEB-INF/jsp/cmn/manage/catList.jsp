@@ -192,7 +192,7 @@ function fn_page() {
 			    if ( type === 'row' ) {
 			        let row = $.ccs.table.getSelectedRows($this.$table);
 			        if(row[0]['cat_cd']){
-						$this.locationManager.detail(row[0]['cat_cd']);
+						$this.locationManager.detail(row[0]['cat_cd'], row[0]['group_yn']);
 			        }
 			    }
 			} );
@@ -204,8 +204,12 @@ function fn_page() {
 	}
 	
 	this.locationManager = {
-		detail : function(_cat_cd) {
-			location.href = "/cat/catProfile/" + _cat_cd;				
+		detail : function(_cat_cd, _group_yn) {
+			if(_group_yn == "Y") {
+				location.href = "/cat/catProfile/grp/" + _cat_cd;				
+			}else {
+				location.href = "/cat/catProfile/cat/" + _cat_cd;	
+			}
 		},
 		form : function(){
 			location.href = PAGE_URL + "/form";

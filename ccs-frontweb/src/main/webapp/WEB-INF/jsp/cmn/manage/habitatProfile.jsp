@@ -4,7 +4,7 @@
 <%@ include file="/WEB-INF/jsp/cmn/menu/manageNav.jsp"%>
 <div class="container">
 	<form>
-		<input type="hidden" id="habitat_cd" name="habitat_cd" value="<c:out value="${habitat_cd}" />"/>
+		<input type="hidden" id="target_cd" name="target_cd" value="<c:out value="${habitat_cd}" />"/>
 	</form>
 	<div class="profile">
 		<!--template 영역  -->
@@ -83,7 +83,7 @@ function fn_page() {
 	this.initialize = function() {
 		$template = $("#tmpl");
 		$noInfoTmpl = $("#noInfoTmpl");
-		HABITAT_CD = Number($("#habitat_cd").val());
+		HABITAT_CD = Number($("#target_cd").val());
 
 		$this.initData();
 
