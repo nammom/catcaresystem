@@ -4,7 +4,7 @@
 <%@ include file="/WEB-INF/jsp/cmn/menu/manageNav.jsp"%>
 <div class="container">
 	<form>
-		<input type="hidden" id="target_cd" name="target_cd" value="<c:out value="${habitat_cd}" />"/>
+		<input type="hidden" id="target_cd" name="target_cd" value="<c:out value="${target_cd}" />"/>
 	</form>
 	<div class="profile">
 		<!--template 영역  -->

@@ -42,14 +42,14 @@ public class CareInfoController {
 	
 	/**
 	 * 고양이 돌봄 정보 페이지
-	 * @param catcd
+	 * @param target_cd
 	 * @param model
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/{catcd}")
-	public String careInfo(@PathVariable("catcd") Long catcd , Model model) throws Exception{
-		model.addAttribute("cat_cd", catcd);
+	@RequestMapping("/{target_cd}")
+	public String careInfo(@PathVariable("target_cd") Long target_cd , Model model) throws Exception{
+		model.addAttribute("cat_cd", target_cd);
 		return "cmn/cat/careInfo";
 	}
 	

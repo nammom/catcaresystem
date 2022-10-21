@@ -6,7 +6,7 @@
 <div class="container">
 	<form>
 		<input type="hidden" id="target_type" name="target_type" value="<c:out value="${target_type}" />"/> 
-		<input type="hidden" id="cat_cd" name="cat_cd" value="<c:out value="${cat_cd}" />"/>
+		<input type="hidden" id="cat_cd" name="cat_cd" value="<c:out value="${target_cd}" />"/>
 	</form>
 	<div class="profile">
 		<!--template 영역  -->

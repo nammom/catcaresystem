@@ -1,8 +1,10 @@
 package ccs.cmn.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -127,8 +129,22 @@ public class CmnServiceImpl implements CmnService {
 		}
 		Map<String, Object> targetInfoMap = targetInfoList.get(0);
 		List<Map<String, Object>> menuList = cmnMapper.selectManageMenuList(targetInfoMap);
-		return this.createManageMenuList(targetInfoMap, menuList);
-
+		menuList = this.createManageMenuList(targetInfoMap, menuList);
+		
+		Map<Long, Object> menuListMap = menuList.stream()
+													.collect(Collectors.toMap(x-> (Long)x.get("menu_id"), x -> x));
+		for ( int i = menuList.size() - 1; i >= 0; i-- ) {
+			Map<String, Object> menuMap = menuList.get(i);
+			Long memu_upper_id = (Long)menuMap.get("menu_upper_id");
+			if( memu_upper_id != null ) {
+				Map<String, Object> menuUpperMap = (Map<String, Object>) menuListMap.get(memu_upper_id);
+				List<Map<String, Object>> childList = (List<Map<String, Object>>)menuUpperMap.getOrDefault("childList", new ArrayList<>());
+				childList.add(0, menuMap);
+				menuUpperMap.put("childList", childList);
+				menuList.remove(i);
+			}
+		}
+		return menuList;
 	}
 
 	/**

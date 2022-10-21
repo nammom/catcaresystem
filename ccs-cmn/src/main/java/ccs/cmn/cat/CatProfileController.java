@@ -41,17 +41,18 @@ public class CatProfileController {
 	
 	/**
 	 * 고양이 프로필 페이지
-	 * @param catcd
+	 * @param target_type 	: "cat" or "grp"
+	 * @param target_cd
 	 * @param model
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("{target_type}/{catcd}")
+	@RequestMapping("{target_type}/{target_cd}")
 	public String catProfile(@PathVariable("target_type") String target_type,
-								@PathVariable("catcd") Long catcd,
+								@PathVariable("target_cd") Long target_cd,
 								Model model) throws Exception{
 		model.addAttribute("target_type", target_type);
-		model.addAttribute("cat_cd", catcd);
+		model.addAttribute("target_cd", target_cd);
 		return "cmn/manage/catProfile";
 	}
 	

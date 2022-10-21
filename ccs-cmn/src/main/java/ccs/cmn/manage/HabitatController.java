@@ -54,16 +54,16 @@ public class HabitatController {
 	
 	/**
 	 * 서식지 프로필 페이지
-	 * @param
+	 * @param target_cd
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/profile/{habitat_cd}")
-	public String profile(@PathVariable("habitat_cd") Long habitat_cd, 
+	@RequestMapping("/profile/{target_cd}")
+	public String profile(@PathVariable("target_cd") Long target_cd, 
 							SystemParameter systemParameter,
 							Model model) throws Exception{
 		
-		model.addAttribute("habitat_cd", habitat_cd);
+		model.addAttribute("target_cd", target_cd);
 		model.addAttribute("target_type", "habitat");
 		
 		return "cmn/manage/habitatProfile";
@@ -71,16 +71,16 @@ public class HabitatController {
 	
 	/**
 	 * 서식지 수정 페이지
-	 * @param
+	 * @param target_cd
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/form/{habitat_cd}")
-	public String edit(@PathVariable("habitat_cd") Long habitat_cd, 
+	@RequestMapping("/form/{target_cd}")
+	public String edit(@PathVariable("target_cd") Long target_cd, 
 							SystemParameter systemParameter,
 							Model model) throws Exception{
 		
-		model.addAttribute("habitat_cd", habitat_cd);
+		model.addAttribute("habitat_cd", target_cd);
 		
 		return "cmn/manage/habitatForm";
 	}

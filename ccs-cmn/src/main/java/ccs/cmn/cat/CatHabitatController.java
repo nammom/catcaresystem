@@ -44,10 +44,10 @@ public class CatHabitatController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/{cat_cd}")
-	public String catHabitat(@PathVariable("cat_cd") Long cat_cd,
+	@RequestMapping("/{target_cd}")
+	public String catHabitat(@PathVariable("target_cd") Long target_cd,
 							Model model) throws Exception{
-		model.addAttribute("cat_cd", cat_cd);
+		model.addAttribute("target_cd", target_cd);
 		return "cmn/cat/catHabitat";
 	}
 
