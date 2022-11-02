@@ -174,35 +174,8 @@
 	</select>
 	
 	<!-- 서식지, 고양이 관리 사이드 네비게이션 메뉴 목록 조회 -->
-	<select id="selectManageMenuList" parameterType="java.util.Map" resultType="java.util.Map">
-<!-- 	SELECT *
-	FROM
-		(SELECT	A.MENU_ID
-				, A.MENU_NM
-				, A.MENU_UPPER_ID 
-				, A.MENU_LINK
-				, A.MENU_DESKTOP
-				, A.MENU_MOBILE
-				, A.MENU_ORDR
-			FROM TB_MANAGE_MENU A
-			WHERE A.TARGET_TYPE = #{target_type}
-			ORDER BY A.MENU_ORDR 
-		) M
-	
-	UNION
-	
-	SELECT B.BOARD_ID 
-			, B.BOARD_NM 
-			, NULL
-			, B.BOARD_LINK 
-			, 'Y'
-			, 'Y'
-			, 0
-	FROM TB_BOARD_MENU B
-	WHERE B.TARGET_CD = #{target_cd}
-		AND B.TARGET_TYPE = #{target_type} -->
-		
-	with recursive SEARCH_MENU(MENU_ID, MENU_NM, MENU_UPPER_ID, MENU_LINK, MENU_DESKTOP, MENU_MOBILE, MENU_ORDR, level, MENU_PATH, cycle) as
+	<select id="selectManageMenuList" parameterType="java.util.Map" resultType="java.util.Map">	
+	WITH RECURSIVE SEARCH_MENU(MENU_ID, MENU_NM, MENU_UPPER_ID, MENU_LINK, MENU_DESKTOP, MENU_MOBILE, MENU_ORDR, level, MENU_PATH, cycle) as
 	(
 		SELECT	A.MENU_ID
 				, A.MENU_NM
