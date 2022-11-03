@@ -4,7 +4,7 @@
 <body>
 <div class="container">
 	<div class="col-md-12">
-		<form id="catGroup-search-form" class="form-group m-3">
+		<form onsubmit="return false" id="catGroup-search-form" class="form-group m-3">
 			<input type="hidden" id="target_cd" name="target_cd" value="<c:out value="${target_cd}" />">
 			<input type="hidden" id="groupFlag" name="groupFlag" value="<c:out value="${groupFlag}" />">
 		</form>	    

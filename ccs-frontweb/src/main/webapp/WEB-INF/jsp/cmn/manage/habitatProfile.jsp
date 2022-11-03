@@ -3,7 +3,7 @@
 <%@ include file="/WEB-INF/jsp/layout/header.jsp"%>
 <%@ include file="/WEB-INF/jsp/cmn/menu/manageNav.jsp"%>
 <div class="container">
-	<form>
+	<form onsubmit="return false">
 		<input type="hidden" id="target_cd" name="target_cd" value="<c:out value="${target_cd}" />"/>
 	</form>
 	<div class="profile">

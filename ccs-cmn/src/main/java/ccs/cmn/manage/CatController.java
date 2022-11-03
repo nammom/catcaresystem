@@ -105,11 +105,6 @@ public class CatController {
 	@RequestMapping("/form/selectData")
 	public AjaxResult selectCatDetail(JsonParameter jsonParameter){
 		try {
-			/*
-			 * Map<String,Object> data = HashMapUtility.<String,Object>create()
-			 * .add(jsonParameter.getData()) .toMap();
-			 */
-		
 			Map<String, Object> detail = catService.selectCatDetail(jsonParameter.getData());
 			
 			return new AjaxResult(AjaxResult.STATUS.SUCCESS, detail);

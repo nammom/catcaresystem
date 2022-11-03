@@ -6,7 +6,7 @@
 <div class="container">
 	<div class="col-md-12">
 		<div class="col-md-6">
-		<form class="form-group contents" id="careInfo-form" method="post">
+		<form onsubmit="return false" class="form-group contents" id="careInfo-form" method="post">
 			<input type="hidden" 
 				id="catcare_cd" name="catcare_cd" 
 				value="<c:out value="${catcare_cd}" />"/>

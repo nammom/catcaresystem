@@ -10,7 +10,7 @@
 	<button type="button" id="btn-add" class="btn btn-warning">등록</button>
 </div>
 <div class="col-md-12">
-	<form id="search-form" class="form-group m-3">
+	<form onsubmit="return false" id="search-form" class="form-group m-3">
 		<input type="hidden" id="target_cd" value="<c:out value="${target_cd}" />"/>
 		<input type="hidden" id="target_type" value="<c:out value="${target_type}" />"/> 
 		<div class="row">

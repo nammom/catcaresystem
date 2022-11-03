@@ -5,7 +5,7 @@
 <div class="container">
 	<div class="col-md-12">
 		<div class="col-md-6">
-			<form class="form-group contents" id="feed-form" method="post">
+			<form onsubmit="return false" class="form-group contents" id="feed-form" method="post">
 				<c:if test="${empty feed_cd}">
 					<input type="hidden" id="cat_cd" name="cat_cd" value="<c:out value="${cat_cd}" />">
 				</c:if>
@@ -39,7 +39,7 @@
 		        </c:if>
 		    </div>
 			</form>
-			<form id="feed-info-form">
+			<form onsubmit="return false" id="feed-info-form">
 				<c:if test="${empty feed_cd}">
 					<div class="col-md-12 catList-btn-div">
 						<button class="btn btn-secondary btn-sm btn-row-add" type="button" data-table="catList">추가</button>

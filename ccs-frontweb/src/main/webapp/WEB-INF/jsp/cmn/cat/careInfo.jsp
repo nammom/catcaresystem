@@ -3,7 +3,7 @@
 <%@ include file="/WEB-INF/jsp/cmn/menu/manageNav.jsp"%>
 <body>
 <div class="container">
-	<form id="search-form" class="form-group m-3">
+	<form onsubmit="return false" id="search-form" class="form-group m-3">
 		<input type="hidden" id="cat_cd" name="cat_cd" value="<c:out value="${cat_cd}" />">
 	</form>
 	<div class="col-md-12">

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ccs.cmn.mapper.user.UserProfileMapper">
+
+<!-- ** 사용자 프로필 조회 ** -->
+
+	<!-- 사용자 프로필 정보 조회 -->
+	<select id="selectUserProfile" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT U.NICKNAME
+				, P.INTRODUCTION 
+				, F.FILE_PATH 
+				, F.FILE_GRP_ID
+		FROM TB_USER U
+			LEFT JOIN TB_USERPROFILE P
+				ON( U.USER_CD  = P.USER_CD )
+			LEFT JOIN TB_FILE F
+				ON( P.FILE_GRP_ID  = F.FILE_GRP_ID )
+		WHERE U.USER_CD = #{user_cd}
+	</select>
+		
+	<!-- 사용자 닉네임 개수 조회 - 중복 여부 -->
+	<select id="selectNicknameCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT COUNT(*)
+		FROM TB_USER U
+		WHERE U.USER_CD != #{_SESSION_USER_CD_}
+			AND U.NICKNAME = #{nickname}
+		 
+	</select>
+
+	<!-- 사용자 닉네임 수정 -->
+	<update id="updateProfile" parameterType="java.util.Map" >
+		UPDATE TB_USERPROFILE
+		SET INTRODUCTION = #{introduction, jdbcType = VARCHAR}
+			, FILE_GRP_ID = #{file_grp_id, jdbcType = BIGINT}
+		WHERE USER_CD = #{user_cd}
+	</update>
+	
+	<!-- 사용자 프로필 정보 수정 -->
+	<update id="updateNickname" parameterType="java.util.Map" >
+		UPDATE TB_USER
+		SET NICKNAME = #{nickname}
+		WHERE USER_CD = #{user_cd}
+	</update>
+</mapper>

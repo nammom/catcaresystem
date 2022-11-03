@@ -47,7 +47,7 @@ public class CatProfileController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("{target_type}/{target_cd}")
+	@RequestMapping("/{target_type}/{target_cd}")
 	public String catProfile(@PathVariable("target_type") String target_type,
 								@PathVariable("target_cd") Long target_cd,
 								Model model) throws Exception{

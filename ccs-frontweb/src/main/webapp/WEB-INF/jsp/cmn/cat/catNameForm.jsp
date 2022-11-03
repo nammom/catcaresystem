@@ -3,7 +3,7 @@
 <body>
 <div class="container">
 <div class="col-md-12">
-	<form id="catName-form" class="form-group m-3">
+	<form onsubmit="return false" id="catName-form" class="form-group m-3">
 		<div class="form-group">
         	<label for="target_cd" class="form-label mt-4">고양이 고유코드</label>
 	        <input type="text" 

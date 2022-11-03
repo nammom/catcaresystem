@@ -5,7 +5,7 @@
 <div class="container">
 	<div class="col-md-12">
 		<div class="col-md-6">
-			<form class="form-group contents" id="character-form" method="post"
+			<form onsubmit="return false" class="form-group contents" id="character-form" method="post"
 				enctype="multipart/form-data" accept-charset="UTF-8">
 				<input type="hidden" id="character_cd" name="character_cd" value="<c:out value="${character_cd}" />">
 				<input type="hidden" id="s_user_cd" name="s_user_cd" value="<c:out value="${_SESSION_USER_CD_}" />"/>

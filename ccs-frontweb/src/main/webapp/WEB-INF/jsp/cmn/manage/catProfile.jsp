@@ -4,7 +4,7 @@
 <%@ include file="/WEB-INF/jsp/cmn/menu/manageNav.jsp"%>
 
 <div class="container">
-	<form>
+	<form onsubmit="return false">
 		<input type="hidden" id="target_type" name="target_type" value="<c:out value="${target_type}" />"/> 
 		<input type="hidden" id="cat_cd" name="cat_cd" value="<c:out value="${target_cd}" />"/>
 	</form>
@@ -302,24 +302,24 @@ function fn_page() {
 	}
 	
 	this.modalManager = {
-			openCatNameModal : function(){
-				let url = PAGE_URL + "/catName/form/" + CAT_CD;
-				let option = {
-						id : "catNameModal",
-						title : "애칭 등록",
-						button : [{"title" : "저장", id : "btn-save", "click" : this.save}],
-						closeFunction : this.close
-					};
-				$.ccs.modal.create(url, option);
-			},
-			save : function(){	//저장
-				_modal.formManager.save($this.modalManager.saveCallback);
-			},
-			saveCallback : function() {	//닫기
-				$this.dataManager.getData();
-				$.ccs.modal.close("catNameModal");
-			}
+		openCatNameModal : function(){
+			let url = PAGE_URL + "/catName/form/" + CAT_CD;
+			let option = {
+					id : "catNameModal",
+					title : "애칭 등록",
+					button : [{"title" : "저장", id : "btn-save", "click" : this.save}],
+					closeFunction : this.close
+				};
+			$.ccs.modal.create(url, option);
+		},
+		save : function(){	//저장
+			_modal.formManager.save($this.modalManager.saveCallback);
+		},
+		saveCallback : function() {	//닫기
+			$this.dataManager.getData();
+			$.ccs.modal.close("catNameModal");
 		}
+	}
 }
 
 </script>

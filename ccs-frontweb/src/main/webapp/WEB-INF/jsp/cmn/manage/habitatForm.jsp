@@ -5,7 +5,7 @@
 <div class="container">
 	<div class="col-md-12">
 		<div class="col-md-10">
-			<form class="form-group contents" id="habitat-form" method="post"
+			<form onsubmit="return false" class="form-group contents" id="habitat-form" method="post"
 				enctype="multipart/form-data" accept-charset="UTF-8">
 				<input type="hidden" id="s_user_cd" name="s_user_cd" value="<c:out value="${_SESSION_USER_CD_}" />"/>
 				<input type="hidden" id="user_cd" name="user_cd" value="<c:out value="${user_cd}" />"/>

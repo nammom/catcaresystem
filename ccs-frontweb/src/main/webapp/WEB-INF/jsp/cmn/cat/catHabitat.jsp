@@ -4,7 +4,7 @@
 <body>
 <div class="container">
 	<div class="col-md-12">
-		<form id="catHabitat-search-form" class="form-group m-3">
+		<form onsubmit="return false" id="catHabitat-search-form" class="form-group m-3">
 			<input type="hidden" id="cat_cd" name="cat_cd" value="<c:out value="${target_cd}" />">
 		</form>	    
 	</div>

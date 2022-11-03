@@ -7,7 +7,7 @@
 		<c:url value="/login" var="loginUrl" />
 		<div class="col-md-12">
 			<div class="col-md-6">
-				<form class="form-group contents" id="sample-fileForm" method="post"
+				<form onsubmit="return false" class="form-group contents" id="sample-fileForm" method="post"
 					enctype="multipart/form-data" accept-charset="UTF-8">
 					<input type="hidden" id="file_grp_id" name="file_grp_id" />
 					<div class="form-group">
