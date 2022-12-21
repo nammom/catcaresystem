@@ -6,7 +6,7 @@
 <c:url value="/login" var="loginUrl" />
 	<div class="col-md-12">
 		<div class="col-md-6">
-		<form onsubmit="return false":form id="formId" class="form-group contents" onsubmit="return false">
+		<form:form id="formId" class="form-group contents" onsubmit="return false">
 		    <div class="form-group">
 		        <label for="username" class="form-label mt-4">아이디</label>
 		        <input type="text" id="id" name="id" class="form-control"/>

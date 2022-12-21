@@ -222,20 +222,19 @@
 		FROM SEARCH_MENU M
 		ORDER BY M.MENU_PATH
 	)
-	UNION ALL
-	( 
-		SELECT B.BOARD_ID 
-				, B.BOARD_NM 
-				, NULL
-				, B.BOARD_LINK 
-				, 1
-				, NULL
-		     	, 'Y'
-		     	, 'Y'
+	
+	</select>
+	
+		<!-- 서식지, 고양이 관리 사이드 게시판 메뉴 목록 조회 -->
+	<select id="selectBoardMenuList" parameterType="java.util.Map" resultType="java.util.Map">	
+		SELECT B.BOARD_ID 		AS MENU_ID
+				, B.BOARD_NM 	AS MENU_NM 
+				, B.BOARD_LINK 	AS MENU_LINK
+		     	, 'Y'			AS MENU_DESKTOP
+		     	, 'Y'			AS MENU_MOBILE
 		FROM TB_BOARD_MENU B
 		WHERE B.TARGET_CD = #{target_cd}
 			AND B.TARGET_TYPE = #{target_type}
 		ORDER BY B.BOARD_ORDR
-	)
 	</select>
 </mapper>

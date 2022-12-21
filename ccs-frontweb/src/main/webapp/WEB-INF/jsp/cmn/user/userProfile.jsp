@@ -132,10 +132,10 @@ function fn_page() {
 			location.href = PAGE_URL + "/form/" + USER_CD;				
 		},
 		careList : function(){
-			location.href = PAGE_URL + "/care/" + USER_CD;
+			location.href =  "/user/care/" + USER_CD;
 		},
 		bookMarkList : function(){
-			location.href = PAGE_URL + "/bookMark/" + USER_CD;
+			location.href = "/user/bookMark/" + USER_CD;
 		}
 	}
 	

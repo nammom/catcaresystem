@@ -12,6 +12,11 @@
 	</div>
 </div>
 
+<style>
+.dropdown-menu.show {
+    display: contents;
+}
+</style>
 <script id="manage-sidebar-tmpl" type="text/x-jsrender">
 {{if childList}}
       <li class="nav-item dropdown">
@@ -86,5 +91,8 @@ function fn_manageNav() {
 <style>
     .manage-dropdown-menu {
     	border: revert;
+    }
+    .nav-item {
+    	display:contents;
     }
 </style>

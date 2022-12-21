@@ -271,6 +271,8 @@
 				let $targetSelect = $("." + className).eq(++idx);
 				let _code = $targetSelect.data("code");
 				let _prntCode = $selectedOption.val();
+				
+				//부모 select 의 value가 있는 경우 (= "전체" 가 아닌 경우)
 				if(_prntCode) {
 					let _data = {
 									"code" : _code
@@ -282,22 +284,28 @@
 						, data : _data
 						, success : function(data){
 							$.ccs.cmnCodeOption.createOption($targetSelect, data["codeList"]);
-							if((length-1) > idx){
+							
+							//하위 select 가 있는 경우 
+							if(!$targetSelect.hasClass("last-select")){
+								//하위 select 코드 조회 
 								$.ccs.cmnCodeOption.selectCodeList(url, className, idx, length);
 							}
 						}
 					});
 				} else {
+					//부모 select 의 value가 있는 경우 (= "전체" 인 경우)
 					while(length > idx){
 						$targetSelect = $("." + className).eq(idx++);
-						$.ccs.cmnCodeOption.createOption($targetSelect, []);	
+						$.ccs.cmnCodeOption.createOption($targetSelect, []);
+						//마지막 select 인  경우 종료
+						if($targetSelect.hasClass("last-select")) break;	
 					}
 				}
 			},
 			/**
 				옵션생성
-				@param targetSelect : 타겟 컴포넌트의 next 컴포넌트 객체
-				@param codeList : next 컴포넌트의 코드리스트
+				@param targetSelect : select 컴포넌트
+				@param codeList : 코드리스트
 			 */
 			createOption : function(targetSelect, codeList) {
 				let optionHtml = "";
@@ -307,18 +315,11 @@
 					optionHtml += "<option value=\"\">" + (firstOption.html() || "전체")  + "</option>";
 				}
 				optionHtml += this.createOptionHtml(codeList, selectedOption.val());
-				/*codeList.forEach(function(e, idx){
-					if(selectedOption.val() == e['value']){
-						optionHtml += "<option value=\"" + e['value'] + "\" data=prnt=\"" + e['prntcode'] + "\" selected>" + e['name'] + "</option>";
-					}else{
-						optionHtml += "<option value=\"" + e['value'] + "\" data=prnt=\"" + e['prntcode'] + "\">" + e['name'] + "</option>";
-					}
-				});*/
 				targetSelect.html(optionHtml);
 			},
 			/**
 				옵션 html 생성
-				@param codeList : next 컴포넌트의 코드리스트
+				@param codeList : 코드리스트
 				@param selectValue : 선택 값
 			 */
 			createOptionHtml : function(codeList, selectValue) {
@@ -334,18 +335,21 @@
 			},
 			/**
 				하위계층 select 옵션 초기화
-				@param idx : 컴포넌트그룹 중 타겟 컴포넌트 순서
+				@param idx : tree-select or area-select 컴포넌트그룹 중 타겟 컴포넌트 순서
 				@param className : "tree-select" or "area-select"
 			 */
 			initSelect : function(idx, className){
 				$.each($("." + className), function(i, e){
 					if(i > idx){
+						
 						let optionHtml = "";
 						let firstOption = $(e).children().first();
 						if(!firstOption.val() && firstOption.html()){
 							optionHtml += "<option value=\"\">" + (firstOption.html() || "전체") + "</option>";
 						}
 						$(e).html(optionHtml);
+						//마지막  select 인  경우 종료
+						if($(e).hasClass("last-select")) return false;
 					}
 				})
 			}
@@ -423,6 +427,9 @@
 					return table.rows(arr).data().toArray();
 				};
 				return null;
+			},
+			reloadData : function(table) {	//데이터 검색
+				table.ajax.reload();
 			}
 		},
 		/**

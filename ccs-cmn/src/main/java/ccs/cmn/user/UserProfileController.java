@@ -30,7 +30,8 @@ import ccs.framework.util.HashMapUtility;
 public class UserProfileController {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(UserProfileController.class.getName());
-
+	private static String PAGE_NAME = "myzone";
+	
 	@Resource(name="UserProfileService")
 	private UserProfileService userProfileService;
 	
@@ -42,8 +43,10 @@ public class UserProfileController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/{user_cd}")
-	public String catProfile(@PathVariable("user_cd") Long user_cd,
+	public String userProfile(@PathVariable("user_cd") Long user_cd,
 								Model model) throws Exception{
+		
+		model.addAttribute("pagenm", PAGE_NAME);
 		model.addAttribute("user_cd", user_cd);
 		return "cmn/user/userProfile";
 	}

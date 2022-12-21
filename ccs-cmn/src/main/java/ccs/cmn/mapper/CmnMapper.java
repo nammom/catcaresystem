@@ -87,6 +87,14 @@ public interface CmnMapper {
 	 */
 	public List<Map<String, Object>> selectManageMenuList(Map<String, Object> data);
 
+	/**
+	 * 서식지, 고양이 관리 사이드 네비게이션 메뉴 목록 조회
+	 * @param data
+	 * @return
+	 */
+	public List<Map<String, Object>> selectBoardMenuList(Map<String, Object> data);
+
+	
 
 
 

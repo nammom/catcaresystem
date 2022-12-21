@@ -55,7 +55,7 @@
 					</div>
 					<div class="form-group col-md-3">
 						<select id="disease_cd3" name="disease_cd3" data-code="C0001" 
-						class="form-control tree-select" 
+						class="form-control tree-select last-select" 
 						<c:if test="${not empty health_cd}">disabled</c:if>>
 		                	<ccs:option type="option" code="C0001" includeAll="전체" /> 
 		                </select> 

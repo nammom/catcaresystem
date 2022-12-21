@@ -48,7 +48,7 @@
 			<div class="form-group">
 				<label for="reason_cd" class="form-label mt-4" data-code="C0002" >사유</label>
 				<select id="reason_cd" name="reason_cd"  
-					class="form-control tree-select" 
+					class="form-control tree-select last-select" 
 					<c:if test="${not empty catcare_cd}">disabled</c:if> required>
 					<ccs:option type="option" code="C0002"/>
 				</select>

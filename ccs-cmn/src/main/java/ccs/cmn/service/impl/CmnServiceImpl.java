@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Resource;
 
@@ -127,26 +128,52 @@ public class CmnServiceImpl implements CmnService {
 		if ( CollectionUtils.isEmpty(targetInfoList) ) {
 			return null;
 		}
+		
+		// 관리 메뉴 조회
 		Map<String, Object> targetInfoMap = targetInfoList.get(0);
 		List<Map<String, Object>> menuList = cmnMapper.selectManageMenuList(targetInfoMap);
-		menuList = this.createManageMenuList(targetInfoMap, menuList);
+		menuList = this.createMenuUrl(targetInfoMap, menuList);
+		menuList = this.createTreeMenu(menuList);
+		
+		// 게시판 메뉴 조회
+		List<Map<String, Object>> boardMenuList = cmnMapper.selectBoardMenuList(targetInfoMap);
+		boardMenuList = this.createMenuUrl(targetInfoMap, boardMenuList);
+		
+		// list 합치기
+        menuList.addAll(boardMenuList);
+		
+		return menuList;
+	}
+
+	/**
+	 * 트리 구조 메뉴 생성
+	 * @param menuList
+	 * @return
+	 * @throws Exception
+	 */
+	private List<Map<String, Object>> createTreeMenu(List<Map<String, Object>> menuList) throws Exception{
 		
 		Map<Long, Object> menuListMap = menuList.stream()
-													.collect(Collectors.toMap(x-> (Long)x.get("menu_id"), x -> x));
+				.collect(Collectors.toMap(x-> (Long)x.get("menu_id"), x -> x));
+		
 		for ( int i = menuList.size() - 1; i >= 0; i-- ) {
 			Map<String, Object> menuMap = menuList.get(i);
+			// 상위 메뉴 확인
 			Long memu_upper_id = (Long)menuMap.get("menu_upper_id");
-			if( memu_upper_id != null ) {
+			if( memu_upper_id != null ) {	
+				// 상위 메뉴가 있는 경우
 				Map<String, Object> menuUpperMap = (Map<String, Object>) menuListMap.get(memu_upper_id);
+				// 상위 메뉴의 childList로 추가
 				List<Map<String, Object>> childList = (List<Map<String, Object>>)menuUpperMap.getOrDefault("childList", new ArrayList<>());
 				childList.add(0, menuMap);
 				menuUpperMap.put("childList", childList);
+				// menuList에서는 제거
 				menuList.remove(i);
 			}
 		}
 		return menuList;
 	}
-
+	
 	/**
 	 * menu url 정보 셋팅
 	 * @param infoMap
@@ -154,7 +181,7 @@ public class CmnServiceImpl implements CmnService {
 	 * @return
 	 * @throws Exception
 	 */
-	private List<Map<String, Object>> createManageMenuList(Map<String, Object> infoMap, List<Map<String, Object>> menuList) throws Exception{
+	private List<Map<String, Object>> createMenuUrl(Map<String, Object> infoMap, List<Map<String, Object>> menuList) throws Exception{
 		for( Map<String, Object> menu : menuList ) {
 			String url = (String)menu.get("menu_link");
 			for( String key : infoMap.keySet() ) {

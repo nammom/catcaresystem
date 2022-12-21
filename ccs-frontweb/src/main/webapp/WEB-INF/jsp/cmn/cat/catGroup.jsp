@@ -57,15 +57,12 @@ $(document).ready(function() {
 function fn_catGroupPage() {
 	let $this = this;
 	let PAGE_URL = "/cat/catGroup";
-	let target_cd, groupFlag;
+	let TARGET_CD, GROUPFLAG, DEFAULT_IMG_URL;
 	
 	this.$table;
 	this.initialize = function() {
-		target_cd = $("#target_cd").val();
-		groupFlag = $("#groupFlag").val();
+		$this.initData();
 		
-		$this.tableManager.createTable();
-
 		$("#btn-add").click(function(){
 			$this.searchManager.openSearchModal();
 		});
@@ -75,7 +72,21 @@ function fn_catGroupPage() {
 		});
 	}
 	
+	this.initData = function() {
+		TARGET_CD = $("#target_cd").val();
+		GROUPFLAG = $("#groupFlag").val();
+		
+		if (GROUPFLAG == "cat") {
+			DEFAULT_IMG_URL = "/images/cmn/basic_cat_profile.jpg";
+		} else if (GROUPFLAG == "grp") {
+			DEFAULT_IMG_URL = "/images/cmn/basic_cat_grp_profile.jpg";
+		}
+		$this.tableManager.createTable();
+		
+	}
+	
 	this.tableManager = {
+		tableId : "catList",
 		createTable : function() {
 			/* 데이터 ajax 버전 */
 			let header = $("meta[name='_csrf_header']").attr('content');
@@ -102,7 +113,7 @@ function fn_catGroupPage() {
 			        		 						if(data){
 							        		 	      	return '<img class="img-profile-s" src="/images/' + data + '"/>';
 			        		 						}else{
-			        		 							return '<img class="img-profile-s" src="/images/cmn/basic_cat_profile.jpg"/>';
+			        		 							return '<img class="img-profile-s" src="' + DEFAULT_IMG_URL + '"/>';
 			        		 						}
 								            	}
 			        		 	},
@@ -128,15 +139,14 @@ function fn_catGroupPage() {
 			        		 	}
 	        				];
 			
-			let tableId = "catList";
-			if(groupFlag == "grp"){
+			if(GROUPFLAG == "grp"){
 				//그룹인 경우 품종 컬럼 제거
 				let colIdx = $.ccs.findIndexByKey(columnArr, "name", "cat_kind_nm"); 
 				columnArr.splice(colIdx,1);
-				tableId = "catGroupList";
+				$this.tableManager.tableId = "catGroupList";
 			}
 			
-			$this.$table = $('#'+tableId).DataTable({
+			$this.$table = $('#' + $this.tableManager.tableId).DataTable({
 				destroy : true,//테이블 파괴가능
 				lengthChang : true,
 				bLengthChange : true, // n개씩보기
@@ -178,7 +188,7 @@ function fn_catGroupPage() {
 			$this.$table.on( 'select', function ( e, dt, type, indexes ) {
 		        let row = $this.tableManager.getSelectedRows();
 		        if(row[0]['cat_cd']){
-					location.href = "/cat/catProfile/" + row[0]['cat_cd'];
+					location.href = "/cat/catProfile/" + GROUPFLAG + "/" + row[0]['cat_cd'];
 		        }
 			} );
 		},
@@ -233,7 +243,7 @@ function fn_catGroupPage() {
 	
 	this.searchManager = {
 		openSearchModal : function(){
-			let url = "/search/cat?groupFlag=" + groupFlag + "&target_cd=" + Number(target_cd); 
+			let url = "/search/cat?groupFlag=" + GROUPFLAG + "&target_cd=" + Number(TARGET_CD); 
 			let option = {
 					id : "searchCatModal",
 					title : "고양이 검색",
@@ -245,7 +255,7 @@ function fn_catGroupPage() {
 			let data = $("#catGroup-search-form").serializeObject();
 			data['target_cd'] = Number(data['target_cd']);
 			//이미 등록된 고양이 제거 
-			let catCdArr = $.ccs.pluck($this.tableManager.getAllRows(), "cat_cd");
+			let catCdArr = $.ccs.pluck($.ccs.table.getAllRows($this.$table), "cat_cd");
 			let saveList = arr.filter(function(e, idx){
 				if(catCdArr.indexOf(e['cat_cd']) < 0){
 					return e;

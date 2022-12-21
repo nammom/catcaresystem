@@ -100,10 +100,10 @@
     width: inherit;
 }
 .manage-navbar-nav{
-   -ms-overflow-style: none;
-}
+   /* -ms-overflow-style: none;
+ */}
 .manage-navbar-nav::-webkit-scrollbar{
-  display:none;
+/*   display:none; */
 }
 @media all and (min-device-width:576px) {
 	#manage-navbar-toggler-checkbox:checked + .manage-sidenav {

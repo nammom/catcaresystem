@@ -53,9 +53,9 @@
 	    </div>
 	</form>	    
 </div>
-	<div class="col-md-12">
-		<table id="searchCatList"></table>
-	</div>
+<div class="col-md-12">
+	<table id="searchCatList"></table>
+</div>
 </div>
 
 <script>
@@ -138,59 +138,101 @@ function fn_modal() {
 		        columns : columnArr  
 		    });
 		},
+		columns : {
+			cat : [
+					{
+	    		 		"title": ""
+	    		 		, "data": null
+	    		 		, "name": ""
+			 			, "orderable": false
+	    		 		, "searchable": false
+	    		 		, "render": function ( data, type, row, meta ) {
+	    		 						return '<input type="checkbox" name="input-check"/>';
+					            	}
+	    		 	},
+		        	{
+	    		 		"title": "프로필"
+	    		 		, "data": "file_path"
+	    		 		, "name": "file_path"
+			 			, "orderable": false
+	    		 		, "searchable": false
+	    		 		, "render": function ( data, type, row, meta ) {
+	    		 						if(data){
+				        		 	      	return '<img class="img-profile-s" src="/images/' + data + '"/>';
+	    		 						}else{
+	    		 							return '<img class="img-profile-s" src="/images/cmn/basic_cat_profile.jpg"/>';
+	    		 						}
+					            	}
+	    		 	},
+			        {
+	    		 		"title": "나의 애칭"
+	    		 		, "data": "cat_name"
+	    		 		, "name": "cat_name"
+	    		 	},
+			        {
+	    		 		"title": "고유코드"
+	    		 		, "data": "cat_cd"
+	    		 		, "name": "cat_cd"
+	    		 	}, 
+			        {
+	    		 		"title": "주소"
+	    		 		, "data": "area_nm"
+	    		 		, "name": "area_nm"
+	    		 	},
+			        {
+	    		 		"title": "품종"
+	    		 		, "data": "cat_kind_nm"
+	    		 		, "name": "cat_kind_nm"
+	    		 	}
+	    		]
+		, "grp" : [
+					{
+				 		"title": ""
+				 		, "data": null
+				 		, "name": ""
+			 			, "orderable": false
+				 		, "searchable": false
+				 		, "render": function ( data, type, row, meta ) {
+				 						return '<input type="checkbox" name="input-check"/>';
+					            	}
+				 	},
+		        	{
+				 		"title": "프로필"
+				 		, "data": "file_path"
+				 		, "name": "file_path"
+			 			, "orderable": false
+				 		, "searchable": false
+				 		, "render": function ( data, type, row, meta ) {
+				 						if(data){
+				        		 	      	return '<img class="img-profile-s" src="/images/' + data + '"/>';
+				 						}else{
+				 							return '<img class="img-profile-s" src="/images/cmn/basic_cat_grp_profile.jpg"/>';
+				 						}
+					            	}
+				 	},
+			        {
+				 		"title": "나의 애칭"
+				 		, "data": "cat_name"
+				 		, "name": "cat_name"
+				 	},
+			        {
+				 		"title": "고유코드"
+				 		, "data": "cat_cd"
+				 		, "name": "cat_cd"
+				 	}, 
+			        {
+				 		"title": "주소"
+				 		, "data": "area_nm"
+				 		, "name": "area_nm"
+				 	}
+			]
+	
+		},	
 		getColumns : function(group_yn) {
-			let columnArr = [
-				{
-    		 		"title": ""
-    		 		, "data": null
-    		 		, "name": ""
-		 			, "orderable": false
-    		 		, "searchable": false
-    		 		, "render": function ( data, type, row, meta ) {
-    		 						return '<input type="checkbox" name="input-check"/>';
-				            	}
-    		 	},
-	        	{
-    		 		"title": "프로필"
-    		 		, "data": "file_path"
-    		 		, "name": "file_path"
-		 			, "orderable": false
-    		 		, "searchable": false
-    		 		, "render": function ( data, type, row, meta ) {
-    		 						if(data){
-			        		 	      	return '<img class="img-profile-s" src="/images/' + data + '"/>';
-    		 						}else{
-    		 							return '<img class="img-profile-s" src="/images/cmn/basic_cat_profile.jpg"/>';
-    		 						}
-				            	}
-    		 	},
-		        {
-    		 		"title": "나의 애칭"
-    		 		, "data": "cat_name"
-    		 		, "name": "cat_name"
-    		 	},
-		        {
-    		 		"title": "고유코드"
-    		 		, "data": "cat_cd"
-    		 		, "name": "cat_cd"
-    		 	}, 
-		        {
-    		 		"title": "주소"
-    		 		, "data": "area_nm"
-    		 		, "name": "area_nm"
-    		 	},
-		        {
-    		 		"title": "품종"
-    		 		, "data": "cat_kind_nm"
-    		 		, "name": "cat_kind_nm"
-    		 	}
-    		];
 			if(group_yn == "N") {
-				return columnArr;
+				return $this.tableManager.columns.cat;
 			}else{
-				let colIdx = $.ccs.findIndexByKey(columnArr, "name", "cat_kind_nm"); 
-				columnArr.splice(colIdx,1);
-				return columnArr;
+				return $this.tableManager.columns.grp;
 			}
 				
 		},
