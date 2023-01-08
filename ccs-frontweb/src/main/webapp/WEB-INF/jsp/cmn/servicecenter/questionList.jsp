@@ -15,14 +15,13 @@
 <!--template 영역  -->
 </div>
 <div class="pagination"></div>
-
 <script id="tmpl" type="text/x-jsrender">
 	<div class="card bg-light mb-3">
-    	<div class="card-header"> 
-			작성자 : {{>nickname}} <br/>
+    	<div class="accordion-header card-header"> 
 			제목 : {{>title}} <br/>
 			답변 상태 : {{if answer_yn == "Y"}}답변{{else}}미답변{{/if}}
 		</div>
+		<div class="accordion-body">
     	<div class="card-body">
 			<div>
 				{{>content}}
@@ -63,6 +62,7 @@
 	   </div>
 	{{/if}}
 	</div>
+</div>
 </script>
 <script id="noInfoTmpl" type="text/x-jsrender">
 	<div class="col-md-12">
@@ -113,6 +113,18 @@ function fn_page() {
 	    $(document).on("click", ".carousel-control-next", function(){
 	    	$(this.parentElement).carousel('next');
 		});
+/* 	    
+		$(document).on("click", ".accordion-header", function(){
+	    	let $accorrdionBody = $(this).next();
+			if(!$accorrdionBody.hasClass("accordion-body")) {
+				return;
+			}
+			if($accorrdionBody.hasClass("show")) {
+				$accorrdionBody.removeClass("show");
+			} else {
+				$accorrdionBody.addClass("show");
+			}
+		}); */
 	}
 	
 	this.initData = function() {

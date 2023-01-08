@@ -27,5 +27,21 @@
 			$(this).addClass("active");
 		})	
 	}
+	
+	$(document).on("click", ".accordion-header", function(){
+	let $accorrdionBody = $(this).next();
+	if(!$accorrdionBody.hasClass("accordion-body")) {
+		return;
+	}
+	if($accorrdionBody.hasClass("show")) {
+		$accorrdionBody.removeClass("show");
+	} else {
+		$accorrdionBody.addClass("show");
+	}
+});
+	
 })(jQuery);
+
+
+
 

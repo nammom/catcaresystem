@@ -105,6 +105,14 @@
 .manage-navbar-nav::-webkit-scrollbar{
 /*   display:none; */
 }
+
+.accordion-body{
+	display:none;
+}
+.accordion-body.show{
+	display: revert;
+}
+
 @media all and (min-device-width:576px) {
 	#manage-navbar-toggler-checkbox:checked + .manage-sidenav {
 	    left: 0px;
