@@ -4,6 +4,10 @@
 	width:50px;
 	height:50px;
 }
+.img-preview {
+	width:100%;
+	height:100%;
+}
 
 .bg-warning {
   background-color: #f6d861 !important;

@@ -3,15 +3,16 @@
 <%@ include file="/WEB-INF/jsp/layout/header.jsp"%>
 <div class="container">
 <div class="col-md-12">
-	<button type="button" id="btn-save" class="btn btn-warning">등록</button>
-</div>
+		<button type="button" id="btn-save" class="btn btn-warning">등록</button>
+		<button type="button" id="btn-cancel" class="btn btn-secondary">취소</button>
+	</div>
 <div class="col-md-12">
 	<form onsubmit="return false" id="profile-form" class="form-group m-3">
 	    <input type="hidden" id="user_cd" name="user_cd" value="<c:out value="${user_cd}" />"/>
 	    <input type="hidden" id="file_grp_id" name="file_grp_id" />
 		<div class="form-group">
 			<label class="form-label mt-4">프로필 사진</label>
-			<div id="profile-fileList" class="sta-multifile-upload-list"></div>
+			<div id="profile-fileList" class="sta-multifile-upload-list" style="display:none;"></div>
 		</div>
 		<div class="form-group">
 			<span id="profile-addFileBtn"
@@ -19,9 +20,12 @@
 				<span>파일선택</span> 
 				<input type="file" 
 					id="profile-fileInput"
-					class="file-upload" 
+					class="file-upload"
 					/>
 			</span>
+		</div>
+		<div class="form-group">
+			<img id="preview" class="img-preview" />
 		</div>
 		<div class="form-group">
 	       	<label for="nickname" class="form-label mt-4">닉네임</label>
@@ -63,6 +67,10 @@ function fn_page() {
 			$this.formManager.save();
 		});
 		
+		$("#btn-cancel").click(function(){
+			$this.locationManager.prevPage();
+		});
+		
 		$("#nickname").change(function(){
 			if($(this).val()) {
 				$this.actionManager.checkNickname($(this).val());
@@ -70,14 +78,22 @@ function fn_page() {
 				$("#nicknameResult").html("닉네임을 입력해주세요.");
 			}
 		});
-		
+
 		// 첨부파일 추가 이벤트
 		$("#profile-fileInput").MultiFile({
 			accept : "jpg|jpeg|gif|png",
-			max : 1,
+			//max : 1,
 			list : "#profile-fileList", // upload / or selected files
 			onFileSelect : function(element, value, master_element) {
 				console.log(master_element);
+			},
+			onFileAppend: function(element, value, master_element) {
+				//기존 이미지 제거 
+				$.ccs.file.reset("profile-form");
+			},
+			afterFileAppend: function(element, value, master_element) {
+				//파일 미리보기 이미지 경로 설정
+				$.ccs.file.preview(master_element.files[0]);
 			}
 		});
 	}
@@ -107,7 +123,8 @@ function fn_page() {
 			$("#profile-form").bindJson(data);
 			// 첨부파일 정보
 			if (data['fileList']) {
-				$.ccs.file.bindFile("profile", data['fileList']);
+				$.ccs.file.bindFile("profile", data["fileList"]);
+				$.ccs.file.bindPreview(data["file_path"]);
 			}
 		},
 		validate : function(){
@@ -129,7 +146,7 @@ function fn_page() {
 					, data : _data
 					, success : function(data){
 						alert("저장되었습니다.");
-						$this.formManager.getData();	
+						$this.locationManager.prevPage();
 					}
 				});
 			}
@@ -169,6 +186,11 @@ function fn_page() {
 		}
 	}
 	
+	this.locationManager = {
+		prevPage : function() {
+			location.href = "/user/profile/" + USER_CD;				
+		}
+	}
 }
 
 </script>

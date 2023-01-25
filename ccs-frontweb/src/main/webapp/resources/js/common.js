@@ -108,15 +108,43 @@
 		        $("#" + selecterName + "-fileInput").MultiFile('addList',files);
 			},
 			/**
+				파일 미리보기 이미지 경로 바인딩
+			 */
+			bindPreview : function(filePath, previewId){
+				if (!previewId) previewId = "preview";
+				document.getElementById(previewId).src = "/images/" + filePath;
+			},
+			/**
 				파일 여부 체크
 				@param fileId
 				@param minCount
 			 */
 			validate : function(fileId, minCount){
-				if($("#" + fileId +"-fileList").children().length < minCount) {
-					return false
+				if($("#" + fileId + "-fileList").children().length < minCount) {
+					return false;
 				}
 				return true;
+			},
+			/**
+				파일 초기화
+			 */
+			reset : function(fileId){
+				$("#" + fileId + " input:file").MultiFile("reset");
+			},
+			/**
+				파일 업로드시 미리보기 바인딩
+			 */
+			preview : function(file, previewId) {
+				if (file) {
+				    let reader = new FileReader();
+					if (!previewId) previewId = "preview";
+				    reader.onload = function(e) {
+				      document.getElementById(previewId).src = e.target.result;
+				    };
+				    reader.readAsDataURL(file);
+				} else {
+				    document.getElementById(previewId).src = "";
+			  	}
 			}
 			
 		},
