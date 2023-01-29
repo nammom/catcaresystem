@@ -43,6 +43,7 @@ public class FileServiceImpl implements FileService {
 			map.put("URL", url + "?fileId=" + String.valueOf(x.get("file_id")));
 			map.put("EXTCLASS", x.get("file_extsn"));
 			map.put("FILESIZE", x.get("file_mg"));
+			map.put("FILEPATH", x.get("file_path"));
 			result.add(map);
 			});
 			

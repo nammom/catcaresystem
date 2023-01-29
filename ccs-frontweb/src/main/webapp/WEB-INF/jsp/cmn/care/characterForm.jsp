@@ -49,16 +49,16 @@
 					<textarea id="character_detail" name="character_detail" class="form-control" maxlength="500" <c:if test="${not empty character_cd}">disabled</c:if>></textarea>
 				</div>
 				<div class="form-group">
-					<div id="character-fileList" class="sta-multifile-upload-list"></div>
-				</div>
-				<div class="form-group">
 					<span id="character-addFileBtn"
 						class="sta-fileinput-btn sta-fileinput-multi-btn sta-fileinput-btn-add fileinput-button">
 						<span>파일선택</span> 
 						<input type="file" 
 							id="character-fileInput"
-							class="file-upload" />
+							class="file-upload with-preview" />
 					</span>
+				</div>
+				<div class="form-group">
+					<div id="character-fileList" class="sta-multifile-upload-list"></div>
 				</div>
 			</form>
 			<button type="button" id="btn-list" class="btn btn-warning">목록</button>

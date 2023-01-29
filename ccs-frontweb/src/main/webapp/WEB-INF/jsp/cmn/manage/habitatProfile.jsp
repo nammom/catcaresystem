@@ -28,7 +28,7 @@
 			</colgroup>
 			<tr class="table-light">
 				<th>서식지 코드</th>
-				<td>{{>habitat_cd}} {{>_SESSION_USER_CD_}} {{>user_cd}}</td>
+				<td>{{>habitat_cd}}</td>
 				<td>
 					{{if _SESSION_USER_CD_ == user_cd}}
 						<button type="button" id="btn-edit" class="btn btn-primary btn-sm">수정</button>

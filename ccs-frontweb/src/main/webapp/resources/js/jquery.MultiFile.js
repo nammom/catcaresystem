@@ -873,6 +873,7 @@ if (window.jQuery)(function ($) {
 				fileSize : 0,
 				url : '',
 				fileId :null
+				//,filePath : ''
 			};
 			
 			// 데이터 베이스에 따라서 속성명 변경
@@ -883,6 +884,7 @@ if (window.jQuery)(function ($) {
 						fileSize : dbOption['FILESIZE'],
 						url : dbOption["URL"],
 						fileId :dbOption["FILEID"]
+						//,filePath : dbOption["FILEPATH"]
 					};
 				return uiOption;
 			}
@@ -935,6 +937,7 @@ if (window.jQuery)(function ($) {
 									"<div class='ico-file {{:extClass}}'></div>" +
 									'<span class="MultiFile-title"><a href="{{:url}}">{{>fileName}}</a></span>'+
 									'{{if fileSize > 0 }}<span style="padding-left:10px">({{g_kb:fileSize}})</span>{{/if}}'+
+									//'<img class="MultiFile-preview" style="max-height:100px; max-width:100px;" src="/images/{{:filePath}}">' +
 								'</span>'+
 							'</span>'+
 							' <a data-file="{{:fileId}}" data-file-click="Y" class="MultiFile-remove" style="cursor:pointer">' + mf.STRING.remove + '</a>'+

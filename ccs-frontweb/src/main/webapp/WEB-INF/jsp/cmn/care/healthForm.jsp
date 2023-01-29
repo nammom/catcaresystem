@@ -67,17 +67,18 @@
 					<c:if test="${not empty health_cd}">disabled</c:if>></textarea>
 				</div>
 				<div class="form-group">
-					<div id="health-fileList" class="sta-multifile-upload-list"></div>
-				</div>
-				<div class="form-group">
 					<span id="health-addFileBtn"
 						class="sta-fileinput-btn sta-fileinput-multi-btn sta-fileinput-btn-add fileinput-button">
 						<span>파일선택</span> 
 						<input type="file" 
 							id="health-fileInput"
-							class="file-upload" />
+							class="file-upload with-preview" />
 					</span>
 				</div>
+				<div class="form-group">
+					<div id="health-fileList" class="sta-multifile-upload-list"></div>
+				</div>
+
 			</form>
 			<button type="button" id="btn-list" class="btn btn-warning">목록</button>
 			<c:if test="${not empty health_cd}">

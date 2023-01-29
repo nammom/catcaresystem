@@ -57,17 +57,18 @@
 	<select id="selectCatByCd" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT C.CAT_CD  
 			, C.GROUP_YN
-			, C.sido_cd
-			, C.sigungu_cd
-			, C.dong_cd 
-			, C.user_cd
-			, C.reg_dt 
+			, C.SIDO_CD
+			, C.SIGUNGU_CD
+			, C.DONG_CD 
+			, C.USER_CD
+			, C.REG_DT 
 			, P.CATKIND_CD
-			, P.introduction
-			, P.age
-			, P.gender
-			, P.neutering_yn
+			, P.INTRODUCTION
+			, P.AGE
+			, P.GENDER
+			, P.NEUTERING_YN
 			, F.FILE_GRP_ID
+			, F.FILE_PATH
 		FROM TB_CAT C
 			LEFT JOIN TB_CAT_PROFILE P
 				ON C.CAT_CD = P.CAT_CD

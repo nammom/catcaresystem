@@ -94,10 +94,6 @@
 					<textarea id="introduction" name="introduction" class="form-control" maxlength="500"></textarea>
 				</div>
 				<div class="form-group">
-					<label class="form-label mt-4">고양이 사진</label>
-					<div id="cat-fileList" class="sta-multifile-upload-list"></div>
-				</div>
-				<div class="form-group">
 					<span id="cat-addFileBtn"
 						class="sta-fileinput-btn sta-fileinput-multi-btn sta-fileinput-btn-add fileinput-button">
 						<span>파일선택</span> 
@@ -106,6 +102,13 @@
 							class="file-upload" 
 							/>
 					</span>
+				</div>
+				<div class="form-group">
+					<label class="form-label mt-4">고양이 사진</label>
+					<div id="cat-fileList" class="sta-multifile-upload-list" style="display:none;"></div>
+				</div>
+				<div class="form-group">
+					<img id="preview" class="img-preview" />
 				</div>
 			</form>
 			<button type="button" id="btn-list" class="btn btn-warning">목록</button>
@@ -160,10 +163,18 @@ function fn_page() {
 		// 첨부파일 추가 이벤트
 		$("#cat-fileInput").MultiFile({
 			accept : "jpg|jpeg|gif|png",
-			max : 1,
+			//max : 1,
 			list : "#cat-fileList", // upload / or selected files
 			onFileSelect : function(element, value, master_element) {
 				console.log(master_element);
+			},
+			onFileAppend: function(element, value, master_element) {
+				//기존 이미지 제거 
+				$.ccs.file.reset("cat-form");
+			},
+			afterFileAppend: function(element, value, master_element) {
+				//파일 미리보기 이미지 경로 설정
+				$.ccs.file.preview(master_element.files[0]);
 			}
 		});
 	}
@@ -201,6 +212,7 @@ function fn_page() {
 			// 첨부파일 정보
 			if (data['fileList']) {
 				$.ccs.file.bindFile("cat", data['fileList']);
+				$.ccs.file.bindPreview(data["file_path"]);
 			}
 			//지역 option 셋팅
 			this.setSelect();

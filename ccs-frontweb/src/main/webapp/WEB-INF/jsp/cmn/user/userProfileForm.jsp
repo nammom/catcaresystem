@@ -11,10 +11,6 @@
 	    <input type="hidden" id="user_cd" name="user_cd" value="<c:out value="${user_cd}" />"/>
 	    <input type="hidden" id="file_grp_id" name="file_grp_id" />
 		<div class="form-group">
-			<label class="form-label mt-4">프로필 사진</label>
-			<div id="profile-fileList" class="sta-multifile-upload-list" style="display:none;"></div>
-		</div>
-		<div class="form-group">
 			<span id="profile-addFileBtn"
 				class="sta-fileinput-btn sta-fileinput-multi-btn sta-fileinput-btn-add fileinput-button">
 				<span>파일선택</span> 
@@ -23,6 +19,10 @@
 					class="file-upload"
 					/>
 			</span>
+		</div>
+		<div class="form-group">
+			<label class="form-label mt-4">프로필 사진</label>
+			<div id="profile-fileList" class="sta-multifile-upload-list" style="display:none;"></div>
 		</div>
 		<div class="form-group">
 			<img id="preview" class="img-preview" />

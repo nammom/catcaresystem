@@ -635,5 +635,141 @@
 		  return newArray;
 		}
 
+	/** 
+		이미 업로드 되어있는 파일 리스트 추가시 이미지 프리뷰 띄우게 수정
+		filePath Option 추가
+		삭제시 confirm 창 추가
+	*/
+	$.fn.MultiFile.addList = function(options,attachOption){
+			var defaultOption = {
+				fileName :'',
+				fileExtension :'',
+				fileSize : 0,
+				url : '',
+				fileId :null,
+				filePath : ''
+			};
+			
+			// 데이터 베이스에 따라서 속성명 변경
+			function cvtUItoPlugn(dbOption){
+				var uiOption = {
+						fileName :dbOption['FILENAME'],
+						fileExtension :dbOption['EXTCLASS'],
+						fileSize : dbOption['FILESIZE'],
+						url : dbOption["URL"],
+						fileId :dbOption["FILEID"],
+						filePath : dbOption["FILEPATH"]
+					};
+				return uiOption;
+			}
+			
+			function sl(x) {
+				return x > 1048576 ? (x / 1048576).toFixed(1) + 'Mb' : (x==1024?'1Mb': (x / 1024).toFixed(1) + 'Kb' )
+			};
+	
+			/**
+			 * set default attach options
+			 */
+			attachOption = $.extend(true,{
+				onFileDeleted : function(json){
+					
+				},
+				deleteMsg:'임시 삭제하였습니다.',
+				canDelete : true
+			},attachOption);
+			
+			
+			//var newOptions = $.extend(true,defaultOption,options);
+			var mf = this.MultiFile('data');
+			if(!mf) return !console.log('MultiFile plugin not initialized');
+			
+			mf.oldList = [];
+			if($.isPlainObject(options)){
+				mf.oldList.push(cvtUItoPlugn(options));
+			}
+			else if($.isArray(options)){
+				for(var i=0;i < options.length ; i++){
+					mf.oldList.push(cvtUItoPlugn(options[i]));
+				}
+				
+			} else{
+				//alert('invalid type parameter');
+				//return;
+			}
+			
+			var $container = $(mf.inputOptions.list);
+			//return;
+			
+			
+			var prev_totla_size = 0;
+			for(var i=0; i < mf.oldList.length ; i++){
+				prev_totla_size += mf.oldList[i]['fileSize'] || 0;
+			}
+			for(var i=0; i < mf.deletedList.length ; i++){
+				prev_totla_size -= mf.deletedList[i]['fileSize'] || 0;
+			}
+			mf.totla_size += prev_totla_size;
+			var strTmpl = '<div data-file="{{:fileId}}" class="MultiFile-label">'+
+							'<span>'+
+								'<span  class="MultiFile-label" title="{{>fileName}}">' +
+									"<div class='ico-file {{:extClass}}'></div>" +
+									'<span class="MultiFile-title"><a href="{{:url}}">{{>fileName}}</a></span>'+
+									'{{if fileSize > 0 }}<span style="padding-left:10px">({{g_kb:fileSize}})</span>{{/if}}'+
+									'<img class="MultiFile-preview" style="max-height:100px; max-width:100px;" src="/images/{{:filePath}}">' +
+								'</span>'+
+							'</span>'+
+							' <a data-file="{{:fileId}}" data-file-click="Y" class="MultiFile-remove" style="cursor:pointer">' + mf.STRING.remove + '</a>'+
+						 '</div>';
+			var myTmpl = $.templates(strTmpl);
+			$.views.converters("g_kb", function(fs) {
+			  var rtn = sl(fs);
+			  //var rtn_1 =  $.format.number(rtn,'#,###,###');
+			  return rtn;
+			});
+			for(var i=0;i < mf.oldList.length ;i++){
+				var jsonFile = $.extend(true,defaultOption,mf.oldList[i]);
+				jsonFile.extClass = $.fn.MultiFile.getFileCss(jsonFile.fileExtension);
+				var html = myTmpl.render(jsonFile);
+				$container.append(html);
+			};
+			if(attachOption.canDelete){
+				$('[data-file-click]',$container).on('click',function(ev){
+					var $this = $(this);
+					function _deleteFile(){
+						var fileId = $this.attr('data-file');
+						//console.log(fileId);
+						var files = $.grep(mf.oldList,function(element,index){
+							return (fileId && element.fileId && (element.fileId == fileId));
+						});
+						
+						$('div.MultiFile-label[data-file="' + fileId + '"]',$container).remove();
+						
+						for(var i=0; i < files.length ; i++){
+							mf.deletedList.push(files[i]);
+							if(attachOption.onFileDeleted){
+								attachOption.onFileDeleted(files[i]);
+							}							
+						}
+					};
+					if(ev && ev.isTrigger == 3){
+						_deleteFile();
+					} else{
+						/** 
+							삭제 시 confirm 창 추가
+						*/
+						
+						$.ccs.confirm(attachOption.deleteMsg || 'Do you want delete file?',function(isOK){
+							//if(isOK){
+								_deleteFile();
+							//}
+						});
+					}
+					
+				});
+			} else{
+				$('[data-file-click]',$container).hide();
+			}
+			
+		}
 })(jQuery);
 

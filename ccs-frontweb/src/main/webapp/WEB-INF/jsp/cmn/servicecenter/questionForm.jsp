@@ -25,18 +25,18 @@
 			<textarea id="content" name="content" class="form-control" maxlength="1300" required></textarea>
 		</div>
 		<div class="form-group">
-			<label class="form-label mt-4">첨부파일</label>
-			<div id="question-fileList" class="sta-multifile-upload-list"></div>
-		</div>
-		<div class="form-group">
 			<span id="question-addFileBtn"
 				class="sta-fileinput-btn sta-fileinput-multi-btn sta-fileinput-btn-add fileinput-button">
 				<span>파일선택</span> 
 				<input type="file" 
 					id="question-fileInput"
-					class="file-upload" 
+					class="file-upload with-preview" 
 					/>
 			</span>
+		</div>
+		<div class="form-group">
+			<label class="form-label mt-4">첨부파일</label>
+			<div id="question-fileList" class="sta-multifile-upload-list"></div>
 		</div>
 	</form>	    
 </div>

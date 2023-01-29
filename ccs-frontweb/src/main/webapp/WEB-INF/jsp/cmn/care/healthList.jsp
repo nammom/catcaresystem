@@ -23,8 +23,8 @@
     	<div class="card-header">
 			<img class="img-profile-s" 
 				src="/images/{{if file_path}}{{>file_path}}{{else}}cmn/{{if group_yn == "N"}}basic_cat_profile.jpg{{else}}basic_cat_grp_profile.jpg{{/if}}{{/if}}"/>
-			고양이 코드 : {{>cat_cd}} {{if cat_name}}({{>cat_name}}){{/if}} 
-			작성자 : {{>nickname}}
+			고양이 코드 : {{>cat_cd}} {{if cat_name}}({{>cat_name}}){{/if}} <br/>
+			작성자 : {{>nickname}} <br/>
 			작성일 : {{>reg_dt}}
 			{{if user_cd == _SESSION_USER_CD_}}
 				<button type="button" id="btn-edit" class="btn btn-warning" data-healthcd="{{>health_cd}}">수정</button>
