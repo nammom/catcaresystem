@@ -22,35 +22,6 @@
     
     <!-- 환경 변수 설정 페이지 경로 등. -->
     <util:properties id="variables" location="classpath:/ccs/properties/globals.variables.xml" />
-    
-<!--     
-	<bean id="messageSource" class="adid.framework.message.CustomReloadableResourceBundleMessageSource">
-		<property name="basenames">
-			<list>
-				<value>classpath:adid/messages/message-common</value>
-				<value>classpath:adid/messages/message-dmrg1000</value>
-				<value>classpath:adid/messages/message-drlt1000</value>
-				<value>classpath:adid/messages/message-merg1000</value>
-				<value>classpath:adid/messages/message-cols1000</value>
-				<value>classpath:adid/messages/message-deid</value>
-				<value>classpath:adid/messages/message-exec</value>
-			</list>
-		</property>
-		<property name="defaultEncoding" value="UTF-8" />
-		<property name="cacheSeconds" value="180"/>
-	</bean>
-   
-
-	<bean class="adid.framework.message.MessageResolverServiceImpl" id="messageService" >
-		 <property name="messageSource">
-            <ref bean="messageSource" />
-        </property>
-	</bean> -->
-<!-- 	<context:component-scan base-package="ccs.cmn">
-		<context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
-		<context:include-filter expression="org.springframework.stereotype.Service" type="annotation"/>
-		<context:include-filter expression="org.springframework.stereotype.Repository" type="annotation"/>
-		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
-	</context:component-scan> -->
+ 
 	
 </beans>	

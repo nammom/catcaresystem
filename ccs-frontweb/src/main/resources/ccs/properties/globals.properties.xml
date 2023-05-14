@@ -31,8 +31,8 @@
 	<entry key="Globals.Login.auto.BeanMethodName">loginAuto</entry>
 	
 	<!-- ADMIN -->
-	<entry key="Globals.Login.auto.Parameter.Id">tko@naver.com</entry>
-	<entry key="Globals.Login.auto.Parameter.Pwd">1111</entry>
+	<entry key="Globals.Login.auto.Parameter.Id"></entry>
+	<entry key="Globals.Login.auto.Parameter.Pwd"></entry>
 
 
 	<!-- script default mode [MINIFY / NONE / DEFAULT / FILE / MINFILE]-->  
@@ -42,10 +42,10 @@
 	<entry key="Status">Local</entry>  
 	
 	<!-- Page Title -->
-	<entry key="Globals.Page.Title">ADID 한국데이터진흥원 (개발)</entry>
+	<entry key="Globals.Page.Title">캣케어</entry>
 	
 	
-	<entry key="container_jsp">/mngt/layout/container_kdata_mngt</entry>
+	<entry key="container_jsp"></entry>
 	
 	
 	<entry key="defaultLanguage">ko</entry>
