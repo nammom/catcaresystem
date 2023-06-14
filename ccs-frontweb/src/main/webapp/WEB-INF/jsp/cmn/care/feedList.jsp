@@ -223,7 +223,7 @@ function fn_page() {
 			location.href = PAGE_URL + "/detail/" + feed_cd;
 		},
 		form : function(){
-			location.href = PAGE_URL + "/form/" + TARGET_CD;
+			location.href = PAGE_URL + "/form/" + TARGET_TYPE + "/" + TARGET_CD;
 		},
 		list : function(){
 			location.href = PAGE_URL + "/" + TARGET_TYPE + "/" + TARGET_CD;

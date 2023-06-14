@@ -7,7 +7,9 @@
 		<div class="col-md-6">
 			<form onsubmit="return false" class="form-group contents" id="feed-form" method="post">
 				<c:if test="${empty feed_cd}">
-					<input type="hidden" id="cat_cd" name="cat_cd" value="<c:out value="${cat_cd}" />">
+					<%-- <input type="hidden" id="cat_cd" name="cat_cd" value="<c:out value="${cat_cd}" />"> --%>
+					<input type="hidden" id="target_cd" value="<c:out value="${target_cd}" />"/>
+					<input type="hidden" id="target_type" value="<c:out value="${target_type}" />"/> 
 				</c:if>
 				<input type="hidden" id="feed_cd" name="feed_cd" value="<c:out value="${feed_cd}" />">
 				<input type="hidden" id="s_user_cd" name="s_user_cd" value="<c:out value="${_SESSION_USER_CD_}" />"/>
@@ -41,10 +43,12 @@
 			</form>
 			<form onsubmit="return false" id="feed-info-form">
 				<c:if test="${empty feed_cd}">
-					<div class="col-md-12 catList-btn-div">
-						<button class="btn btn-secondary btn-sm btn-row-add" type="button" data-table="catList">추가</button>
-						<button class="btn btn-secondary btn-sm btn-row-delete" type="button" data-table="catList">삭제</button>
-					</div>
+					<c:if test="${target_type eq 'habitat'}">
+						<div class="col-md-12 catList-btn-div">
+							<button class="btn btn-secondary btn-sm btn-row-add" type="button" data-table="catList">추가</button>
+							<button class="btn btn-secondary btn-sm btn-row-delete" type="button" data-table="catList">삭제</button>
+						</div>
+					</c:if>
 				    <div class="col-md-12">
 				    	<label class='title'>급여고양이</label>
 						<table id="catList"></table>
@@ -104,7 +108,7 @@ $(document).ready(function() {
 function fn_page() {
 	let $this = this;
 	let PAGE_URL = "/care/feed/form";
-	let CAT_CD, FEED_CD, S_USER_CD, USER_CD;
+	let TARGET_CD, TARGET_TYPE, FEED_CD, S_USER_CD, USER_CD;
 	
 	this.initialize = function() {
 		
@@ -145,7 +149,8 @@ function fn_page() {
 	}
 	
 	this.initData = function() {
-		CAT_CD = $("#cat_cd").val()? Number($("#cat_cd").val()) : "";
+		TARGET_CD = $("#target_cd").val()? Number($("#target_cd").val()) : "";
+		TARGET_TYPE = $("#target_type").val();
 		FEED_CD = $("#feed_cd").val()? Number($("#feed_cd").val()) : "";
 		S_USER_CD = $("#s_user_cd").val();
 		
@@ -160,7 +165,7 @@ function fn_page() {
 		getData : function(){
 			$.ccs.ajax({
 				url : PAGE_URL + "/selectData"
-				, data : FEED_CD ? {"feed_cd" : FEED_CD} : {"cat_cd" : CAT_CD}
+				, data : FEED_CD ? {"feed_cd" : FEED_CD} : {"target_cd" : TARGET_CD, "target_type" : TARGET_TYPE}
 				, success : function(data){
 					if(FEED_CD){
 						$this.formManager.setData(data['feedDetail']);
@@ -178,7 +183,7 @@ function fn_page() {
 			//USER_CD set
 			USER_CD = $("#user_cd").val();
 			//CAT_CD set
-			CAT_CD = $("#cat_cd").val()? Number($("#cat_cd").val()) : "";
+			//CAT_CD = $("#cat_cd").val()? Number($("#cat_cd").val()) : "";
 			
 			if(S_USER_CD == USER_CD){
 				$("#feed_dt").attr("disabled", false);
@@ -326,7 +331,7 @@ function fn_page() {
 				$("input[name='feed_cd1']").attr("checked", false);
 				
 				//등록 폼인 경우 
-				if(data['catList']){
+				if(data['catList'] && data['catList'].length > 0){
 					//고양이 정보 테이블 data 추가
 					$.ccs.table.addRow(this.table.$CAT_TABLE, data['catList']);
 					//그룹인 경우 추가,삭제 버튼 div 숨김
@@ -367,7 +372,10 @@ function fn_page() {
         		 		, "data": null
         		 		, "name": ""
         		 		, "render": function ( data, type, row, meta ) {
-        		 						return '<input type="checkbox" name="input-check"/>';
+        		 						if (TARGET_TYPE == "habitat") {
+	        		 						return '<input type="checkbox" name="input-check"/>';
+        		 						}
+        		 						return '<input type="checkbox" name="input-check" disabled/>';
 					            	}
         		 	},
 			        {
@@ -522,7 +530,11 @@ function fn_page() {
 		
 		this.searchManager = {
 			openSearchModal : function(){
-				let url = "/search/cat?groupFlag=cat&target_cd=" + CAT_CD;
+				debugger;
+				let url = "/search/cat?groupFlag=cat&target_cd=" + TARGET_CD;
+				if (TARGET_TYPE == "habitat") {
+					url += "&habitat_cd=" + TARGET_CD;
+				}
 				let option = {
 						id : "searchCatModal",
 						title : "고양이 검색",

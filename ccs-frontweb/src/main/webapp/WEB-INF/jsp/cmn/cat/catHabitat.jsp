@@ -131,7 +131,7 @@ function fn_catHabitatPage() {
 			$this.$table.on( 'select', function ( e, dt, type, indexes ) {
 		        let row = $this.tableManager.getSelectedRows();
 		        if(row[0]['habitat_cd']){
-					location.href = "/cat/habitatProfile/" + row['habitat_cd'];
+					location.href = "/manage/habitat/profile/" + row[0]['habitat_cd'];
 		        }
 			} );
 		},

@@ -42,15 +42,18 @@ public class SearchController {
 	@RequestMapping("/cat")
 	public String searchCat(@RequestParam(required = false) String groupFlag,
 							@RequestParam(required = false) Long target_cd,
+							@RequestParam(required = false) Long habitat_cd,
 							SystemParameter systemParameter,
 							Model model) throws Exception{
-		if(target_cd != null) {
+		if(groupFlag != null) {
 			model.addAttribute("groupFlag", groupFlag);
 		}
 		if(target_cd != null) {
 			model.addAttribute("target_cd", target_cd);
 		}
-		
+		if(habitat_cd != null) {
+			model.addAttribute("habitat_cd", habitat_cd);
+		}
 		return "cmn/search/searchCatList";
 	}
 

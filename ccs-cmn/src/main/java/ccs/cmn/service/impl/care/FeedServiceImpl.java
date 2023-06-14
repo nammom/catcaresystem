@@ -117,10 +117,10 @@ public class FeedServiceImpl implements FeedService {
 			List<Map<String, Object>> catList = (List<Map<String, Object>>)param.get("catList");
 			if(!CollectionUtils.isEmpty(catList)) {
 				for(Map<String, Object> e : catList) {
-					e.putAll(param);
-					e.put("cat_cd", Integer.valueOf((String)e.get("cat_cd")));
-					feedMapper.insertFeed(e);
-					param.put("feed_cd", Integer.valueOf((String)e.get("feed_cd")));
+					//param.put("cat_cd", Integer.valueOf((String)e.get("cat_cd")));
+					param.putAll(e);
+					feedMapper.insertFeed(param);
+					param.put("feed_cd", Integer.valueOf((String)param.get("feed_cd")));
 					this.insertFeedDetail(param);
 				}
 			}

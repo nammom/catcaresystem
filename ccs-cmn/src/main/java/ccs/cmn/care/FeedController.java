@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Resource;
 
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -108,12 +109,13 @@ public class FeedController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/form/{cat_cd}")
-	public String feedForm(@PathVariable("cat_cd") Long cat_cd,
-							SystemParameter systemParameter,
+	@RequestMapping("/form/{target_type}/{target_cd}")
+	public String feedForm(@PathVariable("target_type") String target_type,
+			   				@PathVariable("target_cd") Long target_cd,
 							Model model) throws Exception{
 		
-		model.addAttribute("cat_cd", cat_cd);
+		model.addAttribute("target_type", target_type);
+		model.addAttribute("target_cd", target_cd);
 		
 		return "cmn/care/feedForm";
 	}
@@ -165,6 +167,8 @@ public class FeedController {
 	/**
 	 * 고양이 돌봄 정보 조회
 	 * @param jsonParameter
+	 *  target_type 	: "cat" or "grp" or "habitat"
+	 *  target_cd		: cat_cd or cat_grp_cd or habitat_cd
 	 * @return
 	 */
 	@ResponseBody
@@ -189,7 +193,10 @@ public class FeedController {
 			if(jsonParameter.getData().containsKey("feed_cd")) {
 				Map<String, Object> feedDetail = feedService.selectFeedDetail(data);
 				result.put("feedDetail", feedDetail);
-			}else {
+			}
+			String target_type = (String) jsonParameter.getData().get("target_type");
+			if(StringUtils.equals("cat", target_type) || StringUtils.equals("grp", target_type)) {
+				data.put("cat_cd", (Integer)data.get("target_cd"));
 				List<Map<String, Object>> catList = cmnService.selectSearchCatList(data);
 				result.put("catList", catList);
 			}

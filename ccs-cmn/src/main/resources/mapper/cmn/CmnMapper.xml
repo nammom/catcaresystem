@@ -74,7 +74,11 @@
 			, FN_GET_CODE_NAME('C0003', P.CATKIND_CD) 						AS CAT_KIND_NM
 			, F.FILE_PATH
 			, N.CAT_NAME
-		FROM TB_CAT C 
+		FROM TB_CAT C
+			<if test="habitat_cd != null and !habitat_cd.equals('')">
+			JOIN TB_HABITAT_INFO H
+				ON C.CAT_CD = H.CAT_CD
+			</if>
 			LEFT JOIN TB_CAT_PROFILE P 
 				ON C.CAT_CD  = P.CAT_CD
 			LEFT JOIN TB_FILE F
@@ -100,6 +104,9 @@
 			</if>
 			<if test="cat_name != null and !cat_name.equals('')">
 				AND N.CAT_NAME like '%'|| #{cat_name} ||'%'
+			</if>
+			<if test="habitat_cd != null and !habitat_cd.equals('')">
+				AND H.HABITAT_CD = #{habitat_cd}
 			</if>
 		</where>
 		ORDER BY C.CAT_CD DESC

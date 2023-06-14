@@ -6,8 +6,6 @@
 	<form onsubmit="return false" id="search-form" class="form-group m-3">
 		<input type="hidden" id="target_cd" name="target_cd" value="<c:out value="${target_cd}" />">
 		<input type="hidden" id="groupFlag" name="groupFlag" value="<c:out value="${groupFlag}" />">
-		
-		<%-- <input type="hidden" id="group_yn" name="group_yn" value="<c:out value="${group_yn}" />"> --%>
 		<div class="row">
 			<div class="form-group col-md-1">
 				<label for="sido" class="form-label">지역</label>
@@ -29,7 +27,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="form-group col-md-1">
+			<div class="form-group col-md-2">
 	         	<label for="cat_name" class="form-label">애칭</label>
         	</div>
 	        <div class="form-group col-md-3">
@@ -38,16 +36,28 @@
 	        <div class="form-group col-md-2">
 	         	<label for="cat_cd" class="form-label">고유코드</label>
         	</div>
-	        <div class="form-group col-md-2">
+	        <div class="form-group col-md-3">
 	           	<input class="form-control" id="cat_cd" name="cat_cd" type="text">
 	        </div>
-	        <div class="form-group col-md-2">
+	    </div>
+	    <div class="row">
+	    	<div class="form-group col-md-2">
+	         	<label for="group_yn" class="form-label">무리여부</label>
+        	</div>
+	    	<div class="form-group col-md-3">
 				<select id="group_yn" name="group_yn" class="form-control" <c:if test="${not empty groupFlag}">disabled</c:if>>
                 	<option value="N" <c:if test="${groupFlag eq 'cat'}">selected</c:if>>개별</option>
                 	<option value="Y" <c:if test="${groupFlag eq 'grp'}">selected</c:if>>무리</option>
                 </select> 
 			</div>
 	        <div class="form-group col-md-2">
+	         	<label for="habitat_cd" class="form-label">서식지코드</label>
+        	</div>
+	        <div class="form-group col-md-2">
+	           	<input class="form-control" id="habitat_cd" name="habitat_cd" type="text" 
+	           		value="<c:out value="${habitat_cd}" />" <c:if test="${not empty habitat_cd}">disabled</c:if>>
+	        </div>
+	        <div class="form-group col-md-3">
 	         	<button class="btn btn-secondary my-2 my-sm-0 float-right" type="button" id="btn-search">검색</button>
 	        </div>
 	    </div>
@@ -85,8 +95,8 @@ function fn_modal() {
 	}
 	
 	this.initData = function() {
-		TARGET_CD = $("#target_cd").val()? Number($("#target_cd").val()) : null;
-		GROUPFLAG = $("#groupFlag").val();
+		TARGET_CD 	= $("#target_cd").val()? Number($("#target_cd").val()) : null;
+		GROUPFLAG 	= $("#groupFlag").val();
 		if(TARGET_CD){
 			$this.formManager.getData();
 		}
@@ -123,7 +133,7 @@ function fn_modal() {
 						//검색정보
 						let data = $("#search-form").serializeObject();
 						if(data['cat_cd']) data['cat_cd'] = Number(data['cat_cd']);
-						
+						if(data['habitat_cd']) data['habitat_cd'] = Number(data['habitat_cd']);
 						d['data'] = data;
 						
 						//그리드 정보 + 검색정보							

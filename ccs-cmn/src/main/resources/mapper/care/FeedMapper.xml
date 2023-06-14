@@ -66,8 +66,8 @@
 					C.CAT_CD = #{cat_cd}
 				</when>		
 				<when test="cat_grp_cd != null and !cat_grp_cd.equals('')">
-					C.CAT_CD = #{cat_grp_cd}
-					OR G.CAT_GRP_CD = #{cat_grp_cd}
+					(C.CAT_CD = #{cat_grp_cd}
+					OR G.CAT_GRP_CD = #{cat_grp_cd})
 				</when>
 				<when test="habitat_cd != null and !habitat_cd.equals('')">
 					H.HABITAT_CD = #{habitat_cd}
